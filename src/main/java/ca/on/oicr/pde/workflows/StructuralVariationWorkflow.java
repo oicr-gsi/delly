@@ -1,6 +1,7 @@
 package ca.on.oicr.pde.workflows;
 
 import ca.on.oicr.pde.utilities.workflows.OicrWorkflow;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,13 +24,16 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
     private Boolean manualOutput;
     private String[] inputBamFiles;
     private Map<String, SqwFile> inputFiles;
-    private final String[] DELLY_TYPES = { "DEL", "DUP", "INV", "TRA" };
+    private final String[] DELLY_TYPES = {"DEL", "DUP", "INV", "TRA"};
+    private final String DEDUP_BAM_SUFFIX = ".deduplicated.bam";
+    private final String FILTR_BAM_SUFFIX = ".filtered.bam";
 
     public StructuralVariationWorkflow() {
         super();
         this.sampleName = "NA";
-        this.manualOutput = null;
-        this.inputBamFiles = null;
+        this.inputFiles = new HashMap <String, SqwFile>();
+        //this.manualOutput = null;
+        //this.inputBamFiles = null;
     }
 
     private SqwFile getInputFile(String name) {
@@ -57,11 +61,11 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                 this.refFasta = getProperty("ref_fasta");
             }
 
-            if (getProperty("exclude-list") == null) {
+            if (getProperty("exclude_list") == null) {
                 Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "The exclude-list param was null! You need exclude list to run delly!");
                 return (null);
             } else {
-                this.excludeList = getProperty("exclude-list");
+                this.excludeList = getProperty("exclude_list");
             }
 
             if (getProperty("sample_name") != null) {
@@ -70,30 +74,32 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                     this.sampleName = sampleTmp;
                 }
             }
-            
+
             this.mappingQuality = getProperty("mapping_quality");
-            if ( null == this.mappingQuality )
-                 this.mappingQuality = "0";
+            if (null == this.mappingQuality || this.mappingQuality.isEmpty()) {
+                this.mappingQuality = "0";
+            }
 
             if (getProperty("samtools") == null) {
                 Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "The samtools param was null! We need samtools!");
                 return (null);
             } else {
-                this.samtools = getProperty("samtools").startsWith("/") ? getWorkflowBaseDir() + "bin/" + getProperty("samtools") : getWorkflowBaseDir() + "/" + getProperty("samtools");
+                this.samtools = getProperty("samtools").startsWith("/") ? getWorkflowBaseDir() + getProperty("samtools"): getWorkflowBaseDir() + "/bin/" + getProperty("samtools"); 
             }
 
             if (getProperty("picard") == null) {
                 Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "The picard param was null! We need picard!");
                 return (null);
             } else {
-                this.picard = getProperty("picard").startsWith("/") ? getWorkflowBaseDir() + "bin/" + getProperty("picard") : getWorkflowBaseDir() + "/" + getProperty("picard");
+                this.picard = getProperty("picard").startsWith("/") ? getWorkflowBaseDir() + getProperty("picard") : getWorkflowBaseDir() + "/bin/" + getProperty("picard");
             }
 
             if (getProperty("delly") == null) {
                 Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "The delly param was null! We need delly!");
                 return (null);
             } else {
-                this.delly = getProperty("delly").startsWith("/") ? getWorkflowBaseDir() + "bin/" + getProperty("delly") : getWorkflowBaseDir() + "/" + getProperty("delly");
+                this.delly = getProperty("delly").startsWith("/") ? getWorkflowBaseDir() + getProperty("delly") + "/" + getProperty("delly") + "_linux_x86_64bit"
+                                                                  : getWorkflowBaseDir() + "/bin/" + getProperty("delly") + "/" + getProperty("delly") + "_linux_x86_64bit";
             }
 
             // INPUTS (bam files and their ids, multiple files will be merged)
@@ -149,21 +155,21 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                 bamJob.addFile(getInputFile("bam_inputs_" + i));
             }
             //Picard job
-            Job picardJob = workflow.createBashJob("pcard_deduplicate");
+            Job picardJob = workflow.createBashJob("picard_deduplicate");
             picardJob.setCommand(
-                    getWorkflowBaseDir() + "/bin/" + getProperty("bundled_jre") + "/bin/java "
-                    + "-Xmx" + getProperty("picard_memory") + "M "
-                    + "-jar " + this.picard + "/MarkDuplicates.jar "
-                    + "TMP_DIR=" + this.dataDir + "picardTmp "
-                    + "OUTPUT=" + this.dataDir + this.sampleName + "deduplicated.bam "
-                    + "METRICS_FILE=" + this.dataDir + this.sampleName + ".bam.mmm ");
-            // + "ASSUME_SORTED=true "
-            // + "VALIDATION_STRINGENCY=LENIENT "
-            // + "REMOVE_DUPLICATES=true "
-            // + "CREATE_INDEX=true ");
+                    getWorkflowBaseDir() + "/bin/" + getProperty("bundled_jre") + "/bin/java"
+                    + " -Xmx" + getProperty("picard_memory") + "M"
+                    + " -jar " + this.picard + "/MarkDuplicates.jar"
+                    + " TMP_DIR=" + this.dataDir + "picardTmp"
+                    + " OUTPUT=" + this.dataDir + this.sampleName + DEDUP_BAM_SUFFIX
+                    + " METRICS_FILE=" + this.dataDir + this.sampleName + ".bam.mmm");
+                   /* + "ASSUME_SORTED=true "
+                    + "VALIDATION_STRINGENCY=LENIENT "
+                    + "REMOVE_DUPLICATES=true "
+                    + "CREATE_INDEX=true "); */
 
             for (int f = 0; f < this.inputBamFiles.length; f++) {
-                picardJob.getCommand().addArgument("INPUT=" + this.inputBamFiles[f]); // this.dataDir + filtered_bam);
+                picardJob.getCommand().addArgument(" INPUT=" + this.inputBamFiles[f]);
             }
             picardJob.setMaxMemory("16000");
             picardJob.addParent(bamJob);
@@ -175,8 +181,8 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             Job filter_job = workflow.createBashJob("samtools_filtering");
             filter_job.setCommand(this.samtools
                     + "/samtools view -b -F 1280 "
-                    + this.dataDir + this.sampleName + "deduplicated.bam "
-                    + "> " + this.dataDir + this.sampleName + "filtered.bam");
+                    + this.dataDir + this.sampleName + DEDUP_BAM_SUFFIX
+                    + " > " + this.dataDir + this.sampleName + FILTR_BAM_SUFFIX);
 
             filter_job.setMaxMemory("3000");
             filter_job.addParent(picardJob);
@@ -185,23 +191,23 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             }
 
             //DELLY jobs
-            for(String type : this.DELLY_TYPES) {
-            Job delly_job = workflow.createBashJob("delly_job");
-            String outputFile = this.dataDir + this.sampleName + "." + type + ".vcf";
-            delly_job.setCommand(this.delly
-                    + "/delly -t " + type 
-                    + " -x " + this.excludeList
-                    + " -o " + outputFile
-                    + " -q " + this.mappingQuality
-                    + " -g " + this.refFasta + " "
-                    + this.dataDir + this.sampleName + "filtered.bam");
-            delly_job.setMaxMemory("6000");
-            delly_job.addParent(picardJob);
-            if (!this.queue.isEmpty()) {
-                delly_job.setQueue(this.queue);
-            }
-            SqwFile dellyCalls = this.createOutputFile(outputFile, "text/vcf", this.manualOutput);
-            delly_job.addFile(dellyCalls);
+            for (String type : this.DELLY_TYPES) {
+                Job delly_job = workflow.createBashJob("delly_job");
+                String outputFile = this.dataDir + this.sampleName + "." + type + ".vcf";
+                delly_job.setCommand(this.delly
+                        + " -t " + type
+                        + " -x " + this.excludeList
+                        + " -o " + outputFile
+                        + " -q " + this.mappingQuality
+                        + " -g " + this.refFasta + " "
+                        + this.dataDir + this.sampleName + FILTR_BAM_SUFFIX);
+                delly_job.setMaxMemory("6000");
+                delly_job.addParent(picardJob);
+                if (!this.queue.isEmpty()) {
+                    delly_job.setQueue(this.queue);
+                }
+                SqwFile dellyCalls = this.createOutputFile(outputFile, "text/vcf", this.manualOutput);
+                delly_job.addFile(dellyCalls);
             }
 
         } catch (Exception e) {
