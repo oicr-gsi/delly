@@ -21,6 +21,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.sourceforge</groupId>
+            <artifactId>vcftools</artifactId>
+            <version>0.1.10</version>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>samtools</groupId>
+            <artifactId>tabix</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+        <dependency>
             <groupId>samtools</groupId>
             <artifactId>samtools</artifactId>
             <version>0.1.19</version>
