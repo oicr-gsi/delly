@@ -24,7 +24,6 @@ public class StructuralVariationDecider extends OicrDecider {
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
     private Map<String, BeSmall> fileSwaToSmall;
     
-    private String templateType   = "WG";
     private String templateTypeFilter = "";
     private String picard_memory = "6000";
     private String delly_memory  = "4000";
@@ -159,7 +158,6 @@ public class StructuralVariationDecider extends OicrDecider {
             Log.stderr("Template type " + currentTtype + " does not pass filter which is set to " + this.templateTypeFilter);
             return false;
         }
-        this.templateType = currentTtype;
         return super.checkFileDetails(returnValue, fm);
     }
 
@@ -265,6 +263,7 @@ public class StructuralVariationDecider extends OicrDecider {
 	run.addProperty("output_dir", this.output_dir);
         run.addProperty("queue", this.queue);
         run.addProperty("sample_name", this.sampleName);
+        run.addProperty("manual_output", this.manualOutput);
         
         if (!this.refFasta.isEmpty())
             run.addProperty("ref_fasta", this.refFasta);
