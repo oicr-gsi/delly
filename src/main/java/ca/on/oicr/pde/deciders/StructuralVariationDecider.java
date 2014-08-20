@@ -326,7 +326,8 @@ public class StructuralVariationDecider extends OicrDecider {
             //TODO check if metatype is doing what it is supposed to do (adding MIME type here)
             iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + fa.getMetatype();
             
-            groupByAttribute = fa.getDonor() + ":"  + fa.getLimsValue(Lims.TISSUE_ORIGIN) + ":" + fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE);
+            //groupByAttribute = fa.getDonor() + ":" + fa.getLimsValue(Lims.TISSUE_ORIGIN) + ":" + fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE);
+            groupByAttribute = fa.getLibrarySample();
             
             if (null != fa.getLimsValue(Lims.TISSUE_TYPE))
                  groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_TYPE));

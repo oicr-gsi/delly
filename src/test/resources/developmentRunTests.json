@@ -7,15 +7,23 @@
         "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir"],
     "tests": [
         {
-            "id": "Delly dummy",
+            "id": "DellyStudyNameTest",
             "parameters": {
-                "--root-sample-name": "CPCG_0235",
-                "--bamqc-dir": "/provisioned-bundles/Workflow_Bundle_BamQC",
-                "--bamqc-version": "2.1",
-                "--parent-wf-accessions": "375928,23341",
-		"--before-date": "2013-11-19"
+                "--study-name": "ABvsInvitrogenReagentComp"
             }
-
+        },
+        {  
+            "id": "DellyRootSampleTest",
+            "parameters": {
+                "--root-sample-name": "CPCG_0235"
+            }
+        },
+        {
+            "id": "DellySequencerRunTest",
+            "parameters": {
+                "--sequencer-run": "120525_h803_0088_AC0M4JACXX"
+            }
+            
         }
     ]
 }
