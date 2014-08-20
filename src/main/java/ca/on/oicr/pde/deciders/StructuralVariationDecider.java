@@ -30,10 +30,10 @@ public class StructuralVariationDecider extends OicrDecider {
     private String sampleName     = "";
     private String output_prefix  = "./";
     private String output_dir = "seqware-results";
-    private String refFasta;
+    private String refFasta = "";
     private String queue = "production";
-    private String excludeList;
-    private String mappingQuality = "";
+    private String excludeList = "";
+    private String mappingQuality = " ";
     private String manualOutput;
     private final static String BAM_METATYPE = "application/bam";
  
@@ -264,15 +264,13 @@ public class StructuralVariationDecider extends OicrDecider {
         run.addProperty("queue", this.queue);
         run.addProperty("sample_name", this.sampleName);
         run.addProperty("manual_output", this.manualOutput);
+        run.addProperty("mapping_quality", this.mappingQuality);
         
         if (!this.refFasta.isEmpty())
             run.addProperty("ref_fasta", this.refFasta);
         
         if(!this.excludeList.isEmpty())
-            run.addProperty("exclude_list", this.excludeList);
-        
-        if(!this.mappingQuality.isEmpty())
-            run.addProperty("mapping_quality", this.mappingQuality);       
+            run.addProperty("exclude_list", this.excludeList);       
                 
         String g_id = fa.getLimsValue(Lims.GROUP_ID);
         if (null != g_id && !g_id.equalsIgnoreCase("NA")) {
