@@ -4,7 +4,7 @@
     "defaultParameters": {
     },
     "defaultIniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
-        "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir"],
+        "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", "force-run-all"],
     "tests": [
         {
             "id": "DellyStudyNameTest",
@@ -21,7 +21,7 @@
         {
             "id": "DellySequencerRunTest",
             "parameters": {
-                "--sequencer-run": "120525_h803_0088_AC0M4JACXX"
+                "--sequencer-run-name": "120525_h803_0088_AC0M4JACXX"
             }
             
         }
