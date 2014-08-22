@@ -14,9 +14,10 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>structural-variation</name>
+    <name>StructuralVariation</name>
 
     <properties>
+        <workflow-directory-name>StructuralVariation</workflow-directory-name>
     </properties>
 
     <dependencies>
