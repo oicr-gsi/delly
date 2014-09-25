@@ -26,7 +26,7 @@ public class StructuralVariationDecider extends OicrDecider {
     
     private String templateTypeFilter = "";
     private String picard_memory = "6000";
-    private String delly_memory  = "4000";
+    private String delly_memory  = "8000";
     private String sampleName     = "";
     private String output_prefix  = "./";
     private String output_dir = "seqware-results";
