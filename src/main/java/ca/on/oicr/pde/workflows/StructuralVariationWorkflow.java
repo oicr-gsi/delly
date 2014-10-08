@@ -295,10 +295,14 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             }
             
             // Merging (vcftoolsDir) Job - make one file
+            // TODO SEQPRODBIO-2758: need to wrap this so that tabix is in PATH
             Job mergeJob = this.getWorkflow().createBashJob("vcf_merge");
-            mergeJob.setCommand(this.vcftoolsDir + "/bin/vcf-merge"
-                + mergeThese + " > "
-                + this.dataDir + this.sampleName + VCF_MERGED_SUFFIX);
+            mergeJob.setCommand(getWorkflowBaseDir() + "/dependencies/vcfmerge_wrapper.pl"
+                              + " --list=\"" +  mergeThese + "\""
+                              + " --datadir=" + this.dataDir
+                              + " --tabix=" + this.tabixDir
+                              + " --output=" + this.dataDir + this.sampleName + VCF_MERGED_SUFFIX
+                              + " --vcf_merge=" + this.vcftoolsDir + "/bin/vcf-merge");
             
             SqwFile dellyVcf = this.createOutputFile(this.dataDir + this.sampleName + VCF_MERGED_SUFFIX, "text/vcf", this.manualOutput);
             mergeJob.setMaxMemory("3000");
