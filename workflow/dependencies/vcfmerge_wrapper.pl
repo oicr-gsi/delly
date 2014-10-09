@@ -13,9 +13,7 @@ use strict;
 use constant DEBUG =>1;
 # Below is the dafault for vcf_compare, should not be used when workflow runs
 
-my(%ids,%files,%matrix,%seen,$list,$studyname,$vcf_path,$oldmatrix,$datadir,$path_to_tabix);
-my(%snps,%cols,%scols); # For assigning colors and number of snps (scols for assigning a color to a sample (like PCSI_006)
-
+my($list,$vcf_merge,$outfile,$datadir,$path_to_tabix);
 my $USAGE="vcfmerge_wrapper.pl --list=[req] --datadir=[optional] --vcf-merge=[req]";
 
 my $result = GetOptions ('list=s'            => \$list, # list with filenames
@@ -24,9 +22,8 @@ my $result = GetOptions ('list=s'            => \$list, # list with filenames
                          'output=s'          => \$outfile, #output file
                          'vcf_merge=s'       => \$vcf_merge); # path to vcftools vcf-merge script
 
-if (!$list || !$vcf_merge || !$datadir || !$tabix) {die $USAGE;}
+if (!$list || !$vcf_merge || !$datadir || !$path_to_tabix) {die $USAGE;}
 $datadir ||=".";
-$vcf_compare = $vcf_path if $vcf_path;
 
 #===========================================================
 # If tabix is not in the PATH, add its location to $PATH
@@ -46,5 +43,5 @@ if (!$tabix_check) {
 #============================================================
 # vcf-merge wrapping
 #============================================================
-print STDERR "Command: ".$vcf_merge $list." > ".$output."\n" if DEBUG;
+print STDERR "Command: ".$vcf_merge." ".$list." > ".$outfile."\n" if DEBUG;
 #`$vcf_merge $list > $output`;
