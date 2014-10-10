@@ -44,4 +44,4 @@ if (!$tabix_check) {
 # vcf-merge wrapping
 #============================================================
 print STDERR "Command: ".$vcf_merge." ".$list." > ".$outfile."\n" if DEBUG;
-#`$vcf_merge $list > $output`;
+`$vcf_merge $list > $outfile`;
