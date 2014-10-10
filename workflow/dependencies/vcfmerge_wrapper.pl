@@ -10,7 +10,7 @@ use Data::Dumper;
 use strict;
 
 
-use constant DEBUG =>1;
+use constant DEBUG =>0;
 # Below is the dafault for vcf_compare, should not be used when workflow runs
 
 my($list,$vcf_merge,$outfile,$datadir,$path_to_tabix);
