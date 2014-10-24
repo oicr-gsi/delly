@@ -34,7 +34,7 @@ public class StructuralVariationDecider extends OicrDecider {
     private String queue = "production";
     private String excludeList = "";
     private String mappingQuality = " ";
-    private String manualOutput;
+    private String manualOutput = "false";
     private final static String BAM_METATYPE = "application/bam";
  
     public StructuralVariationDecider() {
@@ -133,8 +133,11 @@ public class StructuralVariationDecider extends OicrDecider {
         if (this.options.has("output-folder")) {
             this.output_dir = options.valueOf("output-folder").toString();
 	}
-        
-        manualOutput = this.output_prefix.equals("./") ? "false" : "true";
+        // according to Mei, setting manual_output to true if ouput_prefix is not "./" should not be used, SEQPROD want randomly 
+        // named directory in seqware-results dir tree
+        if (this.options.has("manual-output") && this.options.valueOf("output-folder").toString().equalsIgnoreCase("true")) {
+            this.manualOutput = "true";
+	}
         //allows anything defined on the command line to override the defaults here.
         ReturnValue val = super.init();
         return val;
