@@ -28,12 +28,12 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
     private Boolean manualOutput;
     private String[] inputBamFiles;
     private Map<String, SqwFile> inputFiles;
-    private final String[] DELLY_TYPES = {"DEL", "DUP", "INV", "TRA"};  // Subject to change in future DELLY versions?
-    private final String DEDUP_BAM_SUFFIX  = ".dupmarked.bam";
-    private final String FILTR_BAM_SUFFIX  = ".dupmarked.filtered.bam";
-    private final String VCF_MERGED_SUFFIX = ".delly.merged.vcf";
-    
-    
+    private static final String[] DELLY_TYPES = {"DEL", "DUP", "INV", "TRA"};  // Subject to change in future DELLY versions?
+    private static final String DEDUP_BAM_SUFFIX  = ".dupmarked.bam";
+    private static final String FILTR_BAM_SUFFIX  = ".dupmarked.filtered.bam";
+    private static final String VCF_MERGED_SUFFIX = ".delly.merged.vcf";
+
+
 
     public StructuralVariationWorkflow() {
         super();
@@ -48,7 +48,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
      * @param name
      * @return path to a SqwlFile stored in inputFiles HashMap
      */
-    private SqwFile getInputFile(String name) {
+    private SqwFile getInputFile(final String name) {
         return inputFiles.get(name);
     }
 
@@ -62,7 +62,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
      * @return Input SqwFile that would be identified by name variable passed to
      * this function
      */
-    protected SqwFile createInputFile(String name, String workingPath) {
+    protected SqwFile createInputFile(final String name, final String workingPath) {
         SqwFile file = new SqwFile();
         file.setForceCopy(false);
         file.setIsInput(true);
@@ -75,7 +75,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
     public Map<String, SqwFile> setupFiles() {
 
         try {
-            // TODO setup picard, delly and samtools
+
             if (getProperty("ref_fasta") == null) {
                 Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "The ref_fasta param was null! You need reference fasta file to run delly!");
                 return (null);
@@ -129,7 +129,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                 this.delly = getProperty("delly").startsWith("/") ? getWorkflowBaseDir() + getProperty("delly")
                         : getWorkflowBaseDir() + "/bin/" + getProperty("delly") + "/" + getProperty("delly") + "_linux_x86_64bit";
             }
-            
+
             if (getProperty("vcftools") == null) {
                 Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "vcftools is not set, we need it to call vcftools correctly");
                 return (null);
@@ -209,7 +209,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                     + " VALIDATION_STRINGENCY=LENIENT"
                     + " OUTPUT=" + this.dataDir + this.sampleName + DEDUP_BAM_SUFFIX
                     + " METRICS_FILE=" + this.dataDir + this.sampleName + ".bam.mmm");
-            /* 
+            /*
              + "REMOVE_DUPLICATES=true "
              + "CREATE_INDEX=true "); */
 
@@ -250,9 +250,9 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             }
 
             // DELLY jobs (4 different types)
-            List <String> indexedVcfs = new ArrayList<String>();
-            List <Job>    tabixJobs   = new ArrayList<Job>();
-            
+            List<String> indexedVcfs = new ArrayList<String>();
+            List<Job>    tabixJobs   = new ArrayList<Job>();
+
             for (String type : this.DELLY_TYPES) {
                 Job dellyJob = workflow.createBashJob("delly_job_" + type);
                 String outputFile = this.dataDir + this.sampleName + "." + type + ".vcf";
@@ -285,17 +285,16 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                     tabixJob.setQueue(this.queue);
                 }
                 tabixJobs.add(tabixJob);
-                
+
             }
 
             // Concatenate all indexed vcf.gz files
             String mergeThese = "";
-            for(String vcf : indexedVcfs) {
+            for (String vcf : indexedVcfs) {
                 mergeThese = mergeThese.concat(" " + vcf);
             }
-            
+
             // Merging (vcftoolsDir) Job - make one file
-            // TODO SEQPRODBIO-2758: need to wrap this so that tabix is in PATH
             Job mergeJob = this.getWorkflow().createBashJob("vcf_merge");
             mergeJob.setCommand(getWorkflowBaseDir() + "/dependencies/vcfmerge_wrapper.pl"
                               + " --list=\"" +  mergeThese + "\""
@@ -303,7 +302,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                               + " --tabix=" + this.tabixDir
                               + " --output=" + this.dataDir + this.sampleName + VCF_MERGED_SUFFIX
                               + " --vcf_merge=" + this.vcftoolsDir + "/bin/vcf-merge");
-            
+
             SqwFile dellyVcf = this.createOutputFile(this.dataDir + this.sampleName + VCF_MERGED_SUFFIX, "text/vcf", this.manualOutput);
             mergeJob.setMaxMemory("3000");
             mergeJob.addFile(dellyVcf);
@@ -313,8 +312,8 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             if (!this.queue.isEmpty()) {
                     mergeJob.setQueue(this.queue);
             }
-            
-        
+
+
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
         }
