@@ -26,29 +26,34 @@
             <artifactId>vcftools</artifactId>
             <version>0.1.10</version>
             <type>zip</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>samtools</groupId>
             <artifactId>tabix</artifactId>
             <version>0.2.6</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>samtools</groupId>
             <artifactId>samtools</artifactId>
             <version>0.1.19</version>
             <type>zip</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>picard</groupId>
             <artifactId>picard-tools</artifactId>
             <version>1.89</version>
             <type>zip</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>delly</groupId>
             <artifactId>delly</artifactId>
             <version>v0.5.5</version>
             <type>zip</type>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
