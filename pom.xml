@@ -32,6 +32,7 @@
             <groupId>samtools</groupId>
             <artifactId>tabix</artifactId>
             <version>0.2.6</version>
+            <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
