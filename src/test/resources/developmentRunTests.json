@@ -1,6 +1,6 @@
 {
     "defaultDescription": "Structural Variation decider test",
-    "defaultMetricsDirectory": "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/decider/development",
+    "defaultMetricsResources": "/expected_output/development/",
     "defaultParameters": {
     },
     "defaultIniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
@@ -12,7 +12,7 @@
                 "--study-name": "ABvsInvitrogenReagentComp"
             }
         },
-        {  
+        {
             "id": "DellyRootSampleTest",
             "parameters": {
                 "--root-sample-name": "CPCG_0235"
@@ -23,7 +23,7 @@
             "parameters": {
                 "--sequencer-run-name": "120525_h803_0088_AC0M4JACXX"
             }
-            
+
         }
     ]
 }
