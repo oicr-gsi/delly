@@ -31,7 +31,7 @@ public class StructuralVariationDecider extends OicrDecider {
     private String output_prefix  = "./";
     private String output_dir = "seqware-results";
     private String refFasta = "";
-    private String queue = "production";
+    private String queue = " ";
     private String excludeList = "";
     private String mappingQuality = " ";
     private String manualOutput = "false";
