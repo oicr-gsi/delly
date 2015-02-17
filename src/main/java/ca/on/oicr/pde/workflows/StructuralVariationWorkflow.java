@@ -296,7 +296,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
 
             // Merging (vcftoolsDir) Job - make one file
             Job mergeJob = this.getWorkflow().createBashJob("vcf_merge");
-            mergeJob.setCommand(getWorkflowBaseDir() + "/dependencies/vcfmerge_wrapper.pl"
+            mergeJob.setCommand(getWorkflowBaseDir() + "/bin/vcfmerge_wrapper.pl"
                               + " --list=\"" +  mergeThese + "\""
                               + " --datadir=" + this.dataDir
                               + " --tabix=" + this.tabixDir
