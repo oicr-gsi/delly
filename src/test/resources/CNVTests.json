@@ -1,0 +1,31 @@
+{
+    "defaults": {
+        "description": "MutectStrelka workflow test",
+        "metrics_calculate": "calculate.sh",
+        "metrics_compare": "compare.sh",
+        "input_config_dir": "/.mounts/labs/PDE/data/RegressionTests/MutectStrelka/workflow/input_config/",
+        "output_metrics_dir": "/.mounts/labs/PDE/data/RegressionTests/MutectStrelka/workflow/output_expectation/"
+    },
+    "tests": [
+        {
+            "id": "workflow2",
+            "parameters": {
+                "input_files_normal": "${workflow_bundle_dir}/Workflow_Bundle_MutectStrelka/${project.version}/data/GSM732315.SRR222175.sorted.rg.bam",
+                "input_files_tumor": "${workflow_bundle_dir}/Workflow_Bundle_MutectStrelka/${project.version}/data/GSM732316.SRR222176.sorted.rg.bam",
+                "reference_fasta": "/.mounts/labs/PDE/data/MutectStrelka/hg19/hg19_random_sorted.fa",
+                "cosmic_vcf": "/.mounts/labs/PDE/data/MutectStrelka/cosmic/b37_cosmic_v54_120711.chr.vcf",
+                "dbsnp_vcf": "/.mounts/labs/PDE/data/MutectStrelka/dbSNP/dbsnp_132_b37.leftAligned.vcf.gz"
+            }
+        },
+        {
+            "id": "workflow4",
+            "parameters": {
+                "input_files_normal": "${workflow_bundle_dir}/Workflow_Bundle_MutectStrelka/${project.version}/data/GSM732315.SRR222175.sorted.rg.bam",
+                "input_files_tumor": "${workflow_bundle_dir}/Workflow_Bundle_MutectStrelka/${project.version}/data/GSM732316.SRR222176.sorted.rg.bam,${workflow_bundle_dir}/Workflow_Bundle_MutectStrelka/${project.version}/data/GSM732318.SRR222178.sorted.rg.bam",
+                "reference_fasta": "/.mounts/labs/PDE/data/MutectStrelka/hg19/hg19_random_sorted.fa",
+                "cosmic_vcf": "/.mounts/labs/PDE/data/MutectStrelka/cosmic/b37_cosmic_v54_120711.chr.vcf",
+                "dbsnp_vcf": "/.mounts/labs/PDE/data/MutectStrelka/dbSNP/dbsnp_132_b37.leftAligned.vcf.gz"
+            }
+        }
+    ]
+}
