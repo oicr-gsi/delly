@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import net.sourceforge.seqware.common.util.Log;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Job;
 import net.sourceforge.seqware.pipeline.workflowV2.model.SqwFile;
+import net.sourceforge.seqware.pipeline.workflowV2.model.Workflow;
 
 public class CNVWorkflow extends OicrWorkflow {
 
@@ -15,7 +16,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private String strelkaVersion;
     private String samtoolsVersion;
     private String vcftoolsVersion;
-    private String tabixVersion;
+    private String bicseqVersion;
     private String picardVersion;
     
     //References
@@ -40,8 +41,12 @@ public class CNVWorkflow extends OicrWorkflow {
     private String dataDir;
     private String tempDir;
     private String alignerSoftware;
+    private int bicseqInterval;
+    private int bicseqSpread;
 
     private boolean doCrosscheck = false;
+    private static final String BICSEQ_I_DEFAULT = "150";
+    private static final String BICSEQ_S_DEFAULT = "20";
 
     /**
      * 
@@ -160,11 +165,11 @@ public class CNVWorkflow extends OicrWorkflow {
                 this.vcftoolsVersion = getProperty("vcftools_version");
             }
 
-            if (getProperty("tabix_version") == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "tabix_version is not set, we need it to call tabix correctly");
+            if (getProperty("bicseq_version") == null) {
+                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "bicseq_version is not set, we need it to call BICseq correctly");
                 return (null);
             } else {
-                this.tabixVersion = getProperty("tabix_version");
+                this.bicseqVersion = getProperty("bicseq_version");
             }
 
             if (getProperty("picard_version") == null) {
@@ -189,6 +194,8 @@ public class CNVWorkflow extends OicrWorkflow {
             this.localInputTumorFiles = new String[this.tumor.length];
             this.normalBases = new String[this.normal.length];
             this.tumorBases = new String[this.tumor.length];
+            this.bicseqInterval = Integer.valueOf(getOptionalProperty("biqseq_interval", BICSEQ_I_DEFAULT));
+            this.bicseqSpread   = Integer.valueOf(getOptionalProperty("biqseq_spread",   BICSEQ_S_DEFAULT));
 
             String[] types = {"normal", "tumor"};
             for (String type : types) {
@@ -259,6 +266,26 @@ public class CNVWorkflow extends OicrWorkflow {
         try {
             
             
+          // TODO - crosscheck configured and routed here, each job should accept a pair of normal/tumor bam or just one bam
+          // for reference-free analysis
+          for (int n = 0; n < this.normal.length; n++) {
+               for (int t = 0; t < this.tumor.length; t++) {
+               //TODO need to think how to configure this for crosscheck properly if we don't have reference        
+               }
+          }
+          
+          // if this.templateType == "WG"
+          //==============Launch Supported Analyses for Whole Genome Data
+          // launchBicSeq();
+          // launchHMMcopy();
+          // launchSupportedAnalyses("WG");
+          
+          
+          // else if this.templateType == "EX"
+          //==============Launch Supported Analyses for Whole Exome Data
+          // launch VarSeq2();
+          // launch FREEC();
+          // launchSupportedAnalyses("EX);
 
 
         } catch (Exception e) {
@@ -266,34 +293,71 @@ public class CNVWorkflow extends OicrWorkflow {
         }
     }
 
-    /*
-     * bgzipp-ing
-     */
-    private Job bgzipIndexJob(String fileName, String inputDir, String outputDir, boolean index) {
-        if (!inputDir.endsWith("/")) {
-            inputDir = inputDir.concat("/");
-        }
-        if (!outputDir.endsWith("/")) {
-            outputDir = outputDir.concat("/");
-        }
-
-        Job bgzipIdxJob = this.getWorkflow().createBashJob("bgzip_idx");
-        bgzipIdxJob.setCommand(getWorkflowBaseDir() + "/bin/tabix-" + this.tabixVersion + "/bgzip -c "
-                + inputDir + fileName + " > "
-                + outputDir + fileName + ".gz");
-        if (index) {
-            bgzipIdxJob.getCommand().addArgument(";" + getWorkflowBaseDir() + "/bin/tabix-" + this.tabixVersion + "/tabix -p vcf "
-                                               + outputDir + fileName + ".gz");
-        }
-        bgzipIdxJob.setMaxMemory("2000");
-        if (!this.queue.isEmpty()) {
-            bgzipIdxJob.setQueue(this.queue);
-        }
-        return bgzipIdxJob;
-    }
-
     /**
-     * Misc functions for setting up jobs, performing repeating calculations
+     * BICseq configuring/launching
      */
+    private void launchBicSeq(SqwFile[] inputs) {
+
+        // Job convertJob and create configFile
+        Job convertJob = this.getWorkflow().createBashJob("bicseq_prepare");
+        StringBuilder inputFiles = new StringBuilder();
+        // Concatenate inputs
+        for(SqwFile in : inputs) {
+            convertJob.addFile(in);
+            if (inputFiles.length() > 0)
+                inputFiles.append(",");
+            inputFiles.append(in);
+        }
+        
+        
+        String configFile = "bicseq_config";// + TODO
+        convertJob.setCommand(getWorkflowBaseDir() + "/dependencies/configureBICseq.pl"
+                            + " --inputs " + inputFiles.toString()
+                            + " --outdir " + this.dataDir
+                            + " --samtools " + getWorkflowBaseDir() + "/bin/BICseq-" + this.bicseqVersion
+                            + "/PERL_pipeline/BICseq_" + this.bicseqVersion + "/SAMgetUnique/samtools-0.1.7a_getUnique-0.1.1/samtools");
+        convertJob.setMaxMemory("4000");
+        Log.stdout("Created BICseq convert Job");
+        
+        
+        // Launch BICSeq, provision results
+        //PERL_pipeline/BICseq_1.1.2/BIC-seq/BIC-seq.pl --I 150,20 /u/pruzanov/Data/CNVtools/BICseq/test1.config /scratch2/users/pruzanov/Data/CNVTOOLS/BIC-seq.hn.test1 \"InitialTest\"
+        String resultDir = "BICseq_out";// + TODO
+        Job launchJob = this.getWorkflow().createBashJob("bicseq_launch");
+        launchJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchBICseq.pl"
+                           + " --input-config " + configFile
+                           + " --outdir " + this.dataDir + resultDir
+                           + " --bigseq-interval" + this.bicseqInterval
+                           + " --bicseq-spread"   + this.bicseqSpread
+                           + " --biqseq " + getWorkflowBaseDir() + "/bin/BICseq-" + this.bicseqVersion
+                           + "/PERL_pipeline/BICseq_" + this.bicseqVersion);
+        launchJob.setMaxMemory("6000");
+        Log.stdout("Created BICseq launch Job");
+    }
     
+    /**
+     * HMMcopy configuring/launching
+     */
+    private void launchHMMcopy() {
+        // take inputs, convert into .seq
+        
+        // compose config file
+        
+        // Launch HMMcopy scripts, provision results
+    }
+    
+    
+    /**
+     * Varscan configuring/launching
+     */
+    private void launchVarscan() {
+        
+    }
+    
+    /**
+     * FREEC configuring/launching
+     */
+    private void launchFREEC() {
+        
+    }
 }

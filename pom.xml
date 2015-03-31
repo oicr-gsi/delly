@@ -10,15 +10,14 @@
     </parent>
 
     <groupId>ca.on.oicr.pde.workflows</groupId>
-    <artifactId>MutectStrelka</artifactId>
-    <version>1.2</version>
+    <artifactId>CNV</artifactId>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>${display-name}</name>
 
     <properties>
-        <workflow-name>MutectStrelka</workflow-name>
-        <mutect-jre-version>1.6.0_29</mutect-jre-version>
+        <workflow-name>CNV</workflow-name>
         <testSuite>src/test/resources/testng.xml</testSuite>
     </properties>
 
@@ -62,6 +61,13 @@
             <groupId>picard</groupId>
             <artifactId>picard-tools</artifactId>
             <version>1.72</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>BICseq</groupId>
+            <artifactId>BICseq</artifactId>
+            <version>1.1.2</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
