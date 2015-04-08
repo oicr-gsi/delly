@@ -296,24 +296,17 @@ public class CNVWorkflow extends OicrWorkflow {
     /**
      * BICseq configuring/launching
      */
-    private void launchBicSeq(SqwFile[] inputs) {
+    private void launchBicSeq(SqwFile inputNormal, SqwFile inputTumor, int id) {
 
         // Job convertJob and create configFile
         Job convertJob = this.getWorkflow().createBashJob("bicseq_prepare");
-        StringBuilder inputFiles = new StringBuilder();
-        // Concatenate inputs
-        for(SqwFile in : inputs) {
-            convertJob.addFile(in);
-            if (inputFiles.length() > 0)
-                inputFiles.append(",");
-            inputFiles.append(in);
-        }
-        
-        
-        String configFile = "bicseq_config";// + TODO
+            
+        String configFile = "bicseq_config_" + id;// + TODO
         convertJob.setCommand(getWorkflowBaseDir() + "/dependencies/configureBICseq.pl"
-                            + " --inputs " + inputFiles.toString()
+                            + " --input-normal " + inputNormal.getProvisionedPath()
+                            + " --input-tumor "  + inputTumor.getProvisionedPath()
                             + " --outdir " + this.dataDir
+                            + " --config-file " + configFile
                             + " --samtools " + getWorkflowBaseDir() + "/bin/BICseq-" + this.bicseqVersion
                             + "/PERL_pipeline/BICseq_" + this.bicseqVersion + "/SAMgetUnique/samtools-0.1.7a_getUnique-0.1.1/samtools");
         convertJob.setMaxMemory("4000");
@@ -332,6 +325,7 @@ public class CNVWorkflow extends OicrWorkflow {
                            + " --biqseq " + getWorkflowBaseDir() + "/bin/BICseq-" + this.bicseqVersion
                            + "/PERL_pipeline/BICseq_" + this.bicseqVersion);
         launchJob.setMaxMemory("6000");
+        launchJob.addParent(convertJob);
         Log.stdout("Created BICseq launch Job");
     }
     
