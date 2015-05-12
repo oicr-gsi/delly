@@ -12,21 +12,12 @@ import net.sourceforge.seqware.pipeline.workflowV2.model.Workflow;
 public class CNVWorkflow extends OicrWorkflow {
 
     //Versions of tools
-    private String mutectVersion;
-    private String strelkaVersion;
-    private String samtoolsVersion;
-    private String vcftoolsVersion;
     private String bicseqVersion;
-    private String picardVersion;
     
     //References
-    private String referenceFasta;
-    private String bundledJRE;
-    private String cosmicVcf;
-    private String dbSNPvcf;
     private boolean manualOutput;
     private boolean doSort = true;
-    private String queue;
+    private String  queue;
 
     //Data
     private String[] normal;
@@ -40,7 +31,6 @@ public class CNVWorkflow extends OicrWorkflow {
     //Misc
     private String dataDir;
     private String tempDir;
-    private String alignerSoftware;
     private int bicseqInterval;
     private int bicseqSpread;
 
@@ -99,20 +89,6 @@ public class CNVWorkflow extends OicrWorkflow {
                 this.chromData = nextProp.split(",");
             }
 
-            nextProp = getProperty("jre-version");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "jre-version is not set, we need it to run picard");
-                return (null);
-            } else {
-                this.bundledJRE = nextProp;
-            }
-
-            if (getProperty("reference_fasta") == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "reference_fasta is not set!");
-            } else {
-                this.referenceFasta = getProperty("reference_fasta");
-            }
-
             if (getProperty("queue") == null) {
                 Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "Queue not set, will run on a queue assigned by sge");
                 this.queue = "";
@@ -130,41 +106,6 @@ public class CNVWorkflow extends OicrWorkflow {
 
             
             // =====================Application Versions
-            nextProp = getProperty("mutect_version");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "MuTect version not set");
-                this.mutectVersion = "";
-                return (null);
-            } else {
-                this.mutectVersion = nextProp;
-            }
-
-            nextProp = getProperty("strelka_version");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "Strelka version not set");
-                this.strelkaVersion = "";
-                return (null);
-            } else {
-                this.strelkaVersion = nextProp;
-            }
-
-            nextProp = getProperty("samtools_version");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "samtools version not set");
-                this.samtoolsVersion = "";
-                return (null);
-            } else {
-                this.samtoolsVersion = nextProp;
-            }
-
-            nextProp = getProperty("vcftools_version");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "vcftools_version is not set, we need it to call vcftools correctly");
-                return (null);
-            } else {
-                this.vcftoolsVersion = getProperty("vcftools_version");
-            }
-
             if (getProperty("bicseq_version") == null) {
                 Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "bicseq_version is not set, we need it to call BICseq correctly");
                 return (null);
@@ -172,14 +113,7 @@ public class CNVWorkflow extends OicrWorkflow {
                 this.bicseqVersion = getProperty("bicseq_version");
             }
 
-            if (getProperty("picard_version") == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "picard_version is not set, we need it to call tabix correctly");
-                return (null);
-            } else {
-                this.picardVersion = getProperty("picard_version");
-            }
-
-            
+           
             //=============A special flag that determines if we need to sort/index
             nextProp = getProperty("do_sort");
             if (nextProp == null || nextProp.isEmpty()) {
@@ -270,13 +204,17 @@ public class CNVWorkflow extends OicrWorkflow {
           // for reference-free analysis
           for (int n = 0; n < this.normal.length; n++) {
                for (int t = 0; t < this.tumor.length; t++) {
-               //TODO need to think how to configure this for crosscheck properly if we don't have reference        
+               //TODO need to think how to configure this for crosscheck properly if we don't have reference
+               launchBicSeq(this.localInputNormalFiles[n],
+                            this.localInputTumorFiles[t], n);
+                   
                }
           }
           
           // if this.templateType == "WG"
           //==============Launch Supported Analyses for Whole Genome Data
-          // launchBicSeq();
+               //launchBicSeq(this.localInputNormalFiles[n],
+               //             this.localInputTumorFiles[t], n);
           // launchHMMcopy();
           // launchSupportedAnalyses("WG");
           
@@ -296,15 +234,15 @@ public class CNVWorkflow extends OicrWorkflow {
     /**
      * BICseq configuring/launching
      */
-    private void launchBicSeq(SqwFile inputNormal, SqwFile inputTumor, int id) {
+    private void launchBicSeq(String inputNormal, String inputTumor, int id) {
 
         // Job convertJob and create configFile
         Job convertJob = this.getWorkflow().createBashJob("bicseq_prepare");
             
-        String configFile = "bicseq_config_" + id;// + TODO
+        String configFile = "bicseq_config_" + id;
         convertJob.setCommand(getWorkflowBaseDir() + "/dependencies/configureBICseq.pl"
-                            + " --input-normal " + inputNormal.getProvisionedPath()
-                            + " --input-tumor "  + inputTumor.getProvisionedPath()
+                            + " --input-normal " + inputNormal
+                            + " --input-tumor "  + inputTumor
                             + " --outdir " + this.dataDir
                             + " --config-file " + configFile
                             + " --samtools " + getWorkflowBaseDir() + "/bin/BICseq-" + this.bicseqVersion
@@ -314,16 +252,20 @@ public class CNVWorkflow extends OicrWorkflow {
         
         
         // Launch BICSeq, provision results
-        //PERL_pipeline/BICseq_1.1.2/BIC-seq/BIC-seq.pl --I 150,20 /u/pruzanov/Data/CNVtools/BICseq/test1.config /scratch2/users/pruzanov/Data/CNVTOOLS/BIC-seq.hn.test1 \"InitialTest\"
-        String resultDir = "BICseq_out";// + TODO
+        // PERL_pipeline/BICseq_1.1.2/BIC-seq/BIC-seq.pl --I 150,20 /u/pruzanov/Data/CNVtools/BICseq/test1.config /scratch2/users/pruzanov/Data/CNVTOOLS/BIC-seq.hn.test1 \"InitialTest\"
+        String resultDir = "BICseq_out_" + id;
         Job launchJob = this.getWorkflow().createBashJob("bicseq_launch");
+        String resultID = this.makeBasename(inputNormal, ".bam") + ".vs." 
+                        + this.makeBasename(inputTumor,  ".bam");
+        
         launchJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchBICseq.pl"
-                           + " --input-config " + configFile
+                           + " --config-file " + configFile
                            + " --outdir " + this.dataDir + resultDir
-                           + " --bigseq-interval" + this.bicseqInterval
-                           + " --bicseq-spread"   + this.bicseqSpread
+                           + " --bigseq-interval " + this.bicseqInterval
+                           + " --bicseq-spread "   + this.bicseqSpread
+                           + " --result-id " + resultID
                            + " --biqseq " + getWorkflowBaseDir() + "/bin/BICseq-" + this.bicseqVersion
-                           + "/PERL_pipeline/BICseq_" + this.bicseqVersion);
+                           + "/PERL_pipeline/BICseq_" + this.bicseqVersion + "/BIC-seq/BIC-seq.pl");
         launchJob.setMaxMemory("6000");
         launchJob.addParent(convertJob);
         Log.stdout("Created BICseq launch Job");
@@ -353,5 +295,16 @@ public class CNVWorkflow extends OicrWorkflow {
      */
     private void launchFREEC() {
         
+    }
+    
+    /**
+     * Utility function
+     * 
+     * @param path
+     * @param extension
+     * @return 
+     */
+    private String makeBasename(String path, String extension) {
+        return path.substring(path.lastIndexOf("/"), path.lastIndexOf(extension));
     }
 }
