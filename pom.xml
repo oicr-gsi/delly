@@ -23,13 +23,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.sourceforge</groupId>
-            <artifactId>vcftools</artifactId>
-            <version>0.1.10</version>
-            <type>zip</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>samtools</groupId>
             <artifactId>samtools</artifactId>
             <version>0.1.19</version>
@@ -37,32 +30,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>samtools</groupId>
-            <artifactId>tabix</artifactId>
-            <version>0.2.6</version>
+            <groupId>FREEC</groupId>
+            <artifactId>FREEC</artifactId>
+            <version>7.2</version>
             <type>zip</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>strelka</groupId>
-            <artifactId>strelka</artifactId>
-            <version>1.0.13</version>
-            <type>zip</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>mutect</groupId>
-            <artifactId>mutect</artifactId>
-            <version>1.1.4</version>
-            <type>zip</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>picard</groupId>
-            <artifactId>picard-tools</artifactId>
-            <version>1.72</version>
-            <type>zip</type>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>BICseq</groupId>

@@ -5,10 +5,10 @@ use Getopt::Long;
 use File::Basename;
 use constant DEBUG=>0;
 
-my $USAGE = "configureBICseq.pl --input-t [tumor input] --input-n [normal input] --outdir [root data dir] --config-file [name of config file] --samtools [path to modified samtools]\n";
+my $USAGE = "configureBICseq.pl --input-tumor [tumor input] --input-normal [normal input] --outdir [root data dir] --config-file [name of config file] --samtools [path to modified samtools]\n";
 my($input_n,$input_t,$datadir,$config,$samtools);
-my $results = GetOptions ("input-n=s"  => \$input_n,
-                          "input-t=s"  => \$input_t,
+my $results = GetOptions ("input-normal=s"  => \$input_n,
+                          "input-tumor=s"  => \$input_t,
                           "outdir=s"   => \$datadir,
                           "config-file=s"=>\$config,
                           "samtools=s" => \$samtools);

@@ -13,7 +13,14 @@ public class CNVWorkflow extends OicrWorkflow {
 
     //Versions of tools
     private String bicseqVersion;
+    private String freecVersion;
+    private String samtoolsVersion;
     
+    //FREEC
+    private String chrLengthFile = "";
+    private String templateType;
+    private String freecVarCoeff = "";
+            
     //References
     private boolean manualOutput;
     private boolean doSort = true;
@@ -37,7 +44,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private boolean doCrosscheck = false;
     private static final String BICSEQ_I_DEFAULT = "150";
     private static final String BICSEQ_S_DEFAULT = "20";
-
+    private static final String FREEC_CV_DEFAULT = "0.5";
     /**
      * 
      * 
@@ -113,6 +120,27 @@ public class CNVWorkflow extends OicrWorkflow {
                 this.bicseqVersion = getProperty("bicseq_version");
             }
 
+            if (getProperty("freec_version") == null) {
+                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "freec_version is not set, we need it to call FREEC correctly");
+                return (null);
+            } else {
+                this.freecVersion = getProperty("freec_version");
+            }
+            
+            if (getProperty("samtools_version") == null) {
+                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "samtools_version is not set, we need it to call samtools correctly");
+                return (null);
+            } else {
+                this.samtoolsVersion = getProperty("samtools_version");
+            }
+            
+            nextProp = getProperty("freec_var_coefficient");
+            if (nextProp == null) {
+                this.freecVarCoeff = FREEC_CV_DEFAULT;
+                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "freec_var_coefficient is not set, will use default value " + FREEC_CV_DEFAULT);
+            } else {
+                this.freecVarCoeff = nextProp.isEmpty() ? FREEC_CV_DEFAULT : getProperty("freec_var_coefficient");;
+            }
            
             //=============A special flag that determines if we need to sort/index
             nextProp = getProperty("do_sort");
@@ -239,7 +267,7 @@ public class CNVWorkflow extends OicrWorkflow {
         // Job convertJob and create configFile
         Job convertJob = this.getWorkflow().createBashJob("bicseq_prepare");
             
-        String configFile = "bicseq_config_" + id;
+        String configFile = "bicseq_config." + id + ".conf";
         convertJob.setCommand(getWorkflowBaseDir() + "/dependencies/configureBICseq.pl"
                             + " --input-normal " + inputNormal
                             + " --input-tumor "  + inputTumor
@@ -293,8 +321,29 @@ public class CNVWorkflow extends OicrWorkflow {
     /**
      * FREEC configuring/launching
      */
-    private void launchFREEC() {
+    private void launchFREEC(String inputNormal, String inputTumor, int id) {
         
+        // Job convertJob and create configFile
+        Job freecJob = this.getWorkflow().createBashJob("freec_launch");
+            
+        String configFile = "freec_config." + id + ".conf";
+        freecJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchFREEC.pl"
+                            + " --input-normal " + inputNormal
+                            + " --input-tumor "  + inputTumor
+                            + " --lenfile " + this.chrLengthFile
+                            + " --id " + id
+                            + " --freec " + getWorkflowBaseDir() + "/bin/FREEC-" + this.freecVersion + "/freec"
+                            + " --data-type " + this.templateType
+                            + " --outdir " + this.dataDir
+                            + " --samtools " + getWorkflowBaseDir() + "/bin/samtools-" + this.samtoolsVersion + "/samtools");
+                            
+        if (!this.freecVarCoeff.isEmpty()) {
+         freecJob.getCommand().addArgument(" var-coefficient " + this.freecVarCoeff);
+        }              
+                
+        freecJob.setMaxMemory("6000");
+        
+        Log.stdout("Created FREEC launch Job");
     }
     
     /**
