@@ -42,35 +42,13 @@
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>R_packages</groupId>
+            <artifactId>DNAcopy</artifactId>
+            <version>1.22.1</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.pyx4j</groupId>
-                <artifactId>maven-junction-plugin</artifactId>
-                <configuration>
-                    <links>
-                        <link>
-                            <dst>${project.build.directory}/Workflow_Bundle_${workflow-name}_${project.version}_SeqWare_${seqware-version}/Workflow_Bundle_${workflow-directory-name}/${project.version}/data/GSM732315.SRR222175.sorted.rg.bam</dst>
-                            <src>${basedir}/links/data/GSM732315.SRR222175.sorted.rg.bam</src>
-                        </link>
-                        <link>
-                            <dst>${project.build.directory}/Workflow_Bundle_${workflow-name}_${project.version}_SeqWare_${seqware-version}/Workflow_Bundle_${workflow-directory-name}/${project.version}/data/GSM732316.SRR222176.sorted.rg.bam</dst>
-                            <src>${basedir}/links/data/GSM732316.SRR222176.sorted.rg.bam</src>
-                        </link>
-                        <link>
-                            <dst>${project.build.directory}/Workflow_Bundle_${workflow-name}_${project.version}_SeqWare_${seqware-version}/Workflow_Bundle_${workflow-directory-name}/${project.version}/data/GSM732317.SRR222177.sorted.rg.bam</dst>
-                            <src>${basedir}/links/data/GSM732317.SRR222177.sorted.rg.bam</src>
-                        </link>
-                        <link>
-                            <dst>${project.build.directory}/Workflow_Bundle_${workflow-name}_${project.version}_SeqWare_${seqware-version}/Workflow_Bundle_${workflow-directory-name}/${project.version}/data/GSM732318.SRR222178.sorted.rg.bam</dst>
-                            <src>${basedir}/links/data/GSM732318.SRR222178.sorted.rg.bam</src>
-                        </link>
-                    </links>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

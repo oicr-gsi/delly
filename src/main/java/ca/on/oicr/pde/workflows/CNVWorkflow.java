@@ -14,6 +14,7 @@ public class CNVWorkflow extends OicrWorkflow {
     //Versions of tools
     private String bicseqVersion;
     private String freecVersion;
+    private String varscanVersion;
     private String samtoolsVersion;
     
     //FREEC
@@ -25,6 +26,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private boolean manualOutput;
     private boolean doSort = true;
     private String  queue;
+    private String  refFasta;
 
     //Data
     private String[] normal;
@@ -45,6 +47,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private static final String BICSEQ_I_DEFAULT = "150";
     private static final String BICSEQ_S_DEFAULT = "20";
     private static final String FREEC_CV_DEFAULT = "0.5";
+    
     /**
      * 
      * 
@@ -56,28 +59,13 @@ public class CNVWorkflow extends OicrWorkflow {
 
         try {
 
-            String nextProp = getProperty("input_files_normal");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "input_files_normal is not set, we need at least one bam file");
-                return (null);
-            } else {
-                this.normal = nextProp.split(",");
-            }
-
-            nextProp = getProperty("force_crosscheck");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "force_crosscheck is not set, will do only one normal vs N tumors or pairwise N vs T");
-            } else {
-                this.doCrosscheck = nextProp.isEmpty() || nextProp.equalsIgnoreCase("false") ? false : true;
-            }
-
-            nextProp = getProperty("input_files_tumor");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "input_files_tumor is not set, we need at least one bam file");
-                return (null);
-            } else {
-                this.tumor = nextProp.split(",");
-                if (this.tumor.length != this.normal.length) {
+            this.normal = getProperty("input_files_normal").split(",");
+            this.samtoolsVersion = getProperty("samtools_version");
+            this.tumor = getProperty("input_files_tumor").split(",");
+            this.chromData = getProperty("chromosome_length").split(",");
+            this.queue = getProperty("queue");
+            
+            if (this.tumor.length != this.normal.length) {
                     if (this.normal.length == 1) {
                         this.doCrosscheck = true;
                     } else {
@@ -85,25 +73,24 @@ public class CNVWorkflow extends OicrWorkflow {
                                 + "check your .ini file");
                         return (null);
                     }
-                }
             }
 
-            nextProp = getProperty("chromosome_length");
-            if (nextProp == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "chromosome_length is not set, mutect won't split by chromosome, slower option");
-                this.chromData = null;
+            // =====================Application Versions           
+            this.bicseqVersion = getProperty("bicseq_version");
+            this.freecVersion = getProperty("freec_version");
+            this.samtoolsVersion = getProperty("samtools_version");
+            this.varscanVersion  = getProperty("varscan_version");
+            this.freecVarCoeff = getOptionalProperty("freec_var_coefficient", FREEC_CV_DEFAULT);
+           
+            //=============A special flag that determines if we need to sort/index
+            String nextProp = getProperty("do_sort");
+            if (nextProp == null || nextProp.isEmpty()) {
+                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "do_sort is not set, will deduce it from the names of input files");
+                this.doSort = !this.normal[0].contains("sorted");
             } else {
-                this.chromData = nextProp.split(",");
+                this.doSort = nextProp.isEmpty() || nextProp.equalsIgnoreCase("false") ? false : true;
             }
-
-            if (getProperty("queue") == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "Queue not set, will run on a queue assigned by sge");
-                this.queue = "";
-                return (null);
-            } else {
-                this.queue = getProperty("queue");
-            }
-
+            
             nextProp = getProperty("manual_output");
             if (nextProp == null) {
                 Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "manual_output is not set, will put the file into automatically generated dir");
@@ -111,53 +98,13 @@ public class CNVWorkflow extends OicrWorkflow {
                 this.manualOutput = nextProp.isEmpty() || nextProp.equalsIgnoreCase("false") ? false : true;
             }
 
-            
-            // =====================Application Versions
-            if (getProperty("bicseq_version") == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "bicseq_version is not set, we need it to call BICseq correctly");
-                return (null);
-            } else {
-                this.bicseqVersion = getProperty("bicseq_version");
-            }
-
-            if (getProperty("freec_version") == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "freec_version is not set, we need it to call FREEC correctly");
-                return (null);
-            } else {
-                this.freecVersion = getProperty("freec_version");
-            }
-            
-            if (getProperty("samtools_version") == null) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "samtools_version is not set, we need it to call samtools correctly");
-                return (null);
-            } else {
-                this.samtoolsVersion = getProperty("samtools_version");
-            }
-            
-            nextProp = getProperty("freec_var_coefficient");
-            if (nextProp == null) {
-                this.freecVarCoeff = FREEC_CV_DEFAULT;
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "freec_var_coefficient is not set, will use default value " + FREEC_CV_DEFAULT);
-            } else {
-                this.freecVarCoeff = nextProp.isEmpty() ? FREEC_CV_DEFAULT : getProperty("freec_var_coefficient");;
-            }
-           
-            //=============A special flag that determines if we need to sort/index
-            nextProp = getProperty("do_sort");
-            if (nextProp == null || nextProp.isEmpty()) {
-                Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "do_sort is not set, will deduce it from the names of input files");
-                this.doSort = !this.normal[0].contains("sorted");
-            } else {
-                this.doSort = nextProp.isEmpty() || nextProp.equalsIgnoreCase("false") ? false : true;
-            }
-
             // Register input files and set up local files
             this.localInputNormalFiles = new String[this.normal.length];
-            this.localInputTumorFiles = new String[this.tumor.length];
-            this.normalBases = new String[this.normal.length];
-            this.tumorBases = new String[this.tumor.length];
-            this.bicseqInterval = Integer.valueOf(getOptionalProperty("biqseq_interval", BICSEQ_I_DEFAULT));
-            this.bicseqSpread   = Integer.valueOf(getOptionalProperty("biqseq_spread",   BICSEQ_S_DEFAULT));
+            this.localInputTumorFiles  = new String[this.tumor.length];
+            this.normalBases           = new String[this.normal.length];
+            this.tumorBases            = new String[this.tumor.length];
+            this.bicseqInterval        = Integer.valueOf(getOptionalProperty("biqseq_interval", BICSEQ_I_DEFAULT));
+            this.bicseqSpread          = Integer.valueOf(getOptionalProperty("biqseq_spread",   BICSEQ_S_DEFAULT));
 
             String[] types = {"normal", "tumor"};
             for (String type : types) {
@@ -314,8 +261,22 @@ public class CNVWorkflow extends OicrWorkflow {
     /**
      * Varscan configuring/launching
      */
-    private void launchVarscan() {
+    private void launchVarscan(String inputNormal, String inputTumor, int id) {
         
+        Job varscanJob = this.getWorkflow().createBashJob("bicseq_prepare");   
+        String outputDir = this.dataDir + "Varscan2." + id; 
+        
+        varscanJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchVarscan2.pl"
+                            + " --input-normal " + inputNormal
+                            + " --input-tumor "  + inputTumor
+                            + " --output-dir "   + outputDir
+                            + " --ref-fasta "    + refFasta
+                            + " --java "         + getWorkflowBaseDir() + "/bin/" + getProperty("bundled_jre") + "/bin/java"
+                            + " --varscan "      + getWorkflowBaseDir() + "/bin/VarScan.v" + varscanVersion
+                            + " --samtools "     + getWorkflowBaseDir() + "/bin/samtools-" 
+                                                 + this.samtoolsVersion + "/samtools");
+        varscanJob.setMaxMemory("6000");
+        Log.stdout("Created Varscan launch Job");
     }
     
     /**
@@ -326,7 +287,6 @@ public class CNVWorkflow extends OicrWorkflow {
         // Job convertJob and create configFile
         Job freecJob = this.getWorkflow().createBashJob("freec_launch");
             
-        String configFile = "freec_config." + id + ".conf";
         freecJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchFREEC.pl"
                             + " --input-normal " + inputNormal
                             + " --input-tumor "  + inputTumor
@@ -342,7 +302,6 @@ public class CNVWorkflow extends OicrWorkflow {
         }              
                 
         freecJob.setMaxMemory("6000");
-        
         Log.stdout("Created FREEC launch Job");
     }
     
