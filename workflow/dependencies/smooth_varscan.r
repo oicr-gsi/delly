@@ -1,3 +1,6 @@
+# This script relies on wrapper which is supposed to set environment variable
+# R_LIBS that points to a directory with needed modules
+
 library(DNAcopy)
 cmd_args=commandArgs(trailingOnly = TRUE)
 

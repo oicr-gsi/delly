@@ -1,6 +1,9 @@
 package ca.on.oicr.pde.workflows;
 
 import ca.on.oicr.pde.utilities.workflows.OicrWorkflow;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +19,8 @@ public class CNVWorkflow extends OicrWorkflow {
     private String freecVersion;
     private String varscanVersion;
     private String samtoolsVersion;
+    private String hmmcopyVersion;
+    private String rVersion;
     
     //FREEC
     private String chrLengthFile = "";
@@ -27,6 +32,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private boolean doSort = true;
     private String  queue;
     private String  refFasta;
+    private String  chromSizeFile;
 
     //Data
     private String[] normal;
@@ -35,7 +41,6 @@ public class CNVWorkflow extends OicrWorkflow {
     private String[] localInputTumorFiles;
     private String[] normalBases;
     private String[] tumorBases;
-    private String[] chromData; // if we have this, do mutect split/merge that should be faster
 
     //Misc
     private String dataDir;
@@ -59,10 +64,11 @@ public class CNVWorkflow extends OicrWorkflow {
 
         try {
 
-            this.normal = getProperty("input_files_normal").split(",");
-            this.samtoolsVersion = getProperty("samtools_version");
-            this.tumor = getProperty("input_files_tumor").split(",");
-            this.chromData = getProperty("chromosome_length").split(",");
+            this.normal   = getProperty("input_files_normal").split(",");
+            this.tumor    = getProperty("input_files_tumor").split(",");
+            this.refFasta = getProperty("reference_fasta");
+            this.chromSizeFile = getProperty("chromsize_file");
+            
             this.queue = getProperty("queue");
             
             if (this.tumor.length != this.normal.length) {
@@ -80,22 +86,25 @@ public class CNVWorkflow extends OicrWorkflow {
             this.freecVersion = getProperty("freec_version");
             this.samtoolsVersion = getProperty("samtools_version");
             this.varscanVersion  = getProperty("varscan_version");
+            this.samtoolsVersion = getProperty("samtools_version");
+            this.hmmcopyVersion = getProperty("hmmcopy_version");
+            this.rVersion = getProperty("R_version");
             this.freecVarCoeff = getOptionalProperty("freec_var_coefficient", FREEC_CV_DEFAULT);
            
             //=============A special flag that determines if we need to sort/index
-            String nextProp = getProperty("do_sort");
-            if (nextProp == null || nextProp.isEmpty()) {
+            String sortFlag = getProperty("do_sort");
+            if (sortFlag == null || sortFlag.isEmpty()) {
                 Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "do_sort is not set, will deduce it from the names of input files");
                 this.doSort = !this.normal[0].contains("sorted");
             } else {
-                this.doSort = nextProp.isEmpty() || nextProp.equalsIgnoreCase("false") ? false : true;
+                this.doSort = sortFlag.isEmpty() || sortFlag.equalsIgnoreCase("false") ? false : true;
             }
             
-            nextProp = getProperty("manual_output");
-            if (nextProp == null) {
+            String manualFlag = getProperty("manual_output");
+            if (manualFlag == null) {
                 Logger.getLogger(CNVWorkflow.class.getName()).log(Level.WARNING, "manual_output is not set, will put the file into automatically generated dir");
             } else {
-                this.manualOutput = nextProp.isEmpty() || nextProp.equalsIgnoreCase("false") ? false : true;
+                this.manualOutput = manualFlag.isEmpty() || manualFlag.equalsIgnoreCase("false") ? false : true;
             }
 
             // Register input files and set up local files
@@ -111,8 +120,7 @@ public class CNVWorkflow extends OicrWorkflow {
                 int listSize = type.equals("normal") ? this.normal.length : this.tumor.length;
                 for (int fileIndex = 0; fileIndex < listSize; fileIndex++) {
                     String bamBasename;
-                    /*
-                     * vcftools analyzes filename, and if .gz is present, it will treat the file az bgzipped
+                    /* vcftools analyzes filename, and if .gz is present, it will treat the file az bgzipped
                      * So, in our case we need to make sure that we don't have .gz in our files' names
                      */
                     if (type.equals("normal")) {
@@ -140,7 +148,7 @@ public class CNVWorkflow extends OicrWorkflow {
                         this.localInputTumorFiles[fileIndex] = !this.doSort ? file.getProvisionedPath() : this.dataDir + bamBasename + ".sorted.bam";
                     }
                 }
-            }// finished registering input bam files
+            } // finished registering input bam files
 
             return this.getFiles();
 
@@ -173,32 +181,79 @@ public class CNVWorkflow extends OicrWorkflow {
     public void buildWorkflow() {
 
         try {
-            
-            
-          // TODO - crosscheck configured and routed here, each job should accept a pair of normal/tumor bam or just one bam
-          // for reference-free analysis
+          
+          List<Job> sortJobs = new ArrayList<Job>();
+
+          if (this.doSort) {
+          String[] types = {"normal", "tumor"};
+            for (String type : types) {
+                int listSize = type.equals("normal") ? this.normal.length : this.tumor.length;
+                for (int fileIndex = 0; fileIndex < listSize; fileIndex++) {
+                    String bamBasename = "";
+                    String filePath = "";
+                if (type.equals("normal")) {
+                  bamBasename = this.makeBasename(this.localInputNormalFiles[fileIndex], ".bam");
+                  filePath = this.normal[fileIndex];
+                } else {
+                  bamBasename = this.makeBasename(this.localInputTumorFiles[fileIndex], ".bam");
+                  filePath = this.tumor[fileIndex];
+                }
+                  
+                Job jobSamSort = this.getWorkflow().createBashJob("index_sort");
+                jobSamSort.setCommand(getWorkflowBaseDir() + "/bin/samtools-" + this.samtoolsVersion + "/samtools sort "
+                                    + filePath + " "
+                                    + this.dataDir + bamBasename); // localIndexed file
+                jobSamSort.setMaxMemory("9000");
+                 if (!this.queue.isEmpty()) {
+                     jobSamSort.setQueue(this.queue);
+                 }
+                sortJobs.add(jobSamSort);
+                }
+           }
+          }
+
           for (int n = 0; n < this.normal.length; n++) {
                for (int t = 0; t < this.tumor.length; t++) {
                //TODO need to think how to configure this for crosscheck properly if we don't have reference
-               launchBicSeq(this.localInputNormalFiles[n],
-                            this.localInputTumorFiles[t], n);
-                   
+               if (this.templateType.equals("WG")) {
+                 // LAUNCH BICseq
+                 launchBicSeq(this.localInputNormalFiles[n],
+                              this.localInputTumorFiles[t], n, sortJobs);
+                 // LAUNCH HMMcopy
+                 // launchHMMcopy();
+                 
+                 // LAUNCH FREEC
+                 launchFREEC(this.localInputNormalFiles[n],
+                             this.localInputTumorFiles[t], n, null);
+                 // launchSupportedAnalyses("WG");
+               } else if (this.templateType.equals("EX")) {
+                 // LAUNCH FREEC
+                 launchFREEC(this.localInputNormalFiles[n],
+                             this.localInputTumorFiles[t], n, sortJobs);
+                 // LAUNCH Varscan
+                 launchVarscan(this.localInputNormalFiles[n],
+                               this.localInputTumorFiles[t], n, null);
+                 
+                 // launchSupportedAnalyses("EX);
+               } else {
+                   throw new RuntimeException("Unsupported template type, workflow will terminate!");
                }
+                   
+              }
           }
           
           // if this.templateType == "WG"
           //==============Launch Supported Analyses for Whole Genome Data
                //launchBicSeq(this.localInputNormalFiles[n],
                //             this.localInputTumorFiles[t], n);
-          // launchHMMcopy();
-          // launchSupportedAnalyses("WG");
+          
           
           
           // else if this.templateType == "EX"
           //==============Launch Supported Analyses for Whole Exome Data
           // launch VarSeq2();
           // launch FREEC();
-          // launchSupportedAnalyses("EX);
+          
 
 
         } catch (Exception e) {
@@ -209,7 +264,7 @@ public class CNVWorkflow extends OicrWorkflow {
     /**
      * BICseq configuring/launching
      */
-    private void launchBicSeq(String inputNormal, String inputTumor, int id) {
+    private void launchBicSeq(String inputNormal, String inputTumor, int id, List<Job> parents) {
 
         // Job convertJob and create configFile
         Job convertJob = this.getWorkflow().createBashJob("bicseq_prepare");
@@ -223,6 +278,11 @@ public class CNVWorkflow extends OicrWorkflow {
                             + " --samtools " + getWorkflowBaseDir() + "/bin/BICseq-" + this.bicseqVersion
                             + "/PERL_pipeline/BICseq_" + this.bicseqVersion + "/SAMgetUnique/samtools-0.1.7a_getUnique-0.1.1/samtools");
         convertJob.setMaxMemory("4000");
+        if (parents != null) {
+            for (Job p : parents) {
+                convertJob.addParent(p);
+            }
+        }
         Log.stdout("Created BICseq convert Job");
         
         
@@ -249,44 +309,111 @@ public class CNVWorkflow extends OicrWorkflow {
     /**
      * HMMcopy configuring/launching
      */
-    private void launchHMMcopy() {
-        // take inputs, convert into .seq
+    private void launchHMMcopy(String inputNormal, String inputTumor, int id, List<Job> parents) {
         
-        // compose config file
+        String[] allInputs = {inputNormal, inputTumor};
+        String outputDir = this.dataDir + "HMMcopy." + id + "/";
+        List<Job> setupJobs = new ArrayList<Job>();
+        String normalMpb;
+        String tumorMpb;
         
+        // Inputs converted into .wig and then - .bw format
+        for (String inFile : allInputs) {
+            // =============== indexing =========================================
+            Job indexJob = this.getWorkflow().createBashJob("hmmcopy_index");
+            indexJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter -b " + inFile);
+            indexJob.setMaxMemory("4000");
+            
+            if (parents != null) {
+             for (Job p : parents) {
+                indexJob.addParent(p);
+             }
+            }
+            
+            //============ converting to wig format =============================
+            Job convertJob = this.getWorkflow().createBashJob("hmmcopy_convert");
+            convertJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter " + inFile
+                                + " > " + outputDir + this.makeBasename(inFile, ".bam") + "_reads.wig");
+            convertJob.setMaxMemory("4000");
+            convertJob.addParent(indexJob);
+            
+            //================== convert to bigwig format =======================
+            Job convertBwJob = this.getWorkflow().createBashJob("hmmcopy_bw_convert");
+            convertBwJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/util/bigwig/wigToBigWig"
+                                  + " -clip " + outputDir + this.makeBasename(inFile, ".bam") + "_reads.wig "
+                                  + this.chrLengthFile +  " " + outputDir + this.makeBasename(inFile, ".bam") + ".bw");
+
+            convertBwJob.setMaxMemory("4000");
+            convertBwJob.addParent(convertJob);
+            
+            //===================calculate mappability ==========================
+            Job mappableJob = this.getWorkflow().createBashJob("hmmcopy_mappability");
+            mappableJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/mapCounter " 
+                                 + outputDir + this.makeBasename(inFile, ".bam") + ".bw > "
+                                 + outputDir + this.makeBasename(inFile, ".bam") + ".mappable.wig");
+            
+            if (inFile.equals(inputNormal)) {
+              normalMpb = outputDir + this.makeBasename(inFile, ".bam") + ".mappable.wig";
+            } else {
+              tumorMpb  = outputDir + this.makeBasename(inFile, ".bam") + ".mappable.wig";
+            }
+            
+            mappableJob.setMaxMemory("4000");
+            mappableJob.addParent(convertBwJob);
+            
+            setupJobs.add(mappableJob);
+        }
+  
+        // cg content calculation for bins:
+
+        // bin/gcCounter <FASTA reference> > gc.wig
+
+        //  average mappability for bins
+
+        // bin/mapCounter <BigWig file> > map.wig
         // Launch HMMcopy scripts, provision results
     }
+         
+       
+    
     
     
     /**
      * Varscan configuring/launching
      */
-    private void launchVarscan(String inputNormal, String inputTumor, int id) {
+    private void launchVarscan(String inputNormal, String inputTumor, int id, List<Job> parents) {
         
         Job varscanJob = this.getWorkflow().createBashJob("bicseq_prepare");   
-        String outputDir = this.dataDir + "Varscan2." + id; 
+        String outputDir = this.dataDir + "Varscan2." + id + "/"; 
         
         varscanJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchVarscan2.pl"
                             + " --input-normal " + inputNormal
                             + " --input-tumor "  + inputTumor
                             + " --output-dir "   + outputDir
+                            + " --rlibs-dir "    + getWorkflowBaseDir() + "/bin"
                             + " --ref-fasta "    + refFasta
-                            + " --java "         + getWorkflowBaseDir() + "/bin/" + getProperty("bundled_jre") + "/bin/java"
+                            + " --java "         + getWorkflowBaseDir() + "/bin/jre" + getProperty("jre-version") + "/bin/java"
                             + " --varscan "      + getWorkflowBaseDir() + "/bin/VarScan.v" + varscanVersion
+                            + " --id "           + id
                             + " --samtools "     + getWorkflowBaseDir() + "/bin/samtools-" 
                                                  + this.samtoolsVersion + "/samtools");
         varscanJob.setMaxMemory("6000");
+        if (parents != null) {
+            for (Job p : parents) {
+                varscanJob.addParent(p);
+            }
+        }
         Log.stdout("Created Varscan launch Job");
     }
     
     /**
      * FREEC configuring/launching
      */
-    private void launchFREEC(String inputNormal, String inputTumor, int id) {
+    private void launchFREEC(String inputNormal, String inputTumor, int id, List<Job> parents) {
         
         // Job convertJob and create configFile
         Job freecJob = this.getWorkflow().createBashJob("freec_launch");
-            
+        String outputDir = this.dataDir + "FREEC." + id + "/";      
         freecJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchFREEC.pl"
                             + " --input-normal " + inputNormal
                             + " --input-tumor "  + inputTumor
@@ -294,14 +421,19 @@ public class CNVWorkflow extends OicrWorkflow {
                             + " --id " + id
                             + " --freec " + getWorkflowBaseDir() + "/bin/FREEC-" + this.freecVersion + "/freec"
                             + " --data-type " + this.templateType
-                            + " --outdir " + this.dataDir
+                            + " --outdir " + outputDir
                             + " --samtools " + getWorkflowBaseDir() + "/bin/samtools-" + this.samtoolsVersion + "/samtools");
                             
         if (!this.freecVarCoeff.isEmpty()) {
-         freecJob.getCommand().addArgument(" var-coefficient " + this.freecVarCoeff);
+         freecJob.getCommand().addArgument(" --var-coefficient " + this.freecVarCoeff);
         }              
                 
         freecJob.setMaxMemory("6000");
+        if (parents != null) {
+            for (Job p : parents) {
+                freecJob.addParent(p);
+            }
+        }
         Log.stdout("Created FREEC launch Job");
     }
     

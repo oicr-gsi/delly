@@ -43,9 +43,23 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>R_packages</groupId>
+            <groupId>R-packages</groupId>
             <artifactId>DNAcopy</artifactId>
             <version>1.22.1</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>R</groupId>
+            <artifactId>R</artifactId>
+            <version>3.1.1</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>HMMcopy</groupId>
+            <artifactId>HMMcopy</artifactId>
+            <version>0.99.0</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
