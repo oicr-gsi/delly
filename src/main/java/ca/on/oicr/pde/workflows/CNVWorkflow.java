@@ -2,7 +2,6 @@ package ca.on.oicr.pde.workflows;
 
 import ca.on.oicr.pde.utilities.workflows.OicrWorkflow;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -10,7 +9,6 @@ import java.util.logging.Logger;
 import net.sourceforge.seqware.common.util.Log;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Job;
 import net.sourceforge.seqware.pipeline.workflowV2.model.SqwFile;
-import net.sourceforge.seqware.pipeline.workflowV2.model.Workflow;
 
 public class CNVWorkflow extends OicrWorkflow {
 
@@ -32,7 +30,10 @@ public class CNVWorkflow extends OicrWorkflow {
     private boolean doSort = true;
     private String  queue;
     private String  refFasta;
-    private String  chromSizeFile;
+    
+    //HMMcopy
+    private String refGCfile;
+    private String refMAPfile;
 
     //Data
     private String[] normal;
@@ -64,10 +65,13 @@ public class CNVWorkflow extends OicrWorkflow {
 
         try {
 
-            this.normal   = getProperty("input_files_normal").split(",");
-            this.tumor    = getProperty("input_files_tumor").split(",");
-            this.refFasta = getProperty("reference_fasta");
-            this.chromSizeFile = getProperty("chromsize_file");
+            this.normal     = getProperty("input_files_normal").split(",");
+            this.tumor      = getProperty("input_files_tumor").split(",");
+            this.refFasta   = getProperty("reference_fasta");
+            this.refGCfile  = getProperty("reference_gc");
+            this.refMAPfile = getProperty("reference_map");
+            this.chrLengthFile = getProperty("reference_len_file");
+            this.templateType  = getProperty("template_type");
             
             this.queue = getProperty("queue");
             
@@ -218,41 +222,34 @@ public class CNVWorkflow extends OicrWorkflow {
                if (this.templateType.equals("WG")) {
                  // LAUNCH BICseq
                  launchBicSeq(this.localInputNormalFiles[n],
-                              this.localInputTumorFiles[t], n, sortJobs);
+                              this.localInputTumorFiles[t], n + 1, sortJobs);
                  // LAUNCH HMMcopy
-                 // launchHMMcopy();
+                 launchHMMcopy(this.localInputNormalFiles[n],
+                               this.localInputTumorFiles[t], n + 1, sortJobs);
                  
                  // LAUNCH FREEC
                  launchFREEC(this.localInputNormalFiles[n],
-                             this.localInputTumorFiles[t], n, null);
+                             this.localInputTumorFiles[t], n + 1, null);
                  // launchSupportedAnalyses("WG");
+                 
+                 //TODO summary job
                } else if (this.templateType.equals("EX")) {
                  // LAUNCH FREEC
                  launchFREEC(this.localInputNormalFiles[n],
-                             this.localInputTumorFiles[t], n, sortJobs);
+                             this.localInputTumorFiles[t], n + 1, sortJobs);
                  // LAUNCH Varscan
                  launchVarscan(this.localInputNormalFiles[n],
-                               this.localInputTumorFiles[t], n, null);
+                               this.localInputTumorFiles[t], n + 1, null);
                  
                  // launchSupportedAnalyses("EX);
+                 
+                 //TODO summary job
                } else {
                    throw new RuntimeException("Unsupported template type, workflow will terminate!");
                }
                    
               }
           }
-          
-          // if this.templateType == "WG"
-          //==============Launch Supported Analyses for Whole Genome Data
-               //launchBicSeq(this.localInputNormalFiles[n],
-               //             this.localInputTumorFiles[t], n);
-          
-          
-          
-          // else if this.templateType == "EX"
-          //==============Launch Supported Analyses for Whole Exome Data
-          // launch VarSeq2();
-          // launch FREEC();
           
 
 
@@ -294,7 +291,7 @@ public class CNVWorkflow extends OicrWorkflow {
                         + this.makeBasename(inputTumor,  ".bam");
         
         launchJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchBICseq.pl"
-                           + " --config-file " + configFile
+                           + " --config-file " + this.dataDir + configFile
                            + " --outdir " + this.dataDir + resultDir
                            + " --bigseq-interval " + this.bicseqInterval
                            + " --bicseq-spread "   + this.bicseqSpread
@@ -314,64 +311,46 @@ public class CNVWorkflow extends OicrWorkflow {
         String[] allInputs = {inputNormal, inputTumor};
         String outputDir = this.dataDir + "HMMcopy." + id + "/";
         List<Job> setupJobs = new ArrayList<Job>();
-        String normalMpb;
-        String tumorMpb;
-        
+       
         // Inputs converted into .wig and then - .bw format
         for (String inFile : allInputs) {
-            // =============== indexing =========================================
-            Job indexJob = this.getWorkflow().createBashJob("hmmcopy_index");
-            indexJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter -b " + inFile);
-            indexJob.setMaxMemory("4000");
+        // =============== indexing =========================================
+        Job indexJob = this.getWorkflow().createBashJob("hmmcopy_index");
+        indexJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter -b " + inFile);
+        indexJob.setMaxMemory("4000");
             
-            if (parents != null) {
-             for (Job p : parents) {
-                indexJob.addParent(p);
-             }
-            }
-            
-            //============ converting to wig format =============================
-            Job convertJob = this.getWorkflow().createBashJob("hmmcopy_convert");
-            convertJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter " + inFile
-                                + " > " + outputDir + this.makeBasename(inFile, ".bam") + "_reads.wig");
-            convertJob.setMaxMemory("4000");
-            convertJob.addParent(indexJob);
-            
-            //================== convert to bigwig format =======================
-            Job convertBwJob = this.getWorkflow().createBashJob("hmmcopy_bw_convert");
-            convertBwJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/util/bigwig/wigToBigWig"
-                                  + " -clip " + outputDir + this.makeBasename(inFile, ".bam") + "_reads.wig "
-                                  + this.chrLengthFile +  " " + outputDir + this.makeBasename(inFile, ".bam") + ".bw");
-
-            convertBwJob.setMaxMemory("4000");
-            convertBwJob.addParent(convertJob);
-            
-            //===================calculate mappability ==========================
-            Job mappableJob = this.getWorkflow().createBashJob("hmmcopy_mappability");
-            mappableJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/mapCounter " 
-                                 + outputDir + this.makeBasename(inFile, ".bam") + ".bw > "
-                                 + outputDir + this.makeBasename(inFile, ".bam") + ".mappable.wig");
-            
-            if (inFile.equals(inputNormal)) {
-              normalMpb = outputDir + this.makeBasename(inFile, ".bam") + ".mappable.wig";
-            } else {
-              tumorMpb  = outputDir + this.makeBasename(inFile, ".bam") + ".mappable.wig";
-            }
-            
-            mappableJob.setMaxMemory("4000");
-            mappableJob.addParent(convertBwJob);
-            
-            setupJobs.add(mappableJob);
+        if (parents != null) {
+          for (Job p : parents) {
+             indexJob.addParent(p);
+          }
         }
-  
-        // cg content calculation for bins:
-
-        // bin/gcCounter <FASTA reference> > gc.wig
-
-        //  average mappability for bins
-
-        // bin/mapCounter <BigWig file> > map.wig
-        // Launch HMMcopy scripts, provision results
+            
+        //============ converting to wig format =============================
+        Job convertJob = this.getWorkflow().createBashJob("hmmcopy_convert");
+        convertJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter " + inFile
+                            + " > " + outputDir + this.makeBasename(inFile, ".bam") + "_reads.wig");
+        convertJob.setMaxMemory("4000");
+        convertJob.addParent(indexJob);
+            
+        setupJobs.add(convertJob);
+        }
+       
+       // Launch HMMcopy scripts, provision results
+       //================== run HMMcopy ====================================
+        Job hmmJob = this.getWorkflow().createBashJob("hmmcopy_launch");     
+        hmmJob.setCommand(getWorkflowBaseDir() + "/bin/R-" + this.rVersion + "/bin/Rscript"
+                        + getWorkflowBaseDir() + "/dependencies/run_HMMcopy.r "
+                        + outputDir + this.makeBasename(inputNormal, ".bam") + "_reads.wig "
+                        + outputDir + this.makeBasename(inputTumor, ".bam") + "_reads.wig "
+                        + this.refGCfile + " "
+                        + this.refMAPfile + " "
+                        + outputDir + "hmmcopy_" + id);
+        hmmJob.setMaxMemory("6000");
+        for (Job p : setupJobs) {
+            hmmJob.addParent(p);
+        }
+        
+        Log.stdout("Created HMMcopy launch Job");
     }
          
        
@@ -383,7 +362,7 @@ public class CNVWorkflow extends OicrWorkflow {
      */
     private void launchVarscan(String inputNormal, String inputTumor, int id, List<Job> parents) {
         
-        Job varscanJob = this.getWorkflow().createBashJob("bicseq_prepare");   
+        Job varscanJob = this.getWorkflow().createBashJob("launch_varscan");   
         String outputDir = this.dataDir + "Varscan2." + id + "/"; 
         
         varscanJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchVarscan2.pl"
@@ -393,7 +372,7 @@ public class CNVWorkflow extends OicrWorkflow {
                             + " --rlibs-dir "    + getWorkflowBaseDir() + "/bin"
                             + " --ref-fasta "    + refFasta
                             + " --java "         + getWorkflowBaseDir() + "/bin/jre" + getProperty("jre-version") + "/bin/java"
-                            + " --varscan "      + getWorkflowBaseDir() + "/bin/VarScan.v" + varscanVersion
+                            + " --varscan "      + getWorkflowBaseDir() + "/bin/VarScan.v" + varscanVersion + ".jar"
                             + " --id "           + id
                             + " --samtools "     + getWorkflowBaseDir() + "/bin/samtools-" 
                                                  + this.samtoolsVersion + "/samtools");
@@ -445,6 +424,6 @@ public class CNVWorkflow extends OicrWorkflow {
      * @return 
      */
     private String makeBasename(String path, String extension) {
-        return path.substring(path.lastIndexOf("/"), path.lastIndexOf(extension));
+        return path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(extension));
     }
 }
