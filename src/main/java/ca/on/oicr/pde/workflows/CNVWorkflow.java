@@ -30,6 +30,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private boolean doSort = true;
     private String  queue;
     private String  refFasta;
+    private String targetFile;
     
     //HMMcopy
     private String refGCfile;
@@ -54,6 +55,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private static final String BICSEQ_S_DEFAULT = "20";
     private static final String FREEC_CV_DEFAULT = "0.5";
     
+    
     /**
      * 
      * 
@@ -72,6 +74,10 @@ public class CNVWorkflow extends OicrWorkflow {
             this.refMAPfile = getProperty("reference_map");
             this.chrLengthFile = getProperty("reference_len_file");
             this.templateType  = getProperty("template_type");
+            
+            if (this.templateType.equals("EX")) {
+                this.targetFile = getProperty("target_file");
+            }
             
             this.queue = getProperty("queue");
             
@@ -316,7 +322,7 @@ public class CNVWorkflow extends OicrWorkflow {
         for (String inFile : allInputs) {
         // =============== indexing =========================================
         Job indexJob = this.getWorkflow().createBashJob("hmmcopy_index");
-        indexJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter -b " + inFile);
+        indexJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy" + "/bin/readCounter -b " + inFile);
         indexJob.setMaxMemory("4000");
             
         if (parents != null) {
@@ -327,7 +333,7 @@ public class CNVWorkflow extends OicrWorkflow {
             
         //============ converting to wig format =============================
         Job convertJob = this.getWorkflow().createBashJob("hmmcopy_convert");
-        convertJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter " + inFile
+        convertJob.setCommand(getWorkflowBaseDir() + "/bin/HMMcopy" + "/bin/readCounter " + inFile
                             + " > " + outputDir + this.makeBasename(inFile, ".bam") + "_reads.wig");
         convertJob.setMaxMemory("4000");
         convertJob.addParent(indexJob);
@@ -405,7 +411,10 @@ public class CNVWorkflow extends OicrWorkflow {
                             
         if (!this.freecVarCoeff.isEmpty()) {
          freecJob.getCommand().addArgument(" --var-coefficient " + this.freecVarCoeff);
-        }              
+        }
+        if (this.templateType.equals("EX")) {
+         freecJob.getCommand().addArgument(" --target-file " + this.targetFile);
+        }
                 
         freecJob.setMaxMemory("6000");
         if (parents != null) {

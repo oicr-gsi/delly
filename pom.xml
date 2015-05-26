@@ -34,6 +34,7 @@
             <artifactId>FREEC</artifactId>
             <version>7.2</version>
             <type>zip</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>BICseq</groupId>
