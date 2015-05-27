@@ -17,7 +17,7 @@ use constant DEBUG=>0;
 
 =cut
 
-my $USAGE = "configureFREEC.pl --input-tumor [tumor input] --input-normal [normal input] --data-type [optional, default is WG, EX supported] ".
+my $USAGE = "launchFREEC.pl --input-tumor [tumor input] --input-normal [normal input] --data-type [optional, default is WG, EX supported] ".
             " --outdir [root data dir] --config-file [name of template config file] --samtools [path to samtools]\n";
 
 # Required parameters
