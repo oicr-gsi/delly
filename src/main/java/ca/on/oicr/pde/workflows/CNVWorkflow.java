@@ -347,13 +347,22 @@ public class CNVWorkflow extends OicrWorkflow {
        // Launch HMMcopy scripts, provision results
        //================== run HMMcopy ====================================
         Job hmmJob = this.getWorkflow().createBashJob("hmmcopy_launch");     
-        hmmJob.setCommand(getWorkflowBaseDir() + "/bin/R-" + this.rVersion + "/bin/Rscript "
+        hmmJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchHMMcopy.pl "
+                        + " --rscript-path " + getWorkflowBaseDir() + "/bin/R-" + this.rVersion + "/bin/Rscript "
+                        + " --normal-wig "   + this.makeBasename(inputNormal, ".bam") + "_reads.wig "
+                        + " --tumor-wig "    + this.makeBasename(inputTumor, ".bam") + "_reads.wig "
+                        + " --cg-file "      + this.refGCfile
+                        + " --map-file "     + this.refMAPfile
+                        + " --hmm-script "   + getWorkflowBaseDir() + "/dependencies/run_HMMcopy.r"
+                        + " --output-base "  + outputDir + "hmmcopy_" + id);
+
+                /*getWorkflowBaseDir() + "/bin/R-" + this.rVersion + "/bin/Rscript "
                         + getWorkflowBaseDir() + "/dependencies/run_HMMcopy.r "
                         + this.makeBasename(inputNormal, ".bam") + "_reads.wig "
                         + this.makeBasename(inputTumor, ".bam") + "_reads.wig "
                         + this.refGCfile + " "
                         + this.refMAPfile + " "
-                        + outputDir + "hmmcopy_" + id);
+                        + outputDir + "hmmcopy_" + id); */
         hmmJob.setMaxMemory("6000");
         for (Job p : setupJobs) {
             hmmJob.addParent(p);
