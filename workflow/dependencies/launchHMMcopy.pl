@@ -21,8 +21,8 @@ use constant DEBUG=>0;
 my $USAGE = "launchHMMcopy.pl --rscript-path [path to Rscript] --wig-normal [input normal wig] --wig-tumor [input tumor wig] --cg-file [cg file] --map-file [map file] --output-base [basename for output]";
 
 # Required parameters
-my($hmm_script,$rscript,$wig_normal,$wig_tumor,$cg_file,$map_file,$output_base);
-my $results = GetOptions ("rscript-path=s"  =>  \$rscript,
+my($hmm_script,$rhome,$wig_normal,$wig_tumor,$cg_file,$map_file,$output_base);
+my $results = GetOptions ("rhome-path=s"    =>  \$rhome,
                           "normal-wig=s"    =>  \$wig_normal,
                           "tumor-wig=s"     =>  \$wig_tumor,
                           "cg-file=s"       =>  \$cg_file,
@@ -30,12 +30,20 @@ my $results = GetOptions ("rscript-path=s"  =>  \$rscript,
                           "hmm-script=s"    =>  \$hmm_script,
                           "output-base=s"   =>  \$output_base);
 
-if (!$wig_normal || !$wig_tumor || !$rscript || !$cg_file || !$map_file || !$output_base) { die $USAGE; }
+if (!$wig_normal || !$wig_tumor || !$rhome || !$cg_file || !$map_file || !$output_base) { die $USAGE; }
 
 # Make output directory if it does not exists                            
 my $outdir = dirname($output_base);
 `mkdir -p $outdir` if (!-e $outdir || !-d $outdir);
 
+# Set up environmental variables
+my $rlibdir = join("/",($rhome,"library"));
+
+$ENV{R_HOME}     = $rhome;
+$ENV{R_HOME_DIR} = $rhome;
+$ENV{R_LIBS}     = $rlibdir;
+
+my $rscript = join("/",($rhome,"bin/Rscript"));
 
 #=====================================
 # RUNNING HMMcopy script here

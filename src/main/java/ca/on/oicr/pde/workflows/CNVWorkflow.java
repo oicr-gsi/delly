@@ -348,7 +348,7 @@ public class CNVWorkflow extends OicrWorkflow {
        //================== run HMMcopy ====================================
         Job hmmJob = this.getWorkflow().createBashJob("hmmcopy_launch");     
         hmmJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchHMMcopy.pl "
-                        + " --rscript-path " + getWorkflowBaseDir() + "/bin/R-" + this.rVersion + "/bin/Rscript "
+                        + " --rhome-path " + getWorkflowBaseDir() + "/bin/R-" + this.rVersion
                         + " --normal-wig "   + this.makeBasename(inputNormal, ".bam") + "_reads.wig "
                         + " --tumor-wig "    + this.makeBasename(inputTumor, ".bam") + "_reads.wig "
                         + " --cg-file "      + this.refGCfile
