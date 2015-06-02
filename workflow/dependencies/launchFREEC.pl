@@ -52,7 +52,7 @@ $ploidy   ||= 2;
 $makebedgraph ||= "TRUE";
 $matetype ||= &guessMate($input_n);
 $type     ||= "WG";
-$cvar     ||= "0.05";
+$cvar     ||= "0.5";
 $logfile  = "freec.".$id.".log";
 
 $datadir.="/" if $datadir!~m!/$!;

@@ -54,7 +54,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private boolean doCrosscheck = false;
     private static final String BICSEQ_I_DEFAULT     = "150";  //TODO need to investigate if BICseq default parameters are optimal
     private static final String BICSEQ_S_DEFAULT     = "20";
-    private static final String FREEC_CV_DEFAULT     = "0.05"; //TODO need to investigate if FREEC default parameters are optimal
+    private static final String FREEC_CV_DEFAULT     = "0.5"; //TODO need to investigate if FREEC default parameters are optimal
     private static final String FREEC_WINDOW_DEFAULT = "25000";
     
     
