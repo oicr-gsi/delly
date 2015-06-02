@@ -17,6 +17,7 @@
 use strict;
 use File::Basename;
 use File::Path;
+use FindBin qw($Bin);
 use Getopt::Long;
 use constant DEBUG=>0;
 
@@ -99,5 +100,6 @@ if (-e "$out_dir/normtumor_sorted.pileup" && -s "$out_dir/normtumor_sorted.pileu
 $ENV{R_LIBS} = $rlibs_dir;
 
 print STDERR "Will run CBS script to reduce noise in data\n" if DEBUG;
-`Rscript smooth_varscan.r $out_dir/varscan_out.$id.copynumber`;
+my $message = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber`;
+print STDERR $message;
 

@@ -23,23 +23,24 @@ my $USAGE = "launchFREEC.pl --input-tumor [tumor input] --input-normal [normal i
 # Required parameters
 my($input_n,$input_t,$type,$id,$config,$lenfile,$samtools,$freec);
 # Optional parameters
-my($datadir,$ploidy,$makebedgraph,$matetype,$logfile,$targetFile,$cvar,$quiet);
-my $results = GetOptions ("input-normal=s"  =>  \$input_n,
+my($datadir,$ploidy,$makebedgraph,$matetype,$logfile,$targetFile,$cvar,$quiet,$window);
+my $results = GetOptions ("input-normal=s" =>  \$input_n,
                           "input-tumor=s"  =>  \$input_t,
-                          "samtools=s" =>  \$samtools,
-                          "lenfile=s"  =>  \$lenfile,
-                          "freec=s"    =>  \$freec,
-                          "id=s"       =>  \$id,
+                          "samtools=s"     =>  \$samtools,
+                          "lenfile=s"      =>  \$lenfile,
+                          "freec=s"        =>  \$freec,
+                          "id=s"           =>  \$id,
                           # Optional parameters
-                          "quiet=s"    =>  \$quiet,
-                          "data-type=s"=>  \$type,
+                          "quiet=s"        =>  \$quiet,
+                          "data-type=s"    =>  \$type,
                           "var-coefficient=s"=> \$cvar,
-                          "target-file=s"=>\$targetFile,
-                          "outdir=s"   =>  \$datadir,
-                          "config-file=s"=>\$config,
-                          "ploidy=s"     =>\$ploidy,
-                          "make-bedgraph=s" => \$makebedgraph,
-                          "mate-type=s"  =>\$matetype);
+                          "window=s"       => \$window,
+                          "target-file=s"  =>\$targetFile,
+                          "outdir=s"       =>\$datadir,
+                          "config-file=s"  =>\$config,
+                          "ploidy=s"       =>\$ploidy,
+                          "make-bedgraph=s"=> \$makebedgraph,
+                          "mate-type=s"    =>\$matetype);
 
 if (!$input_t || !$input_n || !$samtools || !$freec || !$id) { die $USAGE; }
 if ($type && $type eq "EX" && (!$targetFile || !-e $targetFile)) { die "Exome data passed, but no target .bed provided!"; }
@@ -51,8 +52,8 @@ $ploidy   ||= 2;
 $makebedgraph ||= "TRUE";
 $matetype ||= &guessMate($input_n);
 $type     ||= "WG";
-$cvar     ||= "0.5";
-$logfile    = "freec.".$id.".log";
+$cvar     ||= "0.05";
+$logfile  = "freec.".$id.".log";
 
 $datadir.="/" if $datadir!~m!/$!;
 $datadir.="FREEC_".$id."/";
@@ -68,6 +69,7 @@ coefficientOfVariation = CVAR_TAG
 outputDir = OUTDIR_TAG
 ploidy = PLOIDY_TAG
 samtools = SAMTOOLS_TAG
+window   = WINDOW_TAG
 
 [sample]
 
@@ -87,7 +89,7 @@ my $exomeConf = <<EXOME;
 
 [target]
 
-captureRegions = TARGETFILE_TAG;
+captureRegions = TARGETFILE_TAG
 
 EXOME
 
@@ -96,6 +98,17 @@ my $configBody = $configDefault;
 if ($type eq "EX") {
     $configBody .= $exomeConf;
     $configBody =~s/TARGETFILE_TAG/$targetFile/;
+} else {
+    print STDERR "THIS IS NOT EX, undeff-ing window param\n" if DEBUG;
+    undef($window);
+}
+
+if ($window) {
+    print STDERR "Replacing window param, setting it to [$window]\n" if DEBUG;
+    $configBody =~s/WINDOW_TAG/$window/;
+} else {
+    print STDERR "window param not set, removing tag\n" if DEBUG;
+    $configBody =~s/.*WINDOW_TAG//;
 }
 
 $configBody=~s/LENGHTFILE_TAG/$lenfile/;

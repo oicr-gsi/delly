@@ -24,6 +24,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private String chrLengthFile = "";
     private String templateType;
     private String freecVarCoeff = "";
+    private String freecWindow;
             
     //References
     private boolean manualOutput;
@@ -51,9 +52,10 @@ public class CNVWorkflow extends OicrWorkflow {
     private int bicseqSpread;
 
     private boolean doCrosscheck = false;
-    private static final String BICSEQ_I_DEFAULT = "150";
-    private static final String BICSEQ_S_DEFAULT = "20";
-    private static final String FREEC_CV_DEFAULT = "0.5";
+    private static final String BICSEQ_I_DEFAULT     = "150";  //TODO need to investigate if BICseq default parameters are optimal
+    private static final String BICSEQ_S_DEFAULT     = "20";
+    private static final String FREEC_CV_DEFAULT     = "0.05"; //TODO need to investigate if FREEC default parameters are optimal
+    private static final String FREEC_WINDOW_DEFAULT = "25000";
     
     
     /**
@@ -67,11 +69,11 @@ public class CNVWorkflow extends OicrWorkflow {
 
         try {
 
-            this.normal     = getProperty("input_files_normal").split(",");
-            this.tumor      = getProperty("input_files_tumor").split(",");
-            this.refFasta   = getProperty("reference_fasta");
-            this.refGCfile  = getProperty("reference_gc");
-            this.refMAPfile = getProperty("reference_map");
+            this.normal        = getProperty("input_files_normal").split(",");
+            this.tumor         = getProperty("input_files_tumor").split(",");
+            this.refFasta      = getProperty("reference_fasta");
+            this.refGCfile     = getProperty("reference_gc");
+            this.refMAPfile    = getProperty("reference_map");
             this.chrLengthFile = getProperty("reference_len_file");
             this.templateType  = getProperty("template_type");
             
@@ -92,15 +94,16 @@ public class CNVWorkflow extends OicrWorkflow {
             }
 
             // =====================Application Versions           
-            this.bicseqVersion = getProperty("bicseq_version");
-            this.freecVersion = getProperty("freec_version");
+            this.bicseqVersion   = getProperty("bicseq_version");
+            this.freecVersion    = getProperty("freec_version");
             this.samtoolsVersion = getProperty("samtools_version");
             this.varscanVersion  = getProperty("varscan_version");
             this.samtoolsVersion = getProperty("samtools_version");
-            this.hmmcopyVersion = getProperty("hmmcopy_version");
-            this.rVersion = getProperty("R_version");
-            this.freecVarCoeff = getOptionalProperty("freec_var_coefficient", FREEC_CV_DEFAULT);
-           
+            this.hmmcopyVersion  = getProperty("hmmcopy_version");
+            this.rVersion        = getProperty("R_version");
+            this.freecVarCoeff   = getOptionalProperty("freec_var_coefficient", FREEC_CV_DEFAULT);
+            this.freecWindow     = getOptionalProperty("freec_window", FREEC_WINDOW_DEFAULT);
+            
             //=============A special flag that determines if we need to sort/index
             String sortFlag = getProperty("do_sort");
             if (sortFlag == null || sortFlag.isEmpty()) {
@@ -124,6 +127,7 @@ public class CNVWorkflow extends OicrWorkflow {
             this.tumorBases            = new String[this.tumor.length];
             this.bicseqInterval        = Integer.valueOf(getOptionalProperty("biqseq_interval", BICSEQ_I_DEFAULT));
             this.bicseqSpread          = Integer.valueOf(getOptionalProperty("biqseq_spread",   BICSEQ_S_DEFAULT));
+                   
 
             String[] types = {"normal", "tumor"};
             for (String type : types) {
@@ -235,9 +239,7 @@ public class CNVWorkflow extends OicrWorkflow {
                  
                  // LAUNCH FREEC
                  launchFREEC(this.localInputNormalFiles[n],
-                             this.localInputTumorFiles[t], n + 1, null);
-                 // launchSupportedAnalyses("WG");
-                 
+                             this.localInputTumorFiles[t], n + 1, null);                
                  //TODO summary job
                } else if (this.templateType.equals("EX")) {
                  // LAUNCH FREEC
@@ -323,7 +325,7 @@ public class CNVWorkflow extends OicrWorkflow {
         // =============== indexing =========================================
         Job indexJob = this.getWorkflow().createBashJob("hmmcopy_index");
         indexJob.setCommand("mkdir -p " + outputDir + ";"
-                          + getWorkflowBaseDir() + "/bin/HMMcopy" + "/bin/readCounter -b " + inFile);
+                          + getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter -b " + inFile);
         indexJob.setMaxMemory("4000");
             
         if (parents != null) {
@@ -335,7 +337,7 @@ public class CNVWorkflow extends OicrWorkflow {
         //============ converting to wig format =============================
         Job convertJob = this.getWorkflow().createBashJob("hmmcopy_convert");
         convertJob.setCommand(getWorkflowBaseDir() + "/dependencies/convertHMMcopy.pl "
-                            + " --read-counter " + getWorkflowBaseDir() + "/bin/HMMcopy" + "/bin/readCounter "
+                            + " --read-counter " + getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter "
                             + " --input "  + inFile
                             + " --output " + this.makeBasename(inFile, ".bam") + "_reads.wig");
         convertJob.setMaxMemory("4000");
@@ -356,13 +358,6 @@ public class CNVWorkflow extends OicrWorkflow {
                         + " --hmm-script "   + getWorkflowBaseDir() + "/dependencies/run_HMMcopy.r"
                         + " --output-base "  + outputDir + "hmmcopy_" + id);
 
-                /*getWorkflowBaseDir() + "/bin/R-" + this.rVersion + "/bin/Rscript "
-                        + getWorkflowBaseDir() + "/dependencies/run_HMMcopy.r "
-                        + this.makeBasename(inputNormal, ".bam") + "_reads.wig "
-                        + this.makeBasename(inputTumor, ".bam") + "_reads.wig "
-                        + this.refGCfile + " "
-                        + this.refMAPfile + " "
-                        + outputDir + "hmmcopy_" + id); */
         hmmJob.setMaxMemory("6000");
         for (Job p : setupJobs) {
             hmmJob.addParent(p);
@@ -371,10 +366,7 @@ public class CNVWorkflow extends OicrWorkflow {
         Log.stdout("Created HMMcopy launch Job");
     }
          
-       
-    
-    
-    
+
     /**
      * Varscan configuring/launching
      */
@@ -394,7 +386,7 @@ public class CNVWorkflow extends OicrWorkflow {
                             + " --id "           + id
                             + " --samtools "     + getWorkflowBaseDir() + "/bin/samtools-" 
                                                  + this.samtoolsVersion + "/samtools");
-        varscanJob.setMaxMemory("6000");
+        varscanJob.setMaxMemory("8000");
         if (parents != null) {
             for (Job p : parents) {
                 varscanJob.addParent(p);
@@ -426,6 +418,7 @@ public class CNVWorkflow extends OicrWorkflow {
         }
         if (this.templateType.equals("EX")) {
          freecJob.getCommand().addArgument(" --target-file " + this.targetFile);
+         freecJob.getCommand().addArgument(" --window "      + this.freecWindow);
         }
                 
         freecJob.setMaxMemory("8000");
