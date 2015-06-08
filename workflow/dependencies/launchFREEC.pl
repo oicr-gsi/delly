@@ -98,10 +98,16 @@ my $configBody = $configDefault;
 if ($type eq "EX") {
     $configBody .= $exomeConf;
     $configBody =~s/TARGETFILE_TAG/$targetFile/;
+    $window ||= 500;
 } else {
-    print STDERR "THIS IS NOT EX, undeff-ing window param\n" if DEBUG;
-    undef($window);
+    $window ||= 50000;
 }
+
+
+#else {
+#    print STDERR "THIS IS NOT EX, undeff-ing window param\n" if DEBUG;
+#    undef($window);
+#}
 
 if ($window) {
     print STDERR "Replacing window param, setting it to [$window]\n" if DEBUG;
