@@ -52,10 +52,12 @@ public class CNVWorkflow extends OicrWorkflow {
     private int bicseqSpread;
 
     private boolean doCrosscheck = false;
-    private static final String BICSEQ_I_DEFAULT     = "150";  //TODO need to investigate if BICseq default parameters are optimal
-    private static final String BICSEQ_S_DEFAULT     = "20";
-    private static final String FREEC_CV_DEFAULT     = "0.5"; //TODO need to investigate if FREEC default parameters are optimal
-    private static final String FREEC_WINDOW_DEFAULT = "25000";
+    private static final String BICSEQ_I_DEFAULT        = "150";
+    private static final String BICSEQ_S_DEFAULT        = "20";
+    private static final String FREEC_CV_DEFAULT        = "0.05"; //TODO need to investigate if FREEC default parameters are optimal
+    private static final String FREEC_WINDOW_DEFAULT_EX = "500";
+    private static final String FREEC_WINDOW_DEFAULT_WG = "50000";
+    
     
     
     /**
@@ -78,7 +80,10 @@ public class CNVWorkflow extends OicrWorkflow {
             this.templateType  = getProperty("template_type");
             
             if (this.templateType.equals("EX")) {
-                this.targetFile = getProperty("target_file");
+                this.targetFile  = getProperty("target_file");
+                this.freecWindow = getOptionalProperty("freec_window", FREEC_WINDOW_DEFAULT_EX);
+            } else {
+                this.freecWindow     = getOptionalProperty("freec_window", FREEC_WINDOW_DEFAULT_WG);
             }
             
             this.queue = getProperty("queue");
@@ -102,7 +107,7 @@ public class CNVWorkflow extends OicrWorkflow {
             this.hmmcopyVersion  = getProperty("hmmcopy_version");
             this.rVersion        = getProperty("R_version");
             this.freecVarCoeff   = getOptionalProperty("freec_var_coefficient", FREEC_CV_DEFAULT);
-            this.freecWindow     = getOptionalProperty("freec_window", FREEC_WINDOW_DEFAULT);
+
             
             //=============A special flag that determines if we need to sort/index
             String sortFlag = getProperty("do_sort");
@@ -240,7 +245,6 @@ public class CNVWorkflow extends OicrWorkflow {
                  // LAUNCH FREEC
                  launchFREEC(this.localInputNormalFiles[n],
                              this.localInputTumorFiles[t], n + 1, null);                
-                 //TODO summary job
                } else if (this.templateType.equals("EX")) {
                  // LAUNCH FREEC
                  launchFREEC(this.localInputNormalFiles[n],
@@ -250,16 +254,14 @@ public class CNVWorkflow extends OicrWorkflow {
                                this.localInputTumorFiles[t], n + 1, null);
                  
                  // launchSupportedAnalyses("EX);
-                 
-                 //TODO summary job
                } else {
                    throw new RuntimeException("Unsupported template type, workflow will terminate!");
                }
                    
               }
           }
-          
-
+          //TODO summary job
+          //TODO provisioning job - conditional provisioning
 
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);

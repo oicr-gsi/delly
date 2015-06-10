@@ -3,6 +3,7 @@
 use strict;
 use Getopt::Long;
 use File::Basename;
+use FindBin qw($Bin);
 use constant DEBUG=>0;
 
 =head2 Running FREEC
@@ -23,9 +24,10 @@ my $USAGE = "launchFREEC.pl --input-tumor [tumor input] --input-normal [normal i
 # Required parameters
 my($input_n,$input_t,$type,$id,$config,$lenfile,$samtools,$freec);
 # Optional parameters
-my($datadir,$ploidy,$makebedgraph,$matetype,$logfile,$targetFile,$cvar,$quiet,$window);
+my($datadir,$ploidy,$makebedgraph,$matetype,$logfile,$targetFile,$cvar,$quiet,$window,$rhome);
 my $results = GetOptions ("input-normal=s" =>  \$input_n,
                           "input-tumor=s"  =>  \$input_t,
+                          "rhome-path=s"   =>  \$rhome,
                           "samtools=s"     =>  \$samtools,
                           "lenfile=s"      =>  \$lenfile,
                           "freec=s"        =>  \$freec,
@@ -45,6 +47,16 @@ my $results = GetOptions ("input-normal=s" =>  \$input_n,
 if (!$input_t || !$input_n || !$samtools || !$freec || !$id) { die $USAGE; }
 if ($type && $type eq "EX" && (!$targetFile || !-e $targetFile)) { die "Exome data passed, but no target .bed provided!"; }
 
+# Set up R
+# Set up environmental variables
+my $rlibdir = join("/",($rhome,"library"));
+
+$ENV{R_HOME}     = $rhome;
+$ENV{R_HOME_DIR} = $rhome;
+$ENV{R_LIBS}     = $rlibdir;
+
+my $rscript = join("/",($rhome,"bin/Rscript"));
+
 # Set defaults
 $datadir  ||= "data/";
 $config   ||= "freec.".$id.".conf";
@@ -52,7 +64,7 @@ $ploidy   ||= 2;
 $makebedgraph ||= "TRUE";
 $matetype ||= &guessMate($input_n);
 $type     ||= "WG";
-$cvar     ||= "0.5";
+$cvar     ||= "0.05";
 $logfile  = "freec.".$id.".log";
 
 $datadir.="/" if $datadir!~m!/$!;
@@ -153,6 +165,44 @@ if (!$quiet) {
   `$freec --conf $configPath  1>/dev/null` unless DEBUG;
 }
 
+=head2
+ 
+ Adding Wilcoxon and Kolmogorov-Smirnov test p-values to identified CNVS
+ File will be named [$input_t]_CNVs.p.value.txt
+ 
+
+=cut
+
+my $ratioFile = $input_t."_ratio.txt";
+my $cnvFile   = $input_t."_CNVs";
+
+print STDERR "Adding significance values to called variations\n";
+`$rscript $Bin/assess_significance.R $ratioFile $cnvFile`;
+
+=head2
+ 
+ We can also visualize the results using makeGraph.R 
+ script removing NA first
+
+=cut
+
+ my $noNAfile = $ratioFile;
+ $noNAfile=~s/_ratio.txt/_ratio_noNA.txt/;
+
+ open(IN,"<$ratioFile") or die "Couldn't read from ratio file";
+ open(OUT,">$noNAfile") or die "Couldn't write to output [$noNAfile]";
+ while (<IN>) {
+  my @temp = split("\t");
+  if ($temp[2] == -1){next;}
+  print OUT $_;
+ }
+ 
+ close IN;
+ close OUT;
+
+ print STDERR "Making CNV visualization for [$ratioFile]\n";
+ `$rscript $Bin/makeGraph.R $ploidy $noNAfile`;
+
 =head2 Sequencing type guessing
 
  The script cannot intelligently tell the difference between mate-pair and paired-end sequencing, therefore we 
@@ -160,6 +210,7 @@ if (!$quiet) {
  if no mate information has been passed to us
 
 =cut
+
 #================================================================
 # Subroutine for guessing mate type by looking at flagstat output
 #================================================================
