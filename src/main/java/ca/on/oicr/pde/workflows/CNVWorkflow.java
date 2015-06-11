@@ -52,11 +52,13 @@ public class CNVWorkflow extends OicrWorkflow {
     private int bicseqSpread;
 
     private boolean doCrosscheck = false;
-    private static final String BICSEQ_I_DEFAULT        = "150";
-    private static final String BICSEQ_S_DEFAULT        = "20";
-    private static final String FREEC_CV_DEFAULT        = "0.05"; //TODO need to investigate if FREEC default parameters are optimal
-    private static final String FREEC_WINDOW_DEFAULT_EX = "500";
-    private static final String FREEC_WINDOW_DEFAULT_WG = "50000";
+    private boolean skipFlag;
+    private static final String BICSEQ_I_DEFAULT         = "150";
+    private static final String BICSEQ_S_DEFAULT         = "20";
+    private static final String FREEC_CV_DEFAULT         = "0.05"; // TODO need to investigate if FREEC default parameters are optimal
+    private static final String FREEC_WINDOW_DEFAULT_EX  = "500";
+    private static final String FREEC_WINDOW_DEFAULT_WG  = "50000";
+    private static final boolean DEFAULT_SKIP_IF_MISSING = true;  // Conditional provisioning
     
     
     
@@ -78,6 +80,11 @@ public class CNVWorkflow extends OicrWorkflow {
             this.refMAPfile    = getProperty("reference_map");
             this.chrLengthFile = getProperty("reference_len_file");
             this.templateType  = getProperty("template_type");
+
+            
+            String fileSkipFlag = this.getOptionalProperty("skip_missing_files", Boolean.toString(DEFAULT_SKIP_IF_MISSING));
+            this.skipFlag = Boolean.valueOf(fileSkipFlag);
+            
             
             if (this.templateType.equals("EX")) {
                 this.targetFile  = getProperty("target_file");
@@ -442,5 +449,25 @@ public class CNVWorkflow extends OicrWorkflow {
      */
     private String makeBasename(String path, String extension) {
         return path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(extension));
+    }
+
+    /**
+     * Utility function
+     * @param files A template for further development of this workflow
+     */
+    private void conditionallyProvision(String[] files) {
+        // java -jar seqware-distribution-1.1.0-full.jar --plugin net.sourceforge.seqware.pipeline.plugins.ModuleRunner -- 
+        //                                               --module net.sourceforge.seqware.pipeline.modules.utilities.ProvisionFiles
+        //                                               --force-copy
+        //                                               --skip-if-missing
+        //                                               -i input-file
+        //                                               -o output-dir
+        //                                               -im file-metadata    '::' delimited list of type, meta_type, and file_path
+        //                                               
+        //this.getRandom()
+        SqwFile bfile = this.createOutputFile(this.dataDir + files[0], "application/bam", manualOutput);
+        String path = bfile.getOutputPath();
+        String type = bfile.getType();
+        bfile.setSkipIfMissing(manualOutput);
     }
 }

@@ -2,7 +2,6 @@
 
 use strict;
 use Getopt::Long;
-use File::Basename;
 use constant DEBUG=>0;
 
 # PERL_pipeline/BICseq_1.1.2/BIC-seq/BIC-seq.pl --I 150,20 /u/pruzanov/Data/CNVtools/BICseq/test1.config /scratch2/users/pruzanov/Data/CNVTOOLS/BIC-seq.hn.test1 \"ResultID\"

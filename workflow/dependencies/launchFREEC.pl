@@ -68,7 +68,6 @@ $cvar     ||= "0.05";
 $logfile  = "freec.".$id.".log";
 
 $datadir.="/" if $datadir!~m!/$!;
-$datadir.="FREEC_".$id."/";
 `mkdir -p $datadir` if (!-e $datadir || !-d $datadir);
 
 # Default config file
@@ -150,6 +149,7 @@ close CONF;
  By default, we log output from freec, however option quiet will disable this
 
 =cut
+
 #=====================================
 # RUNNING FREEC here
 #=====================================
@@ -170,14 +170,27 @@ if (!$quiet) {
  Adding Wilcoxon and Kolmogorov-Smirnov test p-values to identified CNVS
  File will be named [$input_t]_CNVs.p.value.txt
  
+ First we need to find if there are inputs
 
 =cut
 
-my $ratioFile = $input_t."_ratio.txt";
-my $cnvFile   = $input_t."_CNVs";
+my @files = `find $datadir -type f`;
+my $freec_dir = undef;
 
-print STDERR "Adding significance values to called variations\n";
-`$rscript $Bin/assess_significance.R $ratioFile $cnvFile`;
+if (@files && @files > 1) {
+ $freec_dir = dirname($files[0]);
+ print STDERR "Got [$freec_dir] for FREEC output dir\n" if DEBUG; 
+}
+ my $tumor_f   = fileparse($input_t);
+ my $ratioFile = $tumor_f."_ratio.txt";
+ my $cnvFile   = $tumor_f."_CNVs";
+
+ if ($freec_dir) {
+   print STDERR "Adding significance values to called variations in [$freec_dir/$ratioFile]\n";
+   print STDERR "Command: $rscript $Bin/assess_significance.R $freec_dir/$ratioFile $freec_dir/$cnvFile\n" if DEBUG;
+   `$rscript $Bin/assess_significance.R $freec_dir/$ratioFile $freec_dir/$cnvFile`;
+ }
+
 
 =head2
  
@@ -189,19 +202,23 @@ print STDERR "Adding significance values to called variations\n";
  my $noNAfile = $ratioFile;
  $noNAfile=~s/_ratio.txt/_ratio_noNA.txt/;
 
- open(IN,"<$ratioFile") or die "Couldn't read from ratio file";
- open(OUT,">$noNAfile") or die "Couldn't write to output [$noNAfile]";
- while (<IN>) {
-  my @temp = split("\t");
-  if ($temp[2] == -1){next;}
-  print OUT $_;
- }
+ if (-e "$freec_dir/$ratioFile") {
+  
+  open(IN,"<$freec_dir/$ratioFile") or die "Couldn't read from ratio file";
+  open(OUT,">$freec_dir/$noNAfile") or die "Couldn't write to output [$freec_dir/$noNAfile]";
+  while (<IN>) {
+   my @temp = split("\t");
+   if ($temp[2] eq "-1"){next;}
+   print OUT $_;
+  }
  
- close IN;
- close OUT;
+  close IN;
+  close OUT;
 
- print STDERR "Making CNV visualization for [$ratioFile]\n";
- `$rscript $Bin/makeGraph.R $ploidy $noNAfile`;
+  print STDERR "Making CNV visualization for [$freec_dir/$ratioFile]\n" if DEBUG;
+  `$rscript $Bin/makeGraph.R $ploidy $freec_dir/$noNAfile`;
+ 
+ }
 
 =head2 Sequencing type guessing
 
