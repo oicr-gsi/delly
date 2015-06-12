@@ -1,14 +1,14 @@
 #!/usr/bin/perl -w
 
-# =========================================================
-# Varscan2 wrapper - wrapping Varscan tool for CNV workflow
-# =========================================================
+=head2 Varscan2 wrapper - wrapping Varscan tool for CNV workflow
 
-=head2 Initial Data processing
+ Initial Data processing
  
  First, we need to produce pileup file using normal and tumor inputs
  It needs to be additionally parsed (using system awk) to remove zero-coverage
  entries. Samtools removes low-quality reads
+
+ it is recommended to pass sample name as id b/c it will be used in plots as a title
 
  samtools mpileup -q 1 -f hg18.fa normal_sorted.bam tumor_sorted.bam | awk -F"\t" '$4 > 0 && $7 > 0' > normtumor_sorted.pileup
 
@@ -101,8 +101,8 @@ if (-e "$out_dir/varscan_out.$id.copynumber") {
  $ENV{R_LIBS} = $rlibs_dir;
 
  print STDERR "Will run CBS script to reduce noise in data\n" if DEBUG;
- my $message = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber`;
+ my $message = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber $id`;
  print STDERR $message;
 } else {
- print STDERR "File with copynumber calls does not exist, won't attempt CBS smoothing\n";
+ print STDERR "File with copynumber calls does not exist, won't attempt CBS smoothing/visualization\n";
 }
