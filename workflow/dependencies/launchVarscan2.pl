@@ -29,18 +29,18 @@ my $result = GetOptions('input-normal=s' => \$normal,
                         'ref-fasta=s'    => \$ref_fasta,
                         'java=s'         => \$java,
                         'varscan=s'      => \$varscan,
-                        'id=i'           => \$id,
+                        'id=s'           => \$id,
                         'rlibs-dir=s'    => \$rlibs_dir,
                         'samtools=s'     => \$samtools);
 
-if (!$normal || !$tumor || !$out_dir || !$ref_fasta || !$samtools || !$rlibs_dir) {die $USAGE;}
+if (!$varscan || !$normal || !$tumor || !$out_dir || !$ref_fasta || !$samtools || !$rlibs_dir) {die $USAGE;}
 if (!-e $out_dir || !-d $out_dir) {
  mkpath($out_dir);
 }
 
 map{if(!/\.bam$/){die "Files are not in .bam format!";}} ($normal,$tumor);
 my $pileup_command = "$samtools mpileup -q 1 -f $ref_fasta $normal $tumor | awk -F \"\t\" '\$4 > 0 && \$7 > 0' > $out_dir/normtumor_sorted.pileup";
-print STDERR "Will run command $pileup_command" if DEBUG;
+print STDERR "Will run command $pileup_command\n" if DEBUG;
 
 `$pileup_command`;
 print STDERR "Pileup data produced, starting actual analysis...\n" if DEBUG;
@@ -97,9 +97,12 @@ if (-e "$out_dir/normtumor_sorted.pileup" && -s "$out_dir/normtumor_sorted.pileu
 
 =cut 
 
-$ENV{R_LIBS} = $rlibs_dir;
+if (-e "$out_dir/varscan_out.$id.copynumber") {
+ $ENV{R_LIBS} = $rlibs_dir;
 
-print STDERR "Will run CBS script to reduce noise in data\n" if DEBUG;
-my $message = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber`;
-print STDERR $message;
-
+ print STDERR "Will run CBS script to reduce noise in data\n" if DEBUG;
+ my $message = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber`;
+ print STDERR $message;
+} else {
+ print STDERR "File with copynumber calls does not exist, won't attempt CBS smoothing\n";
+}
