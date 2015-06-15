@@ -338,6 +338,8 @@ public class CNVWorkflow extends OicrWorkflow {
         launchJob.setMaxMemory("6000");
         launchJob.addParent(convertJob);
         Log.stdout("Created BICseq launch Job");
+        
+        // TODO provision files normal.vs.tumor.bicseg, normal.vs.tumor.png, normal.vs.tumor.wig
     }
     
     /**
@@ -393,6 +395,8 @@ public class CNVWorkflow extends OicrWorkflow {
         }
         
         Log.stdout("Created HMMcopy launch Job");
+        
+        // TODO provision .seg, .tsv, .bias_plot.png, .c_plot.chr*.png, .s_plot.chr*.png
     }
          
 
@@ -442,6 +446,9 @@ public class CNVWorkflow extends OicrWorkflow {
             }
         }
         Log.stdout("Created Varscan launch Job");
+        
+        //TODO provision files .copynumber, .copynumber.segmented, .copynumber.s_plot.png, .copynumber.s_plot.png, .copynumber.w_plot.png
+        //                     .copynumber.filtered and all other derivatives from it (see above)
     }
     
     /**
@@ -478,6 +485,8 @@ public class CNVWorkflow extends OicrWorkflow {
             }
         }
         Log.stdout("Created FREEC launch Job");
+        
+        // TODO provision [tumor bam]_CNVs.p.value.txt, *_ratio.BedGraph, *_ratio_noNA.txt.png, *_sample.cpn, *_control.cpn
     }
     
     /**
@@ -493,7 +502,7 @@ public class CNVWorkflow extends OicrWorkflow {
 
     /**
      * Utility function
-     * @param files A template for further development of this workflow
+     * @param files A template for further development of this workflow (may not be needed actually)
      */
     private void conditionallyProvision(String[] files) {
         // java -jar seqware-distribution-1.1.0-full.jar --plugin net.sourceforge.seqware.pipeline.plugins.ModuleRunner -- 

@@ -40,27 +40,48 @@ write.table(segmented_copy$segs, file = tsvFile, quote = FALSE, sep = "\t")
 # 4. Visualization - produce some images with hard-coded dimensions
 
 # Bias plots:
+print("Producing CG Bias plot...")
 png(filename = paste(outputBasename,"bias_plot","png", sep="."),width = 1200, height = 580, units="px", pointsize=15, bg="white")
 plotBias(tum_corrected_copy)  # May be one plot per comparison  1200x580
 dev.off()
 
-# Correction plots:
-# need to do it one plot per chromosome 1200x680
-chroms<-unique(segmented_copy$segs$chr)
-
-for (c in 1:length(chroms)) {
- png(filename = paste(outputBasename,"correction_plot",chroms[c],"png", sep="."),width = 1200, height = 680, units="px", pointsize=15, bg="white")
- plotCorrection(tum_corrected_copy, pch = ".", chr= chroms[c])
- dev.off()
-}
-
 # Segmentation plots:
 # need to do it one plot per chromosome 1200x450
+print("Producing Segmentation plots...")
 par(mfrow = c(1, 1))
 for (c in 1:length(chroms)) {
- png(filename = paste(outputBasename,"segments_plot", chroms[c], "png", sep="."),width = 1200, height = 450, units="px", pointsize=15, bg="white")
+ png(filename = paste(outputBasename,"s_plot", chroms[c], "png", sep="."),width = 1200, height = 450, units="px", pointsize=15, bg="white")
  plotSegments(tum_corrected_copy, segmented_copy, pch = ".", ylab = "Tumour Copy Number", xlab = "Chromosome Position",chr = chroms[c], main = paste("Segmentation for Chromosome",chroms[c], sep=" "))
  cols <- stateCols()
  legend("topleft", c("HOMD", "HETD", "NEUT", "GAIN", "AMPL", "HLAMP"), fill = cols, horiz = TRUE, bty = "n", cex = 0.9)
  dev.off()
 }
+
+
+# Correction plots:
+# need to do it one plot per chromosome 1200x680
+
+print("Producing Correction plots...")
+chroms<-unique(segmented_copy$segs$chr)
+
+slice_valid<-function (correctOutput) {
+    copy <- correctOutput$reads/median(correctOutput$reads, na.rm = TRUE)
+    if (length(copy[is.na(copy)])> 0) {
+      FALSE 
+    } else {
+      TRUE
+    }
+}
+
+for (c in 1:length(chroms)) {
+ 
+ if (!grepl("_",chroms[c]) && slice_valid(tum_corrected_copy[paste(chroms[c])]) > 0 ) {
+  print(paste("Plotting for chromosome",c,sep=" "))
+  png(filename = paste(outputBasename,"c_plot",chroms[c],"png", sep="."),width = 1200, height = 680, units="px", pointsize=15, bg="white")
+  plotCorrection(tum_corrected_copy, pch = ".", chr= chroms[c], na.rm = TRUE)
+  dev.off()
+ } else {
+  print(paste("Chromosome",c,"cannot be plotted with  plotCorrection",sep = " "))
+ }
+}
+
