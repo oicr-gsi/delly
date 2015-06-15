@@ -21,17 +21,22 @@ use FindBin qw($Bin);
 use Getopt::Long;
 use constant DEBUG=>0;
 
-my($normal, $tumor, $out_dir, $rlibs_dir, $ref_fasta, $samtools, $java, $varscan, $id);
+my($normal, $tumor, $out_dir, $rlibs_dir, $ref_fasta, $samtools, $java, $varscan, $id, $min_coverage, $del_threshold, $min_region_size, $recenter_up, $recenter_down);
 my $USAGE = "launchVarscan2.pl --input-normal [normal .bam file] --input-tumor [tumor .bam file] --output-dir [Output directory] --ref-fasta [Reference fasta] --samtools [Path to samtools] --rlibs-dir [path to directory with R libs] --id [unique id]";
-my $result = GetOptions('input-normal=s' => \$normal,
-                        'input-tumor=s'  => \$tumor,
-                        'output-dir=s'   => \$out_dir,
-                        'ref-fasta=s'    => \$ref_fasta,
-                        'java=s'         => \$java,
-                        'varscan=s'      => \$varscan,
-                        'id=s'           => \$id,
-                        'rlibs-dir=s'    => \$rlibs_dir,
-                        'samtools=s'     => \$samtools);
+my $result = GetOptions('input-normal=s'    => \$normal,
+                        'input-tumor=s'     => \$tumor,
+                        'output-dir=s'      => \$out_dir,
+                        'ref-fasta=s'       => \$ref_fasta,
+                        'java=s'            => \$java,
+                        'varscan=s'         => \$varscan,
+                        'id=s'              => \$id,
+                        'rlibs-dir=s'       => \$rlibs_dir,
+                        'samtools=s'        => \$samtools,
+                        'min-coverage=s'    => \$min_coverage,
+                        'del-coverage=s'    => \$del_threshold,
+                        'min-region-size=s' => \$min_region_size,
+                        'recenter-up=s'     => \$recenter_up,
+                        'recenter-down=s'   => \$recenter_down);
 
 if (!$varscan || !$normal || !$tumor || !$out_dir || !$ref_fasta || !$samtools || !$rlibs_dir) {die $USAGE;}
 if (!-e $out_dir || !-d $out_dir) {
@@ -42,7 +47,7 @@ map{if(!/\.bam$/){die "Files are not in .bam format!";}} ($normal,$tumor);
 my $pileup_command = "$samtools mpileup -q 1 -f $ref_fasta $normal $tumor | awk -F \"\t\" '\$4 > 0 && \$7 > 0' > $out_dir/normtumor_sorted.pileup";
 print STDERR "Will run command $pileup_command\n" if DEBUG;
 
-`$pileup_command`;
+#`$pileup_command`;
 print STDERR "Pileup data produced, starting actual analysis...\n" if DEBUG;
 
 =head2 Running analysis
@@ -88,6 +93,7 @@ if (-e "$out_dir/normtumor_sorted.pileup" && -s "$out_dir/normtumor_sorted.pileu
   die "Pileup file is not suitable for analysis, will exit now";
 }
 
+
 =head2 Additional Smoothing
 
  Circular Binary Segmentation aims to improve (potentially) noisy data
@@ -98,11 +104,40 @@ if (-e "$out_dir/normtumor_sorted.pileup" && -s "$out_dir/normtumor_sorted.pileu
 =cut 
 
 if (-e "$out_dir/varscan_out.$id.copynumber") {
+
+ print STDERR "Will run Additional filtering on results\n" if DEBUG;
+ 
+ my $filterCommand = "$java -jar $varscan copyCaller $out_dir/varscan_out.$id.copynumber --output-file $out_dir/varscan_out.$id.copynumber.filtered";
+
+ # Include filtering options, if set
+ if ($min_coverage) {
+     $filterCommand.=" --min-coverage $min_coverage";
+ }
+
+ if ($del_threshold) {
+     $filterCommand.=" --del-threshold $del_threshold";
+ }
+
+ if ($min_region_size) {
+     $filterCommand.=" --min-region-size $min_region_size";
+ }
+
+ if ($recenter_up) {
+     $filterCommand.=" --recenter-up $recenter_up";
+ } 
+
+ if ($recenter_down) {
+     $filterCommand.=" --recenter-down $recenter_down";
+ }
+
+ `$filterCommand`;
+ 
  $ENV{R_LIBS} = $rlibs_dir;
 
  print STDERR "Will run CBS script to reduce noise in data\n" if DEBUG;
  my $message = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber $id`;
  print STDERR $message;
+ $message    = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber.filtered $id.filtered`;
 } else {
  print STDERR "File with copynumber calls does not exist, won't attempt CBS smoothing/visualization\n";
 }

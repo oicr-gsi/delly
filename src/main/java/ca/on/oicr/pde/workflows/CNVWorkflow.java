@@ -36,7 +36,23 @@ public class CNVWorkflow extends OicrWorkflow {
     //HMMcopy
     private String refGCfile;
     private String refMAPfile;
-
+    
+    /**   Varscan Filtering parameters:
+     *    Defaults are set by the software, not this workflow
+	--min-coverage	Minimum read depth at a position to make a call [8]
+	--amp-threshold	Lower bound for log ratio to call amplification [0.25]
+	--del-threshold	Upper bound for log ratio to call deletion (provide as positive number) [0.25]
+	--min-region-size	Minimum size (in bases) for a region to be counted [10]
+	--recenter-up	Recenter data around an adjusted baseline > 0 [0]
+	--recenter-down	Recenter data around an adjusted baseline < 0 [0]
+        
+     */
+        private String varscanMinCoverage;
+    private String varscanDelCoverage;
+    private String varscanMinRegion;
+    private String varscanRecenterUp;
+    private String varscanRecenterDown;
+    
     //Data
     private String[] normal;
     private String[] tumor;
@@ -59,7 +75,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private static final String FREEC_WINDOW_DEFAULT_EX  = "500";
     private static final String FREEC_WINDOW_DEFAULT_WG  = "50000";
     private static final boolean DEFAULT_SKIP_IF_MISSING = true;  // Conditional provisioning
-    
+
     
     
     /**
@@ -114,7 +130,11 @@ public class CNVWorkflow extends OicrWorkflow {
             this.hmmcopyVersion  = getProperty("hmmcopy_version");
             this.rVersion        = getProperty("R_version");
             this.freecVarCoeff   = getOptionalProperty("freec_var_coefficient", FREEC_CV_DEFAULT);
-
+            this.varscanMinCoverage = getOptionalProperty("varscan_min_coverage", null);
+            this.varscanDelCoverage = getOptionalProperty("varscan_del_coverage", null);
+            this.varscanMinRegion   = getOptionalProperty("varscan_min_region", null);
+            this.varscanRecenterUp  = getOptionalProperty("varscan_recenter_up", null);
+            this.varscanRecenterUp  = getOptionalProperty("varscan_recenter_down", null);
             
             //=============A special flag that determines if we need to sort/index
             String sortFlag = getProperty("do_sort");
@@ -395,6 +415,26 @@ public class CNVWorkflow extends OicrWorkflow {
                             + " --id "           + id
                             + " --samtools "     + getWorkflowBaseDir() + "/bin/samtools-" 
                                                  + this.samtoolsVersion + "/samtools");
+        if (null != this.varscanMinCoverage) {
+            varscanJob.getCommand().addArgument(" --min-coverage " + this.varscanMinCoverage);
+        }
+        
+        if (null != this.varscanDelCoverage) {
+            varscanJob.getCommand().addArgument(" --del-coverage " + this.varscanDelCoverage);
+        }
+        
+        if (null != this.varscanMinRegion) {
+            varscanJob.getCommand().addArgument(" --min-region-size " + this.varscanMinRegion);
+        }
+                            
+        if (null != this.varscanRecenterUp) {
+            varscanJob.getCommand().addArgument(" --recenter-up " + this.varscanRecenterUp);
+        }
+        
+        if (null != this.varscanRecenterDown) {
+            varscanJob.getCommand().addArgument(" --recenter-down "+ this.varscanRecenterDown);
+        }
+
         varscanJob.setMaxMemory("8000");
         if (parents != null) {
             for (Job p : parents) {
