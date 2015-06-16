@@ -47,7 +47,7 @@ map{if(!/\.bam$/){die "Files are not in .bam format!";}} ($normal,$tumor);
 my $pileup_command = "$samtools mpileup -q 1 -f $ref_fasta $normal $tumor | awk -F \"\t\" '\$4 > 0 && \$7 > 0' > $out_dir/normtumor_sorted.pileup";
 print STDERR "Will run command $pileup_command\n" if DEBUG;
 
-#`$pileup_command`;
+`$pileup_command`;
 print STDERR "Pileup data produced, starting actual analysis...\n" if DEBUG;
 
 =head2 Running analysis
@@ -63,7 +63,7 @@ my $resultsOK = undef;
 if (-e "$out_dir/normtumor_sorted.pileup" && -s "$out_dir/normtumor_sorted.pileup") {
   my $cvg = undef;
   do {
-      my $varscan_command = "$java -jar $varscan copynumber $out_dir/normtumor_sorted.pileup $out_dir/varscan_out.$id -mpileup 1";
+      my $varscan_command = "$java -jar $varscan copynumber $out_dir/normtumor_sorted.pileup $out_dir/$id -mpileup 1";
       $varscan_command .= " --min-coverage $cvg" if $cvg;
       print STDERR "Command: $varscan_command\n" if DEBUG; 
       $result = `$varscan_command 2>&1`;
@@ -103,11 +103,11 @@ if (-e "$out_dir/normtumor_sorted.pileup" && -s "$out_dir/normtumor_sorted.pileu
 
 =cut 
 
-if (-e "$out_dir/varscan_out.$id.copynumber") {
+if (-e "$out_dir/$id.copynumber") {
 
  print STDERR "Will run Additional filtering on results\n" if DEBUG;
  
- my $filterCommand = "$java -jar $varscan copyCaller $out_dir/varscan_out.$id.copynumber --output-file $out_dir/varscan_out.$id.copynumber.filtered";
+ my $filterCommand = "$java -jar $varscan copyCaller $out_dir/$id.copynumber --output-file $out_dir/$id.copynumber.filtered";
 
  # Include filtering options, if set
  if ($min_coverage) {
@@ -135,9 +135,9 @@ if (-e "$out_dir/varscan_out.$id.copynumber") {
  $ENV{R_LIBS} = $rlibs_dir;
 
  print STDERR "Will run CBS script to reduce noise in data\n" if DEBUG;
- my $message = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber $id`;
+ my $message = `Rscript $Bin/smooth_varscan.r $out_dir/$id.copynumber $id`;
  print STDERR $message;
- $message    = `Rscript $Bin/smooth_varscan.r $out_dir/varscan_out.$id.copynumber.filtered $id.filtered`;
+ $message    = `Rscript $Bin/smooth_varscan.r $out_dir/$id.copynumber.filtered $id.filtered`;
 } else {
  print STDERR "File with copynumber calls does not exist, won't attempt CBS smoothing/visualization\n";
 }
