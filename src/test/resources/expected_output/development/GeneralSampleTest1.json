@@ -1,0 +1,114 @@
+{
+  "workflowRunCount" : 1,
+  "studies" : [ "PCSI" ],
+  "sequencerRuns" : [ "130321_SN203_0175_AC1MWPACXX" ],
+  "lanes" : [ "130321_SN203_0175_AC1MWPACXX_lane_1", "130321_SN203_0175_AC1MWPACXX_lane_2" ],
+  "samples" : [ "PCSI_0191_Pa_P_PE_410_EX", "PCSI_0191_St_R_PE_391_EX" ],
+  "workflows" : [ "GenomicAlignmentNovoalign" ],
+  "processingAlgorithms" : [ "PicardAddReadGroups" ],
+  "fileMetaTypes" : [ "application/bam" ],
+  "maxInputFiles" : 2,
+  "minInputFiles" : 2,
+  "totalInputFiles" : 2,
+  "workflowRuns" : [ {
+    "workflowIni" : {
+      "aligner_software" : "novocraft",
+      "chromosome_length" : "chr1:249250621,chr2:243199373,chr3:198022430,chr4:191154276,chr5:180915260,chr6:171115067,chr7:159138663,chr8:146364022,chr9:141213431,chr10:135534747,chr11:135006516,chr12:133851895,chr13:115169878,chr14:107349540,chr15:102531392,chr16:90354753,chr17:81195210,chr18:78077248,chr19:59128983,chr20:63025520,chr21:48129895,chr22:51304566,chrX:155270560,chrY:59373566,chrM:16571",
+      "cosmic_vcf" : "/.mounts/labs/PDE/data/MutectStrelka/cosmic/hg19_cosmic_v54_120711.vcf",
+      "data_dir" : "data",
+      "dbsnp_vcf" : "/.mounts/labs/PDE/data/MutectStrelka/dbSNP/dbsnp_138.hg19.leftAligned.vcf.gz",
+      "do_sort" : "true",
+      "external_name" : "NA",
+      "force_crosscheck" : "true",
+      "group_id" : "NA",
+      "group_id_description" : "NA",
+      "input_files_normal" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/60783965/SWID_527018_PCSI_0191_St_R_PE_391_EX_130321_SN203_0175_AC1MWPACXX_NoIndex_L002_R1_001.fastq.gz.annotated.bam",
+      "input_files_tumor" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/55016563/SWID_527002_PCSI_0191_Pa_P_PE_410_EX_130321_SN203_0175_AC1MWPACXX_NoIndex_L001_R1_001.fastq.gz.annotated.bam",
+      "jre-version" : "1.7.0_51",
+      "manual_output" : "false",
+      "metadata" : "metadata",
+      "mutect_jre" : "/oicr/x86_64/lib/jvm/jdk1.6.0_25/jre",
+      "mutect_memory" : "6000",
+      "mutect_version" : "1.1.4",
+      "output_dir" : "seqware-results",
+      "picard_memory" : "6000",
+      "picard_version" : "1.72",
+      "queue" : "",
+      "reference_fasta" : "/.mounts/labs/PDE/data/MutectStrelka/hg19/hg19_random.fa",
+      "sample_name" : "PCSI_0191_EX",
+      "samtools_version" : "0.1.19",
+      "strelka_config" : "/.mounts/labs/PDE/data/MutectStrelka/strelka_config_pde_ex.ini",
+      "strelka_memory" : "6000",
+      "strelka_version" : "1.0.13",
+      "tabix_version" : "0.2.6",
+      "vcftools_version" : "0.1.10"
+    },
+    "files" : [ {
+      "studyTitle" : [ "PCSI" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "33" ] ]
+      },
+      "experimentName" : [ "Geo_PCSI_ILLUMINA_EX_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "PCSI_0191_Pa_P_PE_410_EX" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "EX" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1355_1_1" ] ],
+        "sample.geo_targeted_resequencing" : [ [ "Agilent SureSelect ICGC/Sanger Exon" ] ],
+        "sample.geo_template_id" : [ [ "29956" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
+      },
+      "sequencerRunName" : [ "130321_SN203_0175_AC1MWPACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1355" ] ]
+      },
+      "laneName" : [ "130321_SN203_0175_AC1MWPACXX_lane_1" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "1" ] ]
+      },
+      "iusTag" : [ "GGCTAC" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : 424962649
+    }, {
+      "studyTitle" : [ "PCSI" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "33" ] ]
+      },
+      "experimentName" : [ "Geo_PCSI_ILLUMINA_EX_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "PCSI_0191_St_R_PE_391_EX" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "EX" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1355_2_1" ] ],
+        "sample.geo_targeted_resequencing" : [ [ "Agilent SureSelect ICGC/Sanger Exon" ] ],
+        "sample.geo_template_id" : [ [ "29974" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "St" ] ],
+        "sample.geo_tissue_type" : [ [ "R" ] ]
+      },
+      "sequencerRunName" : [ "130321_SN203_0175_AC1MWPACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1355" ] ]
+      },
+      "laneName" : [ "130321_SN203_0175_AC1MWPACXX_lane_2" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "2" ] ]
+      },
+      "iusTag" : [ "TAGCTT" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : -1089989556
+    } ]
+  } ]
+}
