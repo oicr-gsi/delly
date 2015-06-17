@@ -297,7 +297,8 @@ public class CNVWorkflow extends OicrWorkflow {
                    
               }
           }
-          //TODO summary job
+          
+          // Summary job may be added in a next release
 
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, e);
