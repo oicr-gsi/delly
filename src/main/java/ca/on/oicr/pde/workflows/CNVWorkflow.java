@@ -325,7 +325,7 @@ public class CNVWorkflow extends OicrWorkflow {
         
         // Launch BICSeq, provision results
         // PERL_pipeline/BICseq_1.1.2/BIC-seq/BIC-seq.pl --I 150,20 /u/pruzanov/Data/CNVtools/BICseq/test1.config /scratch2/users/pruzanov/Data/CNVTOOLS/BIC-seq.hn.test1 \"InitialTest\"
-        String resultDir = "BICseq_out_" + id;
+        String resultDir = "BICseq_out_" + id + "/";
         Job launchJob = this.getWorkflow().createBashJob("bicseq_launch");
         String resultID = "bicseq_" + this.makeBasename(inputNormal, ".bam") + ".vs." 
                                     + this.makeBasename(inputTumor,  ".bam");
@@ -413,25 +413,25 @@ public class CNVWorkflow extends OicrWorkflow {
         Log.stdout("Created HMMcopy launch Job");
         
         // Provision .seg, .tsv, .bias_plot.png, .c_plot.chr*.png, .s_plot.chr*.png
-        SqwFile hmmcopySegFile = createOutputFile(this.dataDir + outputDir + resultID + ".seg", "text/plain", this.manualOutput);
+        SqwFile hmmcopySegFile = createOutputFile(outputDir + resultID + ".seg", "text/plain", this.manualOutput);
         hmmcopySegFile.setSkipIfMissing(skipFlag);
         hmmJob.addFile(hmmcopySegFile);
         
-        SqwFile hmmcopyTsvFile = createOutputFile(this.dataDir + outputDir + resultID + ".tsv", "text/plain", this.manualOutput);
+        SqwFile hmmcopyTsvFile = createOutputFile(outputDir + resultID + ".tsv", "text/plain", this.manualOutput);
         hmmcopyTsvFile.setSkipIfMissing(skipFlag);
         hmmJob.addFile(hmmcopyTsvFile);
         
-        SqwFile hmmcopyBiasPlotFile = createOutputFile(this.dataDir + outputDir + resultID + ".png", "image/png", this.manualOutput);
+        SqwFile hmmcopyBiasPlotFile = createOutputFile(outputDir + resultID + ".png", "image/png", this.manualOutput);
         hmmcopyBiasPlotFile.setSkipIfMissing(skipFlag);
         hmmJob.addFile(hmmcopyBiasPlotFile);
         
         for(String chrom : this.supportedChromosomes) {
 
-            SqwFile hmmcopyCPlotFile = createOutputFile(this.dataDir + outputDir + resultID + ".c_plot." + chrom + ".png", "image/png", this.manualOutput);
+            SqwFile hmmcopyCPlotFile = createOutputFile(outputDir + resultID + ".c_plot." + chrom + ".png", "image/png", this.manualOutput);
             hmmcopyCPlotFile.setSkipIfMissing(skipFlag);
             hmmJob.addFile(hmmcopyCPlotFile);
             
-            SqwFile hmmcopySPlotFile = createOutputFile(this.dataDir + outputDir + resultID + ".s_plot." + chrom + ".png", "image/png", this.manualOutput);
+            SqwFile hmmcopySPlotFile = createOutputFile(outputDir + resultID + ".s_plot." + chrom + ".png", "image/png", this.manualOutput);
             hmmcopySPlotFile.setSkipIfMissing(skipFlag);
             hmmJob.addFile(hmmcopySPlotFile);
    
@@ -490,23 +490,28 @@ public class CNVWorkflow extends OicrWorkflow {
         // Provision files .copynumber, .copynumber.segmented, .copynumber.filtered
         //                 .copynumber.filtered.s_plot.png, .copynumber.filtered.s_plot.png       
         
-        SqwFile varscanCopyFile = createOutputFile(this.dataDir + outputDir + resultID + ".copynumber", "text/plain", this.manualOutput);
+        SqwFile varscanCopyFile = createOutputFile(outputDir + resultID + ".copynumber", 
+                                                   "text/plain", this.manualOutput);
         varscanCopyFile.setSkipIfMissing(skipFlag);
         varscanJob.addFile(varscanCopyFile);
         
-        SqwFile varscanCopySegFile = createOutputFile(this.dataDir + outputDir + resultID + ".copynumber.segmented", "text/plain", this.manualOutput);
+        SqwFile varscanCopySegFile = createOutputFile(outputDir + resultID + ".copynumber.segmented",
+                                                      "text/plain", this.manualOutput);
         varscanCopySegFile.setSkipIfMissing(skipFlag);
         varscanJob.addFile(varscanCopySegFile);
         
-        SqwFile varscanCopyFilteredFile = createOutputFile(this.dataDir + outputDir + resultID + ".copynumber.filtered", "text/plain", this.manualOutput);
+        SqwFile varscanCopyFilteredFile = createOutputFile(outputDir + resultID + ".copynumber.filtered",
+                                                           "text/plain", this.manualOutput);
         varscanCopyFilteredFile.setSkipIfMissing(skipFlag);
         varscanJob.addFile(varscanCopyFilteredFile);
      
-        SqwFile varscanWPlotFile = createOutputFile(this.dataDir + outputDir + resultID + ".copynumber.filtered.w_plot.png", "image/png", this.manualOutput);
+        SqwFile varscanWPlotFile = createOutputFile(outputDir + resultID + ".copynumber.filtered.w_plot.png",
+                                                    "image/png", this.manualOutput);
         varscanWPlotFile.setSkipIfMissing(skipFlag);
         varscanJob.addFile(varscanWPlotFile);
         
-        SqwFile varscanSPlotFile = createOutputFile(this.dataDir + outputDir + resultID + ".copynumber.filtered.s_plot.png", "image/png", this.manualOutput);
+        SqwFile varscanSPlotFile = createOutputFile(outputDir + resultID + ".copynumber.filtered.s_plot.png",
+                                                    "image/png", this.manualOutput);
         varscanSPlotFile.setSkipIfMissing(skipFlag);
         varscanJob.addFile(varscanSPlotFile);
 
@@ -522,15 +527,15 @@ public class CNVWorkflow extends OicrWorkflow {
         String outputDir = this.dataDir + "FREEC." + id + "/";
         String resultID = this.makeBasename(inputTumor,  ".bam") + ".bam";
         freecJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchFREEC.pl"
-                            + " --rhome-path " + getWorkflowBaseDir() + "/bin/R-" + this.rVersion
+                            + " --rhome-path "   + getWorkflowBaseDir() + "/bin/R-" + this.rVersion
                             + " --input-normal " + inputNormal
                             + " --input-tumor "  + inputTumor
-                            + " --lenfile " + this.chrLengthFile
-                            + " --id " + id
+                            + " --lenfile "      + this.chrLengthFile
+                            + " --id "           + id
                             + " --freec " + getWorkflowBaseDir() + "/bin/FREEC-" + this.freecVersion + "/freec"
                             + " --data-type " + this.templateType
-                            + " --outdir " + outputDir
-                            + " --samtools " + getWorkflowBaseDir() + "/bin/samtools-" + this.samtoolsVersion + "/samtools");
+                            + " --outdir "    + outputDir
+                            + " --samtools "  + getWorkflowBaseDir() + "/bin/samtools-" + this.samtoolsVersion + "/samtools");
                             
         if (!this.freecVarCoeff.isEmpty()) {
          freecJob.getCommand().addArgument(" --var-coefficient " + this.freecVarCoeff);
@@ -549,25 +554,29 @@ public class CNVWorkflow extends OicrWorkflow {
         Log.stdout("Created FREEC launch Job");
         
         // Provision [tumor bam]_CNVs.p.value.txt, *_ratio.BedGraph, *_ratio_noNA.txt.png, *_sample.cpn, *_control.cpn
-        SqwFile freecCNVFile = createOutputFile(this.dataDir + outputDir + resultID + "_CNVs.p.value.txt", "text/plain", this.manualOutput);
+        SqwFile freecCNVFile = createOutputFile(outputDir + resultID + "_CNVs.p.value.txt", 
+                                                "text/plain", this.manualOutput);
         freecCNVFile.setSkipIfMissing(skipFlag);
         freecJob.addFile(freecCNVFile);
         
-        SqwFile freecBedGraphFile = createOutputFile(this.dataDir + outputDir + resultID + "_ratio.BedGraph", "text/bed", this.manualOutput);
+        SqwFile freecBedGraphFile = createOutputFile(outputDir + resultID + "_ratio.BedGraph",
+                                                     "text/bed", this.manualOutput);
         freecBedGraphFile.setSkipIfMissing(skipFlag);
         freecJob.addFile(freecBedGraphFile);
         
-        SqwFile freecRatioPlotFile = createOutputFile(this.dataDir + outputDir + resultID + "_ratio_noNA.txt.png", "image/png", this.manualOutput);
+        SqwFile freecRatioPlotFile = createOutputFile(outputDir + resultID + "_ratio_noNA.txt.png",
+                                                      "image/png", this.manualOutput);
         freecRatioPlotFile.setSkipIfMissing(skipFlag);
         freecJob.addFile(freecRatioPlotFile);
         
         //Raw (copy number profile) files
-        SqwFile freecSampleCpnFile = createOutputFile(this.dataDir + outputDir + resultID + "_sample.cpn", "text/plain", this.manualOutput);
+        SqwFile freecSampleCpnFile = createOutputFile(outputDir + resultID + "_sample.cpn",
+                                                      "text/plain", this.manualOutput);
         freecSampleCpnFile.setSkipIfMissing(skipFlag);
         freecJob.addFile(freecSampleCpnFile);
         
-        SqwFile freecControlCpnFile = createOutputFile(this.dataDir + outputDir + this.makeBasename(inputNormal,  ".bam") + ".bam" 
-                                                                                          + "_control.cpn", "text/plain", this.manualOutput);
+        SqwFile freecControlCpnFile = createOutputFile(outputDir + this.makeBasename(inputNormal,  ".bam") + ".bam" 
+                                                                           + "_control.cpn", "text/plain", this.manualOutput);
         freecControlCpnFile.setSkipIfMissing(skipFlag);
         freecJob.addFile(freecControlCpnFile);
     }
@@ -583,23 +592,4 @@ public class CNVWorkflow extends OicrWorkflow {
         return path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(extension));
     }
 
-    /**
-     * Utility function
-     * @param files A template for further development of this workflow (may not be needed actually)
-     */
-    private void conditionallyProvision(String[] files) {
-        // java -jar seqware-distribution-1.1.0-full.jar --plugin net.sourceforge.seqware.pipeline.plugins.ModuleRunner -- 
-        //                                               --module net.sourceforge.seqware.pipeline.modules.utilities.ProvisionFiles
-        //                                               --force-copy
-        //                                               --skip-if-missing
-        //                                               -i input-file
-        //                                               -o output-dir
-        //                                               -im file-metadata    '::' delimited list of type, meta_type, and file_path
-        //                                               
-        //this.getRandom()
-        SqwFile bfile = this.createOutputFile(this.dataDir + files[0], "application/bam", manualOutput);
-        String path = bfile.getOutputPath();
-        String type = bfile.getType();
-        bfile.setSkipIfMissing(manualOutput);
-    }
 }
