@@ -19,10 +19,10 @@ use constant DEBUG=>0;
 =cut
 
 my $USAGE = "launchFREEC.pl --input-tumor [tumor input] --input-normal [normal input] --data-type [optional, default is WG, EX supported] ".
-            " --outdir [root data dir] --config-file [name of template config file] --samtools [path to samtools]\n";
+            " --outdir [root data dir] --config-file [name of template config file] --samtools [path to samtools] --prefix [prefix for result files]\n";
 
 # Required parameters
-my($input_n,$input_t,$type,$id,$config,$lenfile,$samtools,$freec);
+my($input_n,$input_t,$type,$id,$config,$lenfile,$samtools,$freec,$prefix);
 # Optional parameters
 my($datadir,$ploidy,$makebedgraph,$matetype,$logfile,$targetFile,$cvar,$quiet,$window,$rhome);
 my $results = GetOptions ("input-normal=s" =>  \$input_n,
@@ -39,6 +39,7 @@ my $results = GetOptions ("input-normal=s" =>  \$input_n,
                           "window=s"       => \$window,
                           "target-file=s"  =>\$targetFile,
                           "outdir=s"       =>\$datadir,
+                          "prefix=s"       => \$prefix,
                           "config-file=s"  =>\$config,
                           "ploidy=s"       =>\$ploidy,
                           "make-bedgraph=s"=> \$makebedgraph,
@@ -220,6 +221,16 @@ if (@files && @files > 1) {
  
  }
 
+=head2
+
+ It looks like FREEC cannot produce custom names, so
+ if we want to prefix our files with something like freec_
+ this is where we do it
+
+=cut
+
+ &prefixFiles($freec_dir, $prefix);
+
 =head2 Sequencing type guessing
 
  The script cannot intelligently tell the difference between mate-pair and paired-end sequencing, therefore we 
@@ -242,4 +253,26 @@ sub guessMate {
  # this script will only guess between two options - single-end (0) or paired-end (FR)
  return "FR";
 
+}
+
+#==================================================
+# Subroutine for prefixing all files in a directory
+#==================================================
+
+sub prefixFiles {
+
+ my($dir,$pr) = @_;
+ return if !$pr || !-d $dir;
+
+ opendir(DIR,$dir) or die "Couldn't read from directory [$dir]";
+ my @files = readdir(DIR);
+ closedir DIR;
+
+ #actual renaming
+ foreach my $file (@files) {
+   next unless -e "$dir/$file" && -f "$dir/$file";
+   my $prefixed_file = $pr.$file;
+   `mv $dir/$file $dir/$prefixed_file`;
+ } 
+ 
 }

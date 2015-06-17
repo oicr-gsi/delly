@@ -78,6 +78,10 @@ public class CNVWorkflow extends OicrWorkflow {
     private static final String FREEC_WINDOW_DEFAULT_EX  = "500";
     private static final String FREEC_WINDOW_DEFAULT_WG  = "50000";
     private static final boolean DEFAULT_SKIP_IF_MISSING = true;  // Conditional provisioning
+    private static final String  FREEC_PREFIX  = "freec_";
+    private static final String HMMCOPY_PREFIX = "hmmcopy_";
+    private static final String BICSEQ_PREFIX  = "bicseq_";
+    private static final String VARSCAN_PREFIX = "varscan_";
 
     
     
@@ -264,7 +268,10 @@ public class CNVWorkflow extends OicrWorkflow {
 
           for (int n = 0; n < this.normal.length; n++) {
                for (int t = 0; t < this.tumor.length; t++) {
-               //TODO need to think how to configure this for crosscheck properly if we don't have reference
+               /**
+                * TODO need to think how to configure this for crosscheck properly 
+                * if we don't have reference (TBD next iteration)
+                */
                if (this.templateType.equals("WG")) {
                  // LAUNCH BICseq
                  launchBicSeq(this.localInputNormalFiles[n],
@@ -284,7 +291,6 @@ public class CNVWorkflow extends OicrWorkflow {
                  launchVarscan(this.localInputNormalFiles[n],
                                this.localInputTumorFiles[t], n + 1, null);
                  
-                 // launchSupportedAnalyses("EX);
                } else {
                    throw new RuntimeException("Unsupported template type, workflow will terminate!");
                }
@@ -327,8 +333,8 @@ public class CNVWorkflow extends OicrWorkflow {
         // PERL_pipeline/BICseq_1.1.2/BIC-seq/BIC-seq.pl --I 150,20 /u/pruzanov/Data/CNVtools/BICseq/test1.config /scratch2/users/pruzanov/Data/CNVTOOLS/BIC-seq.hn.test1 \"InitialTest\"
         String resultDir = "BICseq_out_" + id + "/";
         Job launchJob = this.getWorkflow().createBashJob("bicseq_launch");
-        String resultID = "bicseq_" + this.makeBasename(inputNormal, ".bam") + ".vs." 
-                                    + this.makeBasename(inputTumor,  ".bam");
+        String resultID = BICSEQ_PREFIX + this.makeBasename(inputNormal, ".bam") + ".vs." 
+                                        + this.makeBasename(inputTumor,  ".bam");
         
         launchJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchBICseq.pl"
                            + " --config-file " + this.dataDir + configFile
@@ -345,14 +351,17 @@ public class CNVWorkflow extends OicrWorkflow {
         // Provision files normal.vs.tumor.bicseg, normal.vs.tumor.png, normal.vs.tumor.wig
         SqwFile bicseqSegFile = createOutputFile(this.dataDir + resultDir + resultID + ".bicseg", "text/plain", this.manualOutput);
         bicseqSegFile.setSkipIfMissing(skipFlag);
+        bicseqSegFile.getAnnotations().put("variation_calling_algorithm", "BICseq " + this.bicseqVersion);
         launchJob.addFile(bicseqSegFile);
         
         SqwFile bicseqPngFile = createOutputFile(this.dataDir + resultDir + resultID + ".png",    "image/png",  this.manualOutput);
         bicseqPngFile.setSkipIfMissing(skipFlag);
+        bicseqPngFile.getAnnotations().put("variation_calling_algorithm", "BICseq " + this.bicseqVersion);
         launchJob.addFile(bicseqPngFile);
         
         SqwFile bicseqWigFile = createOutputFile(this.dataDir + resultDir + resultID + ".wig",    "text/plain", this.manualOutput);
         bicseqWigFile.setSkipIfMissing(skipFlag);
+        bicseqWigFile.getAnnotations().put("variation_calling_algorithm", "BICseq " + this.bicseqVersion);
         launchJob.addFile(bicseqWigFile);
     }
     
@@ -394,8 +403,8 @@ public class CNVWorkflow extends OicrWorkflow {
        // Launch HMMcopy scripts, provision results
        //================== run HMMcopy ====================================
         Job hmmJob = this.getWorkflow().createBashJob("hmmcopy_launch");
-        String resultID = "hmmcopy_" + this.makeBasename(inputNormal, ".bam") + ".vs." 
-                                     + this.makeBasename(inputTumor,  ".bam");
+        String resultID = HMMCOPY_PREFIX + this.makeBasename(inputNormal, ".bam") + ".vs." 
+                                         + this.makeBasename(inputTumor,  ".bam");
         hmmJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchHMMcopy.pl "
                         + " --rhome-path " + getWorkflowBaseDir() + "/bin/R-" + this.rVersion
                         + " --normal-wig "   + this.makeBasename(inputNormal, ".bam") + "_reads.wig "
@@ -415,24 +424,29 @@ public class CNVWorkflow extends OicrWorkflow {
         // Provision .seg, .tsv, .bias_plot.png, .c_plot.chr*.png, .s_plot.chr*.png
         SqwFile hmmcopySegFile = createOutputFile(outputDir + resultID + ".seg", "text/plain", this.manualOutput);
         hmmcopySegFile.setSkipIfMissing(skipFlag);
+        hmmcopySegFile.getAnnotations().put("variation_calling_algorithm", "HMMcopy " + this.hmmcopyVersion);
         hmmJob.addFile(hmmcopySegFile);
         
         SqwFile hmmcopyTsvFile = createOutputFile(outputDir + resultID + ".tsv", "text/plain", this.manualOutput);
         hmmcopyTsvFile.setSkipIfMissing(skipFlag);
+        hmmcopyTsvFile.getAnnotations().put("variation_calling_algorithm", "HMMcopy " + this.hmmcopyVersion);
         hmmJob.addFile(hmmcopyTsvFile);
         
         SqwFile hmmcopyBiasPlotFile = createOutputFile(outputDir + resultID + ".png", "image/png", this.manualOutput);
         hmmcopyBiasPlotFile.setSkipIfMissing(skipFlag);
+        hmmcopyBiasPlotFile.getAnnotations().put("variation_calling_algorithm", "HMMcopy " + this.hmmcopyVersion);
         hmmJob.addFile(hmmcopyBiasPlotFile);
         
         for(String chrom : this.supportedChromosomes) {
 
             SqwFile hmmcopyCPlotFile = createOutputFile(outputDir + resultID + ".c_plot." + chrom + ".png", "image/png", this.manualOutput);
             hmmcopyCPlotFile.setSkipIfMissing(skipFlag);
+            hmmcopyCPlotFile.getAnnotations().put("variation_calling_algorithm", "HMMcopy " + this.hmmcopyVersion);
             hmmJob.addFile(hmmcopyCPlotFile);
             
             SqwFile hmmcopySPlotFile = createOutputFile(outputDir + resultID + ".s_plot." + chrom + ".png", "image/png", this.manualOutput);
             hmmcopySPlotFile.setSkipIfMissing(skipFlag);
+            hmmcopySPlotFile.getAnnotations().put("variation_calling_algorithm", "HMMcopy " + this.hmmcopyVersion);
             hmmJob.addFile(hmmcopySPlotFile);
    
         }
@@ -446,8 +460,8 @@ public class CNVWorkflow extends OicrWorkflow {
         
         Job varscanJob = this.getWorkflow().createBashJob("launch_varscan");   
         String outputDir = this.dataDir + "Varscan2." + id + "/"; 
-        String resultID = "varscan_" + this.makeBasename(inputNormal, ".bam") + ".vs." 
-                                     + this.makeBasename(inputTumor,  ".bam");
+        String resultID = VARSCAN_PREFIX + this.makeBasename(inputNormal, ".bam") + ".vs." 
+                                         + this.makeBasename(inputTumor,  ".bam");
         varscanJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchVarscan2.pl"
                             + " --input-normal " + inputNormal
                             + " --input-tumor "  + inputTumor
@@ -493,26 +507,31 @@ public class CNVWorkflow extends OicrWorkflow {
         SqwFile varscanCopyFile = createOutputFile(outputDir + resultID + ".copynumber", 
                                                    "text/plain", this.manualOutput);
         varscanCopyFile.setSkipIfMissing(skipFlag);
+        varscanCopyFile.getAnnotations().put("variation_calling_algorithm", "Varscan " + this.varscanVersion);
         varscanJob.addFile(varscanCopyFile);
         
         SqwFile varscanCopySegFile = createOutputFile(outputDir + resultID + ".copynumber.segmented",
                                                       "text/plain", this.manualOutput);
         varscanCopySegFile.setSkipIfMissing(skipFlag);
+        varscanCopySegFile.getAnnotations().put("variation_calling_algorithm", "Varscan " + this.varscanVersion);
         varscanJob.addFile(varscanCopySegFile);
         
         SqwFile varscanCopyFilteredFile = createOutputFile(outputDir + resultID + ".copynumber.filtered",
                                                            "text/plain", this.manualOutput);
         varscanCopyFilteredFile.setSkipIfMissing(skipFlag);
+        varscanCopyFilteredFile.getAnnotations().put("variation_calling_algorithm", "Varscan " + this.varscanVersion);
         varscanJob.addFile(varscanCopyFilteredFile);
      
         SqwFile varscanWPlotFile = createOutputFile(outputDir + resultID + ".copynumber.filtered.w_plot.png",
                                                     "image/png", this.manualOutput);
         varscanWPlotFile.setSkipIfMissing(skipFlag);
+        varscanWPlotFile.getAnnotations().put("variation_calling_algorithm", "Varscan " + this.varscanVersion);
         varscanJob.addFile(varscanWPlotFile);
         
         SqwFile varscanSPlotFile = createOutputFile(outputDir + resultID + ".copynumber.filtered.s_plot.png",
                                                     "image/png", this.manualOutput);
         varscanSPlotFile.setSkipIfMissing(skipFlag);
+        varscanSPlotFile.getAnnotations().put("variation_calling_algorithm", "Varscan " + this.varscanVersion);
         varscanJob.addFile(varscanSPlotFile);
 
     }
@@ -535,6 +554,7 @@ public class CNVWorkflow extends OicrWorkflow {
                             + " --freec " + getWorkflowBaseDir() + "/bin/FREEC-" + this.freecVersion + "/freec"
                             + " --data-type " + this.templateType
                             + " --outdir "    + outputDir
+                            + " --prefix "    + FREEC_PREFIX
                             + " --samtools "  + getWorkflowBaseDir() + "/bin/samtools-" + this.samtoolsVersion + "/samtools");
                             
         if (!this.freecVarCoeff.isEmpty()) {
@@ -557,27 +577,32 @@ public class CNVWorkflow extends OicrWorkflow {
         SqwFile freecCNVFile = createOutputFile(outputDir + resultID + "_CNVs.p.value.txt", 
                                                 "text/plain", this.manualOutput);
         freecCNVFile.setSkipIfMissing(skipFlag);
+        freecCNVFile.getAnnotations().put("variation_calling_algorithm", "FREEC " + this.freecVersion);
         freecJob.addFile(freecCNVFile);
         
         SqwFile freecBedGraphFile = createOutputFile(outputDir + resultID + "_ratio.BedGraph",
                                                      "text/bed", this.manualOutput);
         freecBedGraphFile.setSkipIfMissing(skipFlag);
+        freecBedGraphFile.getAnnotations().put("variation_calling_algorithm", "FREEC " + this.freecVersion);
         freecJob.addFile(freecBedGraphFile);
         
         SqwFile freecRatioPlotFile = createOutputFile(outputDir + resultID + "_ratio_noNA.txt.png",
                                                       "image/png", this.manualOutput);
         freecRatioPlotFile.setSkipIfMissing(skipFlag);
+        freecRatioPlotFile.getAnnotations().put("variation_calling_algorithm", "FREEC " + this.freecVersion);
         freecJob.addFile(freecRatioPlotFile);
         
-        //Raw (copy number profile) files
+        // Raw (copy number profile) files
         SqwFile freecSampleCpnFile = createOutputFile(outputDir + resultID + "_sample.cpn",
                                                       "text/plain", this.manualOutput);
         freecSampleCpnFile.setSkipIfMissing(skipFlag);
+        freecSampleCpnFile.getAnnotations().put("variation_calling_algorithm", "FREEC " + this.freecVersion);
         freecJob.addFile(freecSampleCpnFile);
         
         SqwFile freecControlCpnFile = createOutputFile(outputDir + this.makeBasename(inputNormal,  ".bam") + ".bam" 
                                                                            + "_control.cpn", "text/plain", this.manualOutput);
         freecControlCpnFile.setSkipIfMissing(skipFlag);
+        freecControlCpnFile.getAnnotations().put("variation_calling_algorithm", "FREEC " + this.freecVersion);
         freecJob.addFile(freecControlCpnFile);
     }
     
