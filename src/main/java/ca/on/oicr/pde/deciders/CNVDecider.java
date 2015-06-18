@@ -4,6 +4,7 @@
  */
 package ca.on.oicr.pde.deciders;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
 import net.sourceforge.seqware.common.module.FileMetadata;
 import net.sourceforge.seqware.common.module.ReturnValue;
 import net.sourceforge.seqware.common.util.Log;
-
 
 /**
  *
@@ -39,20 +39,21 @@ public class CNVDecider extends OicrDecider {
     private String output_prefix  = "./";
     private String output_dir = "seqware-results";
     private String manual_output = "false";
-    
     private String queue = " ";
     private String forceCrosscheck = "true";
+    private String skipMissing;
     private String do_sort = "false";
-    private String sampleName = "NA";
-    private String tumorType = "P"; // Tumor type may be set to other types, i.e. X (xenograft)
+
     private final static String BAM_METATYPE = "application/bam";
+    private final static String WG = "WG";
+    private String rsconfigXmlPath = "/.mounts/labs/PDE/data/rsconfig.xml";
+    private Rsconfig rs;
+    private String tumorType;
     
     public CNVDecider() {
         super();
         fileSwaToSmall  = new HashMap<String, BeSmall>();
         parser.acceptsAll(Arrays.asList("ini-file"), "Optional: the location of the INI file.").withRequiredArg();
-        parser.accepts("study-name","Optional*. Set the study name "
-                + "will define the scope of the data").withRequiredArg();
         parser.accepts("manual-output","Optional*. Set the manual output "
                 + "either to true or false").withRequiredArg();
         parser.accepts("template-type","Required. Set the template type to limit the workflow run "
@@ -66,8 +67,10 @@ public class CNVDecider extends OicrDecider {
         parser.accepts("output-folder", "Optional: the name of the folder to put the output into relative to "
 	        + "the output-path. Corresponds to output-dir in INI file. Default: seqware-results").withRequiredArg();
         parser.accepts("queue", "Optional: Set the queue (Default: not set)").withRequiredArg();
-        parser.accepts("tumor-type", "Optional: Set tumor tissue type to something other than primary tumor (P), i.e. X . Default: P").withRequiredArg();
+        parser.accepts("tumor-type", "Optional: Set tumor tissue type to something other than primary tumor (P), i.e. X . Default: Not set (All)").withRequiredArg();
         parser.accepts("do-sort", "Optional: Set the flag (true or false) to indicate if need to sort bam files. Default: false").withRequiredArg();
+        parser.accepts("skip-missing-files","Optional. Set the flag for skipping non-existing files to true or false "
+                + "when running the workflow, the default is true").withRequiredArg();
         parser.accepts("verbose", "Optional: Enable verbose Logging").withRequiredArg();
     }
 
@@ -77,6 +80,9 @@ public class CNVDecider extends OicrDecider {
 	this.setMetaType(Arrays.asList("application/bam"));
         this.setGroupingStrategy(Header.FILE_SWA);
                 
+        ReturnValue rv = new ReturnValue();
+        rv.setExitStatus(ReturnValue.SUCCESS);
+        
 	//Group by sample if no other grouping selected
         if (this.options.has("group-by")) {
             Log.error("group-by parameter passed, but this decider does not allow overriding the default grouping (by Donor + Library Type)");
@@ -87,10 +93,25 @@ public class CNVDecider extends OicrDecider {
 	} else {
             this.queue   = " ";
         }
-        
+         
+        this.templateTypeFilter = WG;
         if (this.options.has("template-type")) {
-            this.templateTypeFilter = options.valueOf("template-type").toString();
-            Log.debug("Setting template type is not necessary, however if set the decider will run the workflow only on this type of data");
+            if (!options.hasArgument("template-type")) {
+                Log.error("--template-type requires an argument, WG or EX");
+                rv.setExitStatus(ReturnValue.INVALIDARGUMENT);
+                return rv;
+            } else {
+                this.templateTypeFilter = options.valueOf("template-type").toString();
+            }
+	}
+        
+         if (this.options.has("skip-missing-files")) {
+            if (options.hasArgument("skip-missing-files")) {
+                String skip = options.valueOf("skip-missing-files").toString();
+                if (skip.equals("false")) {
+                    this.skipMissing = "false"; // Default is true, so we care only when it is set to false
+                }
+            } 
 	}
         
         if (this.options.has("manual-output")) {
@@ -138,9 +159,30 @@ public class CNVDecider extends OicrDecider {
             Log.stderr("Using --force-run-all WILL BREAK THE LOGIC OF THIS DECIDER, USE AT YOUR OWN RISK");
         }
         
-        //allows anything defined on the command line to override the defaults here.
-        ReturnValue val = super.init();
-        return val;
+         if (options.has("rsconfig-file")) {
+            if (!options.hasArgument("rsconfig-file")) {
+                Log.error("--rsconfig-file requires a file argument.");
+                rv.setExitStatus(ReturnValue.INVALIDARGUMENT);
+                return rv;
+            }
+            if (!fileExistsAndIsAccessible(options.valueOf("rsconfig-file").toString())) {
+                Log.error("The rsconfig-file is not accessible.");
+                rv.setExitStatus(ReturnValue.FILENOTREADABLE);
+                return rv;
+            } else {
+                rsconfigXmlPath = options.valueOf("rsconfig-file").toString();
+            }
+        }
+
+        try {
+            rs = new Rsconfig(new File(rsconfigXmlPath));
+        } catch (Exception e) {
+            Log.error("Rsconfig file did not load properly, exeception stack trace:\n" + e.getStackTrace());
+            rv.setExitStatus(ReturnValue.FAILURE);
+            return rv;
+        }
+
+        return rv;
     }
 
     /**
@@ -178,26 +220,40 @@ public class CNVDecider extends OicrDecider {
     @Override
     protected boolean checkFileDetails(ReturnValue returnValue, FileMetadata fm) {
         Log.debug("CHECK FILE DETAILS:" + fm);
-        String currentTtype    = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
-        String currentTissueType = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type" );
+        String currentTtype    = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle()        + "geo_library_source_template_type");
+        String targetResequencingType = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_targeted_resequencing");
+        String currentTissueType = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle()      + "geo_tissue_type" );
+
         if (null == currentTissueType )
             return false; // we need only those which have their tissue type set
         // Filter the data of a different template type if filter is specified
-        if (!this.templateTypeFilter.isEmpty() && !this.templateTypeFilter.equalsIgnoreCase(currentTtype))
+        if (!this.templateTypeFilter.equalsIgnoreCase(currentTtype))
             return false;
         // Do not process tumor tissues of type that doesn't match set parameter
-        if (!currentTissueType.equals("R") && !currentTissueType.equals(this.tumorType))
+        if (null != this.tumorType) {
+          if (!currentTissueType.equals("R") && !currentTissueType.equals(this.tumorType))
             return false;
+        }
+        
+        String target_bed = null;
+
+        if (!currentTtype.equals(WG) && target_bed == null) {
+            Log.error("For the file with SWID = [" + returnValue.getAttribute(Header.FILE_SWA.getTitle())
+                    + "], the template type/geo_library_source_template_type = [" + currentTtype
+                    + "] and resequencing type/geo_targeted_resequencing = [" + targetResequencingType
+                    + "] could not be found in rsconfig.xml (path = [" + rsconfigXmlPath + "])");
+            return false;
+        }
+
+        returnValue.setAttribute("target_bed", target_bed); //Change
+         
         for (FileMetadata fmeta : returnValue.getFiles()) {
             if (!fmeta.getMetaType().equals(BAM_METATYPE))
                 continue;
             if (!fmeta.getFilePath().contains("sorted"))
                 this.do_sort = "true"; // Force sorting of all files even if only one is unsorted
         }
-
-        FileAttributes fa = new FileAttributes(returnValue, returnValue.getFiles().get(0));
-        this.sampleName = fa.getDonor();
-        
+       
         return super.checkFileDetails(returnValue, fm);
     }
 
@@ -215,9 +271,9 @@ public class CNVDecider extends OicrDecider {
                      metatypeOK = true;
                } catch (Exception e) {
                  Log.stderr("Error checking a file");
-                 continue;
                }
             }
+            
             if (!metatypeOK)
                 continue; // Go to the next value
             
@@ -238,8 +294,8 @@ public class CNVDecider extends OicrDecider {
             //it in the map
             else {
                 ReturnValue oldRV = iusDeetsToRV.get(fileDeets);               
-                BeSmall oldSmall = fileSwaToSmall.get(oldRV.getAttribute(Header.FILE_SWA.getTitle()));
-                Date oldDate = oldSmall.getDate();
+                BeSmall oldSmall  = fileSwaToSmall.get(oldRV.getAttribute(Header.FILE_SWA.getTitle()));
+                Date oldDate      = oldSmall.getDate();
                 if (currentDate.after(oldDate)) {
                     iusDeetsToRV.put(fileDeets, currentRV);
                 } 
@@ -340,7 +396,9 @@ public class CNVDecider extends OicrDecider {
 
         iniFileMap.put("manual_output",  this.manual_output);
         iniFileMap.put("force_crosscheck",  this.forceCrosscheck);
-        iniFileMap.put("sample_name", this.sampleName);
+        if (null != this.skipMissing && !this.skipMissing.isEmpty()) {
+         iniFileMap.put("skip_missing_files", this.skipMissing);
+        }
         iniFileMap.put("do_sort", this.do_sort);
         
         //Note that we can use group_id, group_description and external_name for tumor bams only
@@ -462,5 +520,11 @@ public class CNVDecider extends OicrDecider {
         public void setPath(String path) {
             this.path = path;
         }
+    }
+   public static boolean fileExistsAndIsAccessible(String filePath) {
+
+        File file = new File(filePath);
+        return (file.exists() && file.canRead() && file.isFile());
+
     }
 }
