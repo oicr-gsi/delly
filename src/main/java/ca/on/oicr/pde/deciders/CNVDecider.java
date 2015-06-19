@@ -36,17 +36,17 @@ public class CNVDecider extends OicrDecider {
     
     //CNV specific stuff
     private String templateTypeFilter = "";
-    private String output_prefix  = "./";
+    private String output_prefix      = "./";
+    private String queue              = " ";
     private String output_dir = "seqware-results";
-    private String manual_output = "false";
-    private String queue = " ";
-    private String forceCrosscheck = "true";
     private String skipMissing;
-    private String do_sort = "false";
+    private String manual_output   = "false";
+    private String forceCrosscheck = "true";
+    private String do_sort         = "false";
 
     private final static String BAM_METATYPE = "application/bam";
-    private final static String WG = "WG";
-    private String rsconfigXmlPath = "/.mounts/labs/PDE/data/rsconfig.xml";
+    private final static String WG           = "WG";
+    private String rsconfigXmlPath           = "/.mounts/labs/PDE/data/rsconfig.xml";
     private Rsconfig rs;
     private String tumorType;
     
@@ -200,6 +200,7 @@ public class CNVDecider extends OicrDecider {
                 if (!bs.getPath().equals(p))
                     continue;
                 String tt = bs.getTissueType();
+                
 
                 if (!tt.isEmpty() && tt.equals("R")) {
                     haveNorm = true;
@@ -235,7 +236,7 @@ public class CNVDecider extends OicrDecider {
             return false;
         }
         
-        String target_bed = null;
+        String target_bed = rs.get(currentTtype, targetResequencingType, this.rsconfigXmlPath);
 
         if (!currentTtype.equals(WG) && target_bed == null) {
             Log.error("For the file with SWID = [" + returnValue.getAttribute(Header.FILE_SWA.getTitle())
