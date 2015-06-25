@@ -49,6 +49,7 @@ public class CNVDecider extends OicrDecider {
     private String rsconfigXmlPath           = "/.mounts/labs/PDE/data/rsconfig.xml";
     private Rsconfig rs;
     private String tumorType;
+    private String targetFile;
     
     public CNVDecider() {
         super();
@@ -107,9 +108,9 @@ public class CNVDecider extends OicrDecider {
         
          if (this.options.has("skip-missing-files")) {
             if (options.hasArgument("skip-missing-files")) {
-                String skip = options.valueOf("skip-missing-files").toString();
-                if (skip.equals("false")) {
-                    this.skipMissing = "false"; // Default is true, so we care only when it is set to false
+                this.skipMissing = options.valueOf("skip-missing-files").toString();
+                if (!this.skipMissing.equals("false")) {
+                    this.skipMissing = "true"; // Default is true, so we care only when it is set to false
                 }
             } 
 	}
@@ -244,9 +245,9 @@ public class CNVDecider extends OicrDecider {
                     + "] and resequencing type/geo_targeted_resequencing = [" + targetResequencingType
                     + "] could not be found in rsconfig.xml (path = [" + rsconfigXmlPath + "])");
             return false;
+        } else {
+            this.targetFile = target_bed;
         }
-
-        returnValue.setAttribute("target_bed", target_bed); //Change
          
         for (FileMetadata fmeta : returnValue.getFiles()) {
             if (!fmeta.getMetaType().equals(BAM_METATYPE))
@@ -387,6 +388,9 @@ public class CNVDecider extends OicrDecider {
         iniFileMap.put("input_files_normal", inputNormFiles.toString());
         iniFileMap.put("input_files_tumor",  inputTumrFiles.toString());
         iniFileMap.put("data_dir", "data");
+        if (null != this.targetFile && !this.targetFile.isEmpty()) {
+            iniFileMap.put("target_file", this.targetFile);
+        }
 	iniFileMap.put("output_prefix",this.output_prefix);
 	iniFileMap.put("output_dir", this.output_dir);
         if (!this.queue.isEmpty()) {
@@ -397,9 +401,7 @@ public class CNVDecider extends OicrDecider {
 
         iniFileMap.put("manual_output",  this.manual_output);
         iniFileMap.put("force_crosscheck",  this.forceCrosscheck);
-        if (null != this.skipMissing && !this.skipMissing.isEmpty()) {
-         iniFileMap.put("skip_missing_files", this.skipMissing);
-        }
+        iniFileMap.put("skip_missing_files", this.skipMissing);
         iniFileMap.put("do_sort", this.do_sort);
         
         //Note that we can use group_id, group_description and external_name for tumor bams only
