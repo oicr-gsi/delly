@@ -38,8 +38,8 @@ public class CNVDecider extends OicrDecider {
     private String templateTypeFilter = "";
     private String output_prefix      = "./";
     private String queue              = " ";
-    private String output_dir = "seqware-results";
-    private String skipMissing;
+    private String output_dir      = "seqware-results";
+    private String skipMissing     = "true";
     private String manual_output   = "false";
     private String forceCrosscheck = "true";
     private String do_sort         = "false";
@@ -49,7 +49,7 @@ public class CNVDecider extends OicrDecider {
     private String rsconfigXmlPath           = "/.mounts/labs/PDE/data/rsconfig.xml";
     private Rsconfig rs;
     private String tumorType;
-    private String targetFile;
+    private String targetFile = " ";
     
     public CNVDecider() {
         super();
@@ -78,10 +78,10 @@ public class CNVDecider extends OicrDecider {
     @Override
     public ReturnValue init() {
         Log.debug("INIT");
-	this.setMetaType(Arrays.asList("application/bam"));
+	this.setMetaType(Arrays.asList(BAM_METATYPE));
         this.setGroupingStrategy(Header.FILE_SWA);
                 
-        ReturnValue rv = new ReturnValue();
+        ReturnValue rv = super.init();
         rv.setExitStatus(ReturnValue.SUCCESS);
         
 	//Group by sample if no other grouping selected
@@ -239,14 +239,16 @@ public class CNVDecider extends OicrDecider {
         
         String target_bed = rs.get(currentTtype, targetResequencingType, this.rsconfigXmlPath);
 
-        if (!currentTtype.equals(WG) && target_bed == null) {
+        if (!currentTtype.equals(WG) && target_bed != null && !target_bed.isEmpty()) {
+            this.targetFile = target_bed;
+        } else if (!currentTtype.equals(WG) && (target_bed == null || target_bed.isEmpty())) {
+            
             Log.error("For the file with SWID = [" + returnValue.getAttribute(Header.FILE_SWA.getTitle())
                     + "], the template type/geo_library_source_template_type = [" + currentTtype
                     + "] and resequencing type/geo_targeted_resequencing = [" + targetResequencingType
                     + "] could not be found in rsconfig.xml (path = [" + rsconfigXmlPath + "])");
             return false;
-        } else {
-            this.targetFile = target_bed;
+            
         }
          
         for (FileMetadata fmeta : returnValue.getFiles()) {
@@ -388,9 +390,8 @@ public class CNVDecider extends OicrDecider {
         iniFileMap.put("input_files_normal", inputNormFiles.toString());
         iniFileMap.put("input_files_tumor",  inputTumrFiles.toString());
         iniFileMap.put("data_dir", "data");
-        if (null != this.targetFile && !this.targetFile.isEmpty()) {
-            iniFileMap.put("target_file", this.targetFile);
-        }
+        iniFileMap.put("target_file", this.targetFile);
+ 
 	iniFileMap.put("output_prefix",this.output_prefix);
 	iniFileMap.put("output_dir", this.output_dir);
         if (!this.queue.isEmpty()) {

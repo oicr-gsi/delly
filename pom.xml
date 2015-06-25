@@ -19,7 +19,7 @@
     <properties>
         <workflow-version>1.0</workflow-version>
         <main-class>ca.on.oicr.pde.deciders.CNVDecider</main-class>
-        <testSuite>src/test/resources/testing.xml</testSuite>
+        <testSuite>src/test/resources/testng.xml</testSuite>
     </properties>
 
     <dependencies>
@@ -27,6 +27,16 @@
             <groupId>ca.on.oicr.pde.workflows</groupId>
             <artifactId>CNV</artifactId>
             <version>${workflow-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.seqware</groupId>
+                    <artifactId>seqware-distribution</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.seqware</groupId>
+                    <artifactId>seqware-pipeline</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
