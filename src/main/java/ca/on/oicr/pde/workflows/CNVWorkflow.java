@@ -545,7 +545,7 @@ public class CNVWorkflow extends OicrWorkflow {
         // Job convertJob and create configFile
         Job freecJob = this.getWorkflow().createBashJob("freec_launch");
         String outputDir = this.dataDir + "FREEC." + id + "/";
-        String resultID = this.makeBasename(inputTumor,  ".bam") + ".bam";
+        String resultID  = FREEC_PREFIX + this.makeBasename(inputTumor,  ".bam") + ".bam";
         freecJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchFREEC.pl"
                             + " --rhome-path "   + getWorkflowBaseDir() + "/bin/R-" + this.rVersion
                             + " --input-normal " + inputNormal
