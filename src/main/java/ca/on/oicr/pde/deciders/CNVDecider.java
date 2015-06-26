@@ -36,6 +36,7 @@ public class CNVDecider extends OicrDecider {
     
     //CNV specific stuff
     private String templateTypeFilter = "";
+    private String templateType       = "";
     private String output_prefix      = "./";
     private String queue              = " ";
     private String output_dir      = "seqware-results";
@@ -104,6 +105,7 @@ public class CNVDecider extends OicrDecider {
                 return rv;
             } else {
                 this.templateTypeFilter = options.valueOf("template-type").toString();
+                this.templateType       = this.templateTypeFilter;
             }
 	}
         
@@ -246,6 +248,9 @@ public class CNVDecider extends OicrDecider {
             return false;
         }
         
+        if (this.templateType.isEmpty() || !this.templateType.equals(currentTtype)) {
+            this.templateType = currentTtype;
+        }
         String target_bed = rs.get(currentTtype, targetResequencingType, "interval_file");
 
         if (!currentTtype.equals(WG) && target_bed != null && !target_bed.isEmpty()) {
@@ -404,6 +409,7 @@ public class CNVDecider extends OicrDecider {
         iniFileMap.put("input_files_normal", inputNormFiles.toString());
         iniFileMap.put("input_files_tumor",  inputTumrFiles.toString());
         iniFileMap.put("data_dir", "data");
+        iniFileMap.put("template_type", this.templateType);
         iniFileMap.put("target_file", this.targetFile);
  
 	iniFileMap.put("output_prefix",this.output_prefix);
