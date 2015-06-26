@@ -47,6 +47,7 @@ public class CNVDecider extends OicrDecider {
 
     private final static String BAM_METATYPE = "application/bam";
     private final static String WG           = "WG";
+    private final static String EX           = "EX";
     private String rsconfigXmlPath           = "/.mounts/labs/PDE/data/rsconfig.xml";
     private Rsconfig rs;
     private String tumorType;
@@ -105,6 +106,9 @@ public class CNVDecider extends OicrDecider {
                 return rv;
             } else {
                 this.templateTypeFilter = options.valueOf("template-type").toString();
+                if (!this.templateTypeFilter.equals(WG) && !this.templateTypeFilter.equals(EX)) {
+                    Log.stderr("NOTE THAT ONLY EX or WG template-type SUPPORTED, WE CANNOT GUARANTEE MEANINGFUL RESULTS WITH OTHER TEMPLATE TYPES");
+                }
                 this.templateType       = this.templateTypeFilter;
             }
 	}
