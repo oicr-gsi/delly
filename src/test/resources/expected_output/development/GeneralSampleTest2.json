@@ -1,1426 +1,177 @@
 {
   "workflowRunCount" : 1,
-  "studies" : [ "PCSI" ],
-  "sequencerRuns" : [ "100219_i580_6157C_AW", "100316_I278_61J2YA_AW", "100327_i581_61E1F_LT", "100330_I320_61JP0A_AW", "100630_I278_00010_7049M_LT", "100803_i320_00012_706B7_AP", "100815_I320_00013_62413_AP", "100908_I580_00020_629W8_AP", "100908_h203_0079_A80707ABXX" ],
-  "lanes" : [ "100219_i580_6157C_AW_lane_7", "100316_I278_61J2YA_AW_lane_5", "100316_I278_61J2YA_AW_lane_6", "100316_I278_61J2YA_AW_lane_7", "100316_I278_61J2YA_AW_lane_8", "100327_i581_61E1F_LT_lane_5", "100327_i581_61E1F_LT_lane_6", "100330_I320_61JP0A_AW_lane_5", "100330_I320_61JP0A_AW_lane_6", "100330_I320_61JP0A_AW_lane_7", "100330_I320_61JP0A_AW_lane_8", "100630_I278_00010_7049M_LT_lane_1", "100630_I278_00010_7049M_LT_lane_2", "100803_i320_00012_706B7_AP_lane_1", "100803_i320_00012_706B7_AP_lane_2", "100803_i320_00012_706B7_AP_lane_3", "100803_i320_00012_706B7_AP_lane_4", "100803_i320_00012_706B7_AP_lane_5", "100803_i320_00012_706B7_AP_lane_6", "100803_i320_00012_706B7_AP_lane_7", "100803_i320_00012_706B7_AP_lane_8", "100815_I320_00013_62413_AP_lane_1", "100815_I320_00013_62413_AP_lane_2", "100815_I320_00013_62413_AP_lane_3", "100815_I320_00013_62413_AP_lane_4", "100908_I580_00020_629W8_AP_lane_1", "100908_I580_00020_629W8_AP_lane_2", "100908_I580_00020_629W8_AP_lane_3", "100908_I580_00020_629W8_AP_lane_4", "100908_I580_00020_629W8_AP_lane_5", "100908_I580_00020_629W8_AP_lane_6", "100908_I580_00020_629W8_AP_lane_7", "100908_I580_00020_629W8_AP_lane_8", "100908_h203_0079_A80707ABXX_lane_1", "100908_h203_0079_A80707ABXX_lane_2", "100908_h203_0079_A80707ABXX_lane_3", "100908_h203_0079_A80707ABXX_lane_4", "100908_h203_0079_A80707ABXX_lane_5", "100908_h203_0079_A80707ABXX_lane_6", "100908_h203_0079_A80707ABXX_lane_7", "100908_h203_0079_A80707ABXX_lane_8" ],
-  "samples" : [ "PCSI_0022_Ly_R_PE_252_WG", "PCSI_0022_Ly_R_PE_300_WG", "PCSI_0022_Ly_R_PE_301_WG", "PCSI_0022_Ly_R_PE_400_WG", "PCSI_0022_Pa_P_PE_2", "PCSI_0022_Pa_P_PE_259_WG", "PCSI_0022_Pa_P_PE_300_WG", "PCSI_0022_Pa_P_PE_344_WG", "PCSI_0022_Pa_P_PE_603_WG", "PCSI_0022_Pa_P__PE_1", "PCSI_0022_nn_R_MP_350_WG", "PCSI_0022_nn_n_PE_300_WG_" ],
-  "workflows" : [ "FileImport" ],
-  "processingAlgorithms" : [ "fileImport" ],
+  "studies" : [ "HALT" ],
+  "sequencerRuns" : [ "130626_SN7001179_0132_AC2A1UACXX", "140109_SN804_0171_AC3KVTACXX", "140417_SN7001205_0212_BC4CAWACXX" ],
+  "lanes" : [ "130626_SN7001179_0132_AC2A1UACXX_lane_6", "140109_SN804_0171_AC3KVTACXX_lane_8", "140417_SN7001205_0212_BC4CAWACXX_lane_2" ],
+  "samples" : [ "HALT_0032_Bm_P_PE_396_TS", "HALT_0032_Ly_R_PE_455_TS", "HALT_0032_Pb_P_PE_418_TS" ],
+  "workflows" : [ "GenomicAlignmentNovoalign", "GenomicAlignmentNovoalign_V2.07.15b" ],
+  "processingAlgorithms" : [ "PicardAddReadGroups", "ProvisionFiles" ],
   "fileMetaTypes" : [ "application/bam" ],
-  "maxInputFiles" : 41,
-  "minInputFiles" : 41,
-  "totalInputFiles" : 41,
+  "maxInputFiles" : 4,
+  "minInputFiles" : 4,
+  "totalInputFiles" : 4,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "aligner_software" : "novocraft",
-      "chromosome_length" : "chr1:249250621,chr2:243199373,chr3:198022430,chr4:191154276,chr5:180915260,chr6:171115067,chr7:159138663,chr8:146364022,chr9:141213431,chr10:135534747,chr11:135006516,chr12:133851895,chr13:115169878,chr14:107349540,chr15:102531392,chr16:90354753,chr17:81195210,chr18:78077248,chr19:59128983,chr20:63025520,chr21:48129895,chr22:51304566,chrX:155270560,chrY:59373566,chrM:16571",
-      "cosmic_vcf" : "/.mounts/labs/PDE/data/MutectStrelka/cosmic/hg19_cosmic_v54_120711.vcf",
+      "R_version" : "3.1.1",
+      "bicseq_version" : "1.1.2",
       "data_dir" : "data",
-      "dbsnp_vcf" : "/.mounts/labs/PDE/data/MutectStrelka/dbSNP/dbsnp_138.hg19.leftAligned.vcf.gz",
-      "do_sort" : "false",
-      "external_name" : "NA",
+      "do_sort" : "true",
+      "external_name" : "NA,NA,NA",
       "force_crosscheck" : "true",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
-      "input_files_normal" : "/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100316_I278_61J2YA_AW_s_6_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100908_I580_00020_629W8_AP_s_8_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100908_I580_00020_629W8_AP_s_5_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100815_I320_00013_62413_AP_s_4_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100219_I580_6157CA_AW_s_7_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100815_I320_00013_62413_AP_s_1_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100316_I278_61J2YA_AW_s_5_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100908_I580_00020_629W8_AP_s_4_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100330_I320_61JP0A_AW_s_8_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100908_I580_00020_629W8_AP_s_1_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100330_I320_61JP0A_AW_s_6_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100815_I320_00013_62413_AP_s_2_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100908_I580_00020_629W8_AP_s_3_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100815_I320_00013_62413_AP_s_3_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100908_I580_00020_629W8_AP_s_2_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100330_I320_61JP0A_AW_s_5_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100330_I320_61JP0A_AW_s_7_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100908_I580_00020_629W8_AP_s_6_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100316_I278_61J2YA_AW_s_7_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100316_I278_61J2YA_AW_s_8_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022R/wgs/novoalign/hg19_random/libraries/PE/bam/100908_I580_00020_629W8_AP_s_7_sequence_PE_novoalign.sam.sorted.bam",
-      "input_files_tumor" : "/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100327_i581_61E1F_LT_s_5_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100908_h203_0079_A80707ABXX_s_5_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100803_I320_00012_706B7_AP_s_2_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100908_h203_0079_A80707ABXX_s_7_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100908_h203_0079_A80707ABXX_s_4_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100803_I320_00012_706B7_AP_s_5_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100803_I320_00012_706B7_AP_s_7_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100908_h203_0079_A80707ABXX_s_8_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100908_h203_0079_A80707ABXX_s_2_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100803_I320_00012_706B7_AP_s_4_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100803_I320_00012_706B7_AP_s_1_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100803_I320_00012_706B7_AP_s_8_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100327_i581_61E1F_LT_s_6_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100630_I278_00010_7049M_LT_s_1_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100803_I320_00012_706B7_AP_s_3_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100908_h203_0079_A80707ABXX_s_3_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100908_h203_0079_A80707ABXX_s_6_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100803_I320_00012_706B7_AP_s_6_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100630_I278_00010_7049M_LT_s_2_sequence_PE_novoalign.sam.sorted.bam,/oicr/data/archive/projects/PCSI/analysis/PCSI0022/PCSI0022P/wgs/novoalign/hg19_random/libraries/PE/bam/100908_h203_0079_A80707ABXX_s_1_sequence_PE_novoalign.sam.sorted.bam",
+      "freec_version" : "7.2",
+      "group_id" : "33000008&CIRM33000008,31000341&CIRM31000341,33000008&CIRM33000008",
+      "group_id_description" : "NA,NA,NA",
+      "hmmcopy_version" : "0.99.0",
+      "input_files_normal" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/63570923/SWID_569156_HALT_0032_Ly_R_PE_455_TS_130626_SN7001179_0132_AC2A1UACXX_ACACAGAA_L006_R1_001.fastq.gz.annotated.bam",
+      "input_files_tumor" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/91609659/SWID_1792242_HALT_0032_Bm_P_PE_396_TS_33000008_140109_SN804_0171_AC3KVTACXX_GGAGAACA_L008_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/62334360/SWID_569157_HALT_0032_Pb_P_PE_418_TS_130626_SN7001179_0132_AC2A1UACXX_AAGGTACA_L006_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/92633564/SWID_881973_HALT_0032_Bm_P_PE_396_TS_140417_SN7001205_0212_BC4CAWACXX_GGAGAACA_L002_R1_001.fastq.gz.annotated.bam",
       "jre-version" : "1.7.0_51",
       "manual_output" : "false",
       "metadata" : "metadata",
-      "mutect_jre" : "/oicr/x86_64/lib/jvm/jdk1.6.0_25/jre",
-      "mutect_memory" : "6000",
-      "mutect_version" : "1.1.4",
       "output_dir" : "seqware-results",
-      "picard_memory" : "6000",
-      "picard_version" : "1.72",
       "queue" : "",
       "reference_fasta" : "/.mounts/labs/PDE/data/MutectStrelka/hg19/hg19_random.fa",
-      "sample_name" : "PCSI_0022_WG",
+      "reference_gc" : "/.mounts/labs/PDE/data/HMMcopy/hg19_random.gc.wig",
+      "reference_len_file" : "/.mounts/labs/PDE/data/FREEC/hg19_chr.len",
+      "reference_map" : "/.mounts/labs/PDE/data/HMMcopy/hg19_random.map.wig",
       "samtools_version" : "0.1.19",
-      "strelka_config" : "/.mounts/labs/PDE/data/MutectStrelka/strelka_config_pde_wg.ini",
-      "strelka_memory" : "6000",
-      "strelka_version" : "1.0.13",
-      "tabix_version" : "0.2.6",
-      "vcftools_version" : "0.1.10"
+      "skip_missing_files" : "true",
+      "supported_chromosomes" : "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY",
+      "target_file" : "/.mounts/labs/PDE/data/TargetedSequencingQC/HALT/halt_coding_exons_sorted_nov2013.bed",
+      "template_type" : "WG",
+      "varscan_version" : "2.3.7"
     },
     "files" : [ {
-      "studyTitle" : [ "PCSI" ],
+      "studyTitle" : [ "HALT" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
+        "study.geo_lab_group_id" : [ [ "154" ] ]
       },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ "Geo_HALT_ILLUMINA_EX_{F*101}{..}{R*101}" ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_252_WG" ],
+      "sampleName" : [ "HALT_0032_Ly_R_PE_455_TS" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "1998" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "323_7_1" ] ],
-        "sample.geo_template_id" : [ [ "2119" ] ],
-        "sample.geo_template_type" : [ [ "DNA" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100219_i580_6157C_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "323" ] ]
-      },
-      "laneName" : [ "100219_i580_6157C_AW_lane_7" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 947056117
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2885" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "442_1_1", "442_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3823" ] ],
+        "sample.geo_library_source_template_type" : [ [ "TS" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1469_6_1", "1484_6_1" ] ],
+        "sample.geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
+        "sample.geo_template_id" : [ [ "37679" ] ],
         "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "sample.geo_tissue_origin" : [ [ "Ly" ] ],
         "sample.geo_tissue_type" : [ [ "R" ] ]
       },
-      "sequencerRunName" : [ "100815_I320_00013_62413_AP" ],
+      "sequencerRunName" : [ "130626_SN7001179_0132_AC2A1UACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "442" ] ]
+        "sequencerrun.geo_instrument_run_id" : [ [ "1484" ] ]
       },
-      "laneName" : [ "100815_I320_00013_62413_AP_lane_1" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "1" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1849685388
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2885" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "442_1_1", "442_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3823" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100815_I320_00013_62413_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "442" ] ]
-      },
-      "laneName" : [ "100815_I320_00013_62413_AP_lane_2" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "2" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -216881389
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_301_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "3093" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "477_1_1", "477_2_1", "477_3_1", "477_4_1" ] ],
-        "sample.geo_template_id" : [ [ "4339" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100908_I580_00020_629W8_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "477" ] ]
-      },
-      "laneName" : [ "100908_I580_00020_629W8_AP_lane_1" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "1" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -2084319317
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_301_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "3093" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "477_1_1", "477_2_1", "477_3_1", "477_4_1" ] ],
-        "sample.geo_template_id" : [ [ "4339" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100908_I580_00020_629W8_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "477" ] ]
-      },
-      "laneName" : [ "100908_I580_00020_629W8_AP_lane_2" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "2" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -451515318
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_301_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "3093" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "477_1_1", "477_2_1", "477_3_1", "477_4_1" ] ],
-        "sample.geo_template_id" : [ [ "4339" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100908_I580_00020_629W8_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "477" ] ]
-      },
-      "laneName" : [ "100908_I580_00020_629W8_AP_lane_3" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "3" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1181288681
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_301_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "3093" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "477_1_1", "477_2_1", "477_3_1", "477_4_1" ] ],
-        "sample.geo_template_id" : [ [ "4339" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100908_I580_00020_629W8_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "477" ] ]
-      },
-      "laneName" : [ "100908_I580_00020_629W8_AP_lane_4" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "4" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1480874616
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_400_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2884" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "442_3_1", "442_4_1" ] ],
-        "sample.geo_template_id" : [ [ "3822" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100815_I320_00013_62413_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "442" ] ]
-      },
-      "laneName" : [ "100815_I320_00013_62413_AP_lane_3" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "3" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1415922610
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_400_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2884" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "442_3_1", "442_4_1" ] ],
-        "sample.geo_template_id" : [ [ "3822" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100815_I320_00013_62413_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "442" ] ]
-      },
-      "laneName" : [ "100815_I320_00013_62413_AP_lane_4" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "4" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1246240687
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_400_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "3092" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "477_5_1", "477_6_1", "477_7_1", "477_8_1" ] ],
-        "sample.geo_template_id" : [ [ "4338" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100908_I580_00020_629W8_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "477" ] ]
-      },
-      "laneName" : [ "100908_I580_00020_629W8_AP_lane_5" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 151929383
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_400_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "3092" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "477_5_1", "477_6_1", "477_7_1", "477_8_1" ] ],
-        "sample.geo_template_id" : [ [ "4338" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100908_I580_00020_629W8_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "477" ] ]
-      },
-      "laneName" : [ "100908_I580_00020_629W8_AP_lane_6" ],
+      "laneName" : [ "130626_SN7001179_0132_AC2A1UACXX_lane_6" ],
       "laneAttributes" : {
         "lane.geo_lane" : [ [ "6" ] ]
       },
-      "iusTag" : [ "NoIndex" ],
+      "iusTag" : [ "ACACAGAA" ],
       "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : 1784733382
+      "fileId" : -716762627
     }, {
-      "studyTitle" : [ "PCSI" ],
+      "studyTitle" : [ "HALT" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
+        "study.geo_lab_group_id" : [ [ "154" ] ]
       },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ "Geo_HALT_ILLUMINA_EX_{F*101}{..}{R*101}" ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_400_WG" ],
+      "sampleName" : [ "HALT_0032_Pb_P_PE_418_TS" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "3092" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "477_5_1", "477_6_1", "477_7_1", "477_8_1" ] ],
-        "sample.geo_template_id" : [ [ "4338" ] ],
+        "sample.geo_library_source_template_type" : [ [ "TS" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1469_6_1", "1484_6_1" ] ],
+        "sample.geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
+        "sample.geo_template_id" : [ [ "37678" ] ],
         "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
+        "sample.geo_tissue_origin" : [ [ "Pb", "nn" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
       },
-      "sequencerRunName" : [ "100908_I580_00020_629W8_AP" ],
+      "sequencerRunName" : [ "130626_SN7001179_0132_AC2A1UACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "477" ] ]
+        "sequencerrun.geo_instrument_run_id" : [ [ "1484" ] ]
       },
-      "laneName" : [ "100908_I580_00020_629W8_AP_lane_7" ],
+      "laneName" : [ "130626_SN7001179_0132_AC2A1UACXX_lane_6" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
+        "lane.geo_lane" : [ [ "6" ] ]
       },
-      "iusTag" : [ "NoIndex" ],
+      "iusTag" : [ "AAGGTACA" ],
       "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : -877429915
+      "fileId" : 1855117
     }, {
-      "studyTitle" : [ "PCSI" ],
+      "studyTitle" : [ "HALT" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
+        "study.geo_lab_group_id" : [ [ "154" ] ]
       },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ "Geo_HALT_ILLUMINA_TS_{F*101}{..}{R*101}" ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Ly_R_PE_400_WG" ],
+      "sampleName" : [ "HALT_0032_Bm_P_PE_396_TS" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "3092" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "477_5_1", "477_6_1", "477_7_1", "477_8_1" ] ],
-        "sample.geo_template_id" : [ [ "4338" ] ],
+        "sample.geo_library_source_template_type" : [ [ "TS" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1709_8_1", "1821_8_1", "1861_2_2", "2263_8_1" ] ],
+        "sample.geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
+        "sample.geo_template_id" : [ [ "52144" ] ],
         "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
+        "sample.geo_tissue_origin" : [ [ "Bm" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
       },
-      "sequencerRunName" : [ "100908_I580_00020_629W8_AP" ],
+      "sequencerRunName" : [ "140109_SN804_0171_AC3KVTACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "477" ] ]
+        "sequencerrun.geo_instrument_run_id" : [ [ "2263" ] ]
       },
-      "laneName" : [ "100908_I580_00020_629W8_AP_lane_8" ],
+      "laneName" : [ "140109_SN804_0171_AC3KVTACXX_lane_8" ],
       "laneAttributes" : {
         "lane.geo_lane" : [ [ "8" ] ]
       },
-      "iusTag" : [ "NoIndex" ],
+      "iusTag" : [ "GGAGAACA" ],
       "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign_V2.07.15b" ],
+      "processingAlgorithm" : [ "ProvisionFiles" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : 755374084
+      "fileId" : -1394485135
     }, {
-      "studyTitle" : [ "PCSI" ],
+      "studyTitle" : [ "HALT" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
+        "study.geo_lab_group_id" : [ [ "154" ] ]
       },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ "Geo_HALT_ILLUMINA_TS_{F*101}{..}{R*101}" ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_259_WG" ],
+      "sampleName" : [ "HALT_0032_Bm_P_PE_396_TS" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2173", "2174" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "355_5_1", "355_6_1" ] ],
-        "sample.geo_template_id" : [ [ "2295" ] ],
-        "sample.geo_template_type" : [ [ "DNA" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100327_i581_61E1F_LT" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "355" ] ]
-      },
-      "laneName" : [ "100327_i581_61E1F_LT_lane_5" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 268907244
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_259_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2173", "2174" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "355_5_1", "355_6_1" ] ],
-        "sample.geo_template_id" : [ [ "2295" ] ],
-        "sample.geo_template_type" : [ [ "DNA" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100327_i581_61E1F_LT" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "355" ] ]
-      },
-      "laneName" : [ "100327_i581_61E1F_LT_lane_6" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1901711243
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_2" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "3006", "3007", "3008", "3009", "3010", "3011" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "428_1_1", "428_2_1", "428_3_1", "428_4_1", "428_5_1", "428_6_1", "428_7_1", "428_8_1", "466_3_1", "466_4_1", "466_5_1", "466_6_1", "466_7_1", "466_8_1" ] ],
-        "sample.geo_template_id" : [ [ "3584" ] ],
+        "sample.geo_library_source_template_type" : [ [ "TS" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1709_8_1", "1821_8_1", "1861_2_2", "2263_8_1" ] ],
+        "sample.geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
+        "sample.geo_template_id" : [ [ "52144" ] ],
         "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
+        "sample.geo_tissue_origin" : [ [ "Bm" ] ],
         "sample.geo_tissue_type" : [ [ "P" ] ]
       },
-      "sequencerRunName" : [ "100908_h203_0079_A80707ABXX" ],
+      "sequencerRunName" : [ "140417_SN7001205_0212_BC4CAWACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "466" ] ]
+        "sequencerrun.geo_instrument_run_id" : [ [ "1861" ] ]
       },
-      "laneName" : [ "100908_h203_0079_A80707ABXX_lane_3" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "3" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1339073012
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_2" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "3006", "3007", "3008", "3009", "3010", "3011" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "428_1_1", "428_2_1", "428_3_1", "428_4_1", "428_5_1", "428_6_1", "428_7_1", "428_8_1", "466_3_1", "466_4_1", "466_5_1", "466_6_1", "466_7_1", "466_8_1" ] ],
-        "sample.geo_template_id" : [ [ "3584" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100908_h203_0079_A80707ABXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "466" ] ]
-      },
-      "laneName" : [ "100908_h203_0079_A80707ABXX_lane_4" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "4" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 293730987
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_2" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "3006", "3007", "3008", "3009", "3010", "3011" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "428_1_1", "428_2_1", "428_3_1", "428_4_1", "428_5_1", "428_6_1", "428_7_1", "428_8_1", "466_3_1", "466_4_1", "466_5_1", "466_6_1", "466_7_1", "466_8_1" ] ],
-        "sample.geo_template_id" : [ [ "3584" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100908_h203_0079_A80707ABXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "466" ] ]
-      },
-      "laneName" : [ "100908_h203_0079_A80707ABXX_lane_5" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1926534986
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_2" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "3006", "3007", "3008", "3009", "3010", "3011" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "428_1_1", "428_2_1", "428_3_1", "428_4_1", "428_5_1", "428_6_1", "428_7_1", "428_8_1", "466_3_1", "466_4_1", "466_5_1", "466_6_1", "466_7_1", "466_8_1" ] ],
-        "sample.geo_template_id" : [ [ "3584" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100908_h203_0079_A80707ABXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "466" ] ]
-      },
-      "laneName" : [ "100908_h203_0079_A80707ABXX_lane_6" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -735628311
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_2" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "3006", "3007", "3008", "3009", "3010", "3011" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "428_1_1", "428_2_1", "428_3_1", "428_4_1", "428_5_1", "428_6_1", "428_7_1", "428_8_1", "466_3_1", "466_4_1", "466_5_1", "466_6_1", "466_7_1", "466_8_1" ] ],
-        "sample.geo_template_id" : [ [ "3584" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100908_h203_0079_A80707ABXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "466" ] ]
-      },
-      "laneName" : [ "100908_h203_0079_A80707ABXX_lane_7" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 897175688
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_2" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "3006", "3007", "3008", "3009", "3010", "3011" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "428_1_1", "428_2_1", "428_3_1", "428_4_1", "428_5_1", "428_6_1", "428_7_1", "428_8_1", "466_3_1", "466_4_1", "466_5_1", "466_6_1", "466_7_1", "466_8_1" ] ],
-        "sample.geo_template_id" : [ [ "3584" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100908_h203_0079_A80707ABXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "466" ] ]
-      },
-      "laneName" : [ "100908_h203_0079_A80707ABXX_lane_8" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1764987609
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "2756", "2757", "2758", "2759", "2760", "2761", "2762", "2763" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100803_i320_00012_706B7_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "426" ] ]
-      },
-      "laneName" : [ "100803_i320_00012_706B7_AP_lane_1" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "1" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1215056334
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "2756", "2757", "2758", "2759", "2760", "2761", "2762", "2763" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100803_i320_00012_706B7_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "426" ] ]
-      },
-      "laneName" : [ "100803_i320_00012_706B7_AP_lane_2" ],
+      "laneName" : [ "140417_SN7001205_0212_BC4CAWACXX_lane_2" ],
       "laneAttributes" : {
         "lane.geo_lane" : [ [ "2" ] ]
       },
-      "iusTag" : [ "NoIndex" ],
+      "iusTag" : [ "GGAGAACA" ],
       "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : -1447106963
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "2756", "2757", "2758", "2759", "2760", "2761", "2762", "2763" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100803_i320_00012_706B7_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "426" ] ]
-      },
-      "laneName" : [ "100803_i320_00012_706B7_AP_lane_3" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "3" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 185697036
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "2756", "2757", "2758", "2759", "2760", "2761", "2762", "2763" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100803_i320_00012_706B7_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "426" ] ]
-      },
-      "laneName" : [ "100803_i320_00012_706B7_AP_lane_4" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "4" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1818501035
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "2756", "2757", "2758", "2759", "2760", "2761", "2762", "2763" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100803_i320_00012_706B7_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "426" ] ]
-      },
-      "laneName" : [ "100803_i320_00012_706B7_AP_lane_5" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -843662262
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "2756", "2757", "2758", "2759", "2760", "2761", "2762", "2763" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100803_i320_00012_706B7_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "426" ] ]
-      },
-      "laneName" : [ "100803_i320_00012_706B7_AP_lane_6" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 789141737
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "2756", "2757", "2758", "2759", "2760", "2761", "2762", "2763" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100803_i320_00012_706B7_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "426" ] ]
-      },
-      "laneName" : [ "100803_i320_00012_706B7_AP_lane_7" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1873021560
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_300_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "2756", "2757", "2758", "2759", "2760", "2761", "2762", "2763" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100803_i320_00012_706B7_AP" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "426" ] ]
-      },
-      "laneName" : [ "100803_i320_00012_706B7_AP_lane_8" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -240217561
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_344_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2587" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "403_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3195" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100630_I278_00010_7049M_LT" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "403" ] ]
-      },
-      "laneName" : [ "100630_I278_00010_7049M_LT_lane_2" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "2" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -244132167
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P_PE_603_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2586" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "403_1_1" ] ],
-        "sample.geo_template_id" : [ [ "3194" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100630_I278_00010_7049M_LT" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "403" ] ]
-      },
-      "laneName" : [ "100630_I278_00010_7049M_LT_lane_1" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "1" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1876936166
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P__PE_1" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "3012", "3013" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100908_h203_0079_A80707ABXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "466" ] ]
-      },
-      "laneName" : [ "100908_h203_0079_A80707ABXX_lane_1" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "1" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -309713714
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_Pa_P__PE_1" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_reaction_id" : [ [ "3012", "3013" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "426_1_1", "426_2_1", "426_3_1", "426_4_1", "426_5_1", "426_6_1", "426_7_1", "426_8_1", "466_1_1", "466_2_1" ] ],
-        "sample.geo_template_id" : [ [ "3566" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pa" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "100908_h203_0079_A80707ABXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "466" ] ]
-      },
-      "laneName" : [ "100908_h203_0079_A80707ABXX_lane_2" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "2" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1323090285
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_nn_n_PE_300_WG_" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2136", "2137", "2138", "2139" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "347_5_1", "347_6_1", "347_7_1", "347_8_1" ] ],
-        "sample.geo_template_id" : [ [ "2271" ] ],
-        "sample.geo_template_type" : [ [ "DNA", "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100330_I320_61JP0A_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "347" ] ]
-      },
-      "laneName" : [ "100330_I320_61JP0A_AW_lane_5" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1027586368
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_nn_n_PE_300_WG_" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2136", "2137", "2138", "2139" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "347_5_1", "347_6_1", "347_7_1", "347_8_1" ] ],
-        "sample.geo_template_id" : [ [ "2271" ] ],
-        "sample.geo_template_type" : [ [ "DNA", "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100330_I320_61JP0A_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "347" ] ]
-      },
-      "laneName" : [ "100330_I320_61JP0A_AW_lane_6" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1634576929
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_nn_n_PE_300_WG_" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2136", "2137", "2138", "2139" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "347_5_1", "347_6_1", "347_7_1", "347_8_1" ] ],
-        "sample.geo_template_id" : [ [ "2271" ] ],
-        "sample.geo_template_type" : [ [ "DNA", "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100330_I320_61JP0A_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "347" ] ]
-      },
-      "laneName" : [ "100330_I320_61JP0A_AW_lane_7" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -1772930
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_nn_n_PE_300_WG_" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "2136", "2137", "2138", "2139" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "347_5_1", "347_6_1", "347_7_1", "347_8_1" ] ],
-        "sample.geo_template_id" : [ [ "2271" ] ],
-        "sample.geo_template_type" : [ [ "DNA", "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100330_I320_61JP0A_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "347" ] ]
-      },
-      "laneName" : [ "100330_I320_61JP0A_AW_lane_8" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1631031069
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{R*101}{..}{F*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_nn_R_MP_350_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_MP" ] ],
-        "sample.geo_reaction_id" : [ [ "2096", "2097", "2098", "2099" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "342_5_1", "342_6_1", "342_7_1", "342_8_1" ] ],
-        "sample.geo_template_id" : [ [ "2230" ] ],
-        "sample.geo_template_type" : [ [ "Illumina MP Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100316_I278_61J2YA_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "342" ] ]
-      },
-      "laneName" : [ "100316_I278_61J2YA_AW_lane_5" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 193052607
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{R*101}{..}{F*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_nn_R_MP_350_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_MP" ] ],
-        "sample.geo_reaction_id" : [ [ "2096", "2097", "2098", "2099" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "342_5_1", "342_6_1", "342_7_1", "342_8_1" ] ],
-        "sample.geo_template_id" : [ [ "2230" ] ],
-        "sample.geo_template_type" : [ [ "Illumina MP Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100316_I278_61J2YA_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "342" ] ]
-      },
-      "laneName" : [ "100316_I278_61J2YA_AW_lane_6" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1825856606
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{R*101}{..}{F*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_nn_R_MP_350_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_MP" ] ],
-        "sample.geo_reaction_id" : [ [ "2096", "2097", "2098", "2099" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "342_5_1", "342_6_1", "342_7_1", "342_8_1" ] ],
-        "sample.geo_template_id" : [ [ "2230" ] ],
-        "sample.geo_template_type" : [ [ "Illumina MP Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100316_I278_61J2YA_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "342" ] ]
-      },
-      "laneName" : [ "100316_I278_61J2YA_AW_lane_7" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -836306691
-    }, {
-      "studyTitle" : [ "PCSI" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "33" ] ]
-      },
-      "experimentName" : [ "Geo_PCSI_ILLUMINA_WG_{R*101}{..}{F*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0022_nn_R_MP_350_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_MP" ] ],
-        "sample.geo_reaction_id" : [ [ "2096", "2097", "2098", "2099" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "342_5_1", "342_6_1", "342_7_1", "342_8_1" ] ],
-        "sample.geo_template_id" : [ [ "2230" ] ],
-        "sample.geo_template_type" : [ [ "Illumina MP Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "100316_I278_61J2YA_AW" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "342" ] ]
-      },
-      "laneName" : [ "100316_I278_61J2YA_AW_lane_8" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "FileImport" ],
-      "processingAlgorithm" : [ "fileImport" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 796497308
+      "fileId" : -1612894200
     } ]
   } ]
 }

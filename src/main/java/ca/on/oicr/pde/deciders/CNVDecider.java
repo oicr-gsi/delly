@@ -50,6 +50,7 @@ public class CNVDecider extends OicrDecider {
     private Rsconfig rs;
     private String tumorType;
     private String targetFile = " ";
+    private List<String> duplicates;
     
     public CNVDecider() {
         super();
@@ -196,7 +197,15 @@ public class CNVDecider extends OicrDecider {
         String[] filePaths = commaSeparatedFilePaths.split(",");
         boolean haveNorm = false;
         boolean haveTumr = false;
+        
+        // Check for duplicate file names and exclude them from analysis
+        this.duplicates = detectDuplicates(commaSeparatedFilePaths);
+        
         for (String p : filePaths) {
+            if (null != this.duplicates && this.duplicates.contains(p)) {
+                Log.stderr("File [" + p + "] has a name that cannot be disambiguated in current set, will skip it");
+                continue;
+            }
             for (BeSmall bs : fileSwaToSmall.values()) {
                 if (!bs.getPath().equals(p))
                     continue;
@@ -237,7 +246,7 @@ public class CNVDecider extends OicrDecider {
             return false;
         }
         
-        String target_bed = rs.get(currentTtype, targetResequencingType, this.rsconfigXmlPath);
+        String target_bed = rs.get(currentTtype, targetResequencingType, "interval_file");
 
         if (!currentTtype.equals(WG) && target_bed != null && !target_bed.isEmpty()) {
             this.targetFile = target_bed;
@@ -347,6 +356,11 @@ public class CNVDecider extends OicrDecider {
         StringBuilder groupDescription= new StringBuilder();
         
         for (String p :  filePaths) {
+            if (null != this.duplicates && this.duplicates.contains(p)) {
+                Log.stderr("Will not include file [" + p + "] since there is an ambiguity in names that cannot be resolved");
+                continue;
+            }
+            
             for (BeSmall bs : fileSwaToSmall.values()) {
                 if (!bs.getPath().equals(p))
                     continue;
@@ -530,5 +544,36 @@ public class CNVDecider extends OicrDecider {
         File file = new File(filePath);
         return (file.exists() && file.canRead() && file.isFile());
 
+    }
+   
+   public static List<String> detectDuplicates(String commaSeparatedFilePaths) {
+       
+       String [] filePaths = commaSeparatedFilePaths.split(",");
+       List<String> list    = new ArrayList<String>();
+       List<String> checker = new ArrayList<String>();
+       
+       for (String path : filePaths) {
+           String baseName = makeBasename(path, ".bam");
+           
+           if (checker.contains(baseName) && !list.contains(path)) {
+               list.add(path);
+           } else {
+               checker.add(baseName);
+           }
+       }
+       
+       return list.isEmpty() ? null : list;
+       
+   }
+   
+    /**
+     * Utility function
+     * 
+     * @param path
+     * @param extension
+     * @return 
+     */
+    public static String makeBasename(String path, String extension) {
+        return path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(extension));
     }
 }

@@ -17,7 +17,14 @@
         {
             "id": "General sample test 2",
             "parameters": {
-                "--root-sample-name": "CPCG_0006",
+                "--root-sample-name": "HALT_0032",
+                "--template-type": "TS"
+            }
+        },
+        {
+            "id": "General sample test 3",
+            "parameters": {
+                "--root-sample-name": "JDRT_0087",
                 "--template-type": "EX"
             }
         }
