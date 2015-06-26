@@ -31,7 +31,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private boolean doSort = true;
     private String  queue;
     private String  refFasta;
-    private String  targetFile;
+    private String  targetFile = "";
     private String[] supportedChromosomes;
     
     //HMMcopy
@@ -82,7 +82,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private static final String HMMCOPY_PREFIX = "hmmcopy_";
     private static final String BICSEQ_PREFIX  = "bicseq_";
     private static final String VARSCAN_PREFIX = "varscan_";
-
+    private final static String WG           = "WG";
     
     
     /**
@@ -109,8 +109,8 @@ public class CNVWorkflow extends OicrWorkflow {
             String fileSkipFlag = this.getOptionalProperty("skip_missing_files", Boolean.toString(DEFAULT_SKIP_IF_MISSING));
             this.skipFlag = Boolean.valueOf(fileSkipFlag);
             
-            
-            if (this.templateType.equals("EX")) {
+            //allow all template types other than WG (given that their have valid interval file associated)
+            if (!this.templateType.equals(WG)) { 
                 this.targetFile  = getProperty("target_file");
                 this.freecWindow = getOptionalProperty("freec_window", FREEC_WINDOW_DEFAULT_EX);
             } else {
@@ -272,7 +272,7 @@ public class CNVWorkflow extends OicrWorkflow {
                 * TODO need to think how to configure this for crosscheck properly 
                 * if we don't have reference (TBD next iteration)
                 */
-               if (this.templateType.equals("WG")) {
+               if (this.templateType.equals(WG)) {
                  // LAUNCH BICseq
                  launchBicSeq(this.localInputNormalFiles[n],
                               this.localInputTumorFiles[t], n + 1, sortJobs);
@@ -283,7 +283,7 @@ public class CNVWorkflow extends OicrWorkflow {
                  // LAUNCH FREEC
                  launchFREEC(this.localInputNormalFiles[n],
                              this.localInputTumorFiles[t], n + 1, null);                
-               } else if (this.templateType.equals("EX")) {
+               } else if (!this.targetFile.isEmpty()) {
                  // LAUNCH FREEC
                  launchFREEC(this.localInputNormalFiles[n],
                              this.localInputTumorFiles[t], n + 1, sortJobs);
@@ -494,7 +494,7 @@ public class CNVWorkflow extends OicrWorkflow {
             varscanJob.getCommand().addArgument(" --recenter-down "+ this.varscanRecenterDown);
         }
 
-        varscanJob.setMaxMemory("8000");
+        varscanJob.setMaxMemory("10000");
         if (parents != null) {
             for (Job p : parents) {
                 varscanJob.addParent(p);
@@ -561,7 +561,7 @@ public class CNVWorkflow extends OicrWorkflow {
         if (!this.freecVarCoeff.isEmpty()) {
          freecJob.getCommand().addArgument(" --var-coefficient " + this.freecVarCoeff);
         }
-        if (this.templateType.equals("EX")) {
+        if (!this.templateType.equals(WG)) {
          freecJob.getCommand().addArgument(" --target-file " + this.targetFile);
          freecJob.getCommand().addArgument(" --window "      + this.freecWindow);
         }

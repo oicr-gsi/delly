@@ -46,7 +46,7 @@ my $results = GetOptions ("input-normal=s" =>  \$input_n,
                           "mate-type=s"    =>\$matetype);
 
 if (!$input_t || !$input_n || !$samtools || !$freec || !$id) { die $USAGE; }
-if ($type && $type eq "EX" && (!$targetFile || !-e $targetFile)) { die "Exome data passed, but no target .bed provided!"; }
+if ($type && $type ne "WG" && (!$targetFile || !-e $targetFile)) { die "Exome data passed, but no target .bed provided!"; }
 
 # Set up R
 # Set up environmental variables
@@ -107,7 +107,7 @@ EXOME
 
 my $configBody = $configDefault;
 
-if ($type eq "EX") {
+if ($type ne "WG") {
     $configBody .= $exomeConf;
     $configBody =~s/TARGETFILE_TAG/$targetFile/;
     $window ||= 500;

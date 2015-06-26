@@ -6,7 +6,7 @@
     <parent>
         <groupId>ca.on.oicr.pde.config</groupId>
         <artifactId>workflows</artifactId>
-        <version>3</version>
+        <version>4-SNAPSHOT</version>
     </parent>
 
     <groupId>ca.on.oicr.pde.workflows</groupId>
