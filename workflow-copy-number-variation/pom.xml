@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ca.on.oicr.pde.config</groupId>
+        <artifactId>workflows</artifactId>
+        <version>4-SNAPSHOT</version>
+    </parent>
+
+    <groupId>ca.on.oicr.pde.workflows</groupId>
+    <artifactId>CNV</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>${display-name}</name>
+
+    <properties>
+        <workflow-name>CNV</workflow-name>
+        <testSuite>src/test/resources/testng.xml</testSuite>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>samtools</groupId>
+            <artifactId>samtools</artifactId>
+            <version>0.1.19</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>FREEC</groupId>
+            <artifactId>FREEC</artifactId>
+            <version>7.2</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>BICseq</groupId>
+            <artifactId>BICseq</artifactId>
+            <version>1.1.2</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>R-packages</groupId>
+            <artifactId>DNAcopy</artifactId>
+            <version>1.22.1</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>R</groupId>
+            <artifactId>R</artifactId>
+            <version>3.1.1</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>HMMcopy</groupId>
+            <artifactId>HMMcopy</artifactId>
+            <version>0.99.0</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>VarScan</groupId>
+            <artifactId>VarScan</artifactId>
+            <version>2.3.7</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>
