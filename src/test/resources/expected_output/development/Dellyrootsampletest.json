@@ -1,0 +1,501 @@
+{
+  "workflowRunCount" : 5,
+  "studies" : [ "CPC-GENE" ],
+  "sequencerRuns" : [ "130508_SN203_0177_AC1LMEACXX", "130522_h803_0122_AC1N00ACXX", "130529_SN7001179_0124_BC0MVPACXX", "130531_SN804_0118_BC0J20ACXX" ],
+  "lanes" : [ "130508_SN203_0177_AC1LMEACXX_lane_4", "130508_SN203_0177_AC1LMEACXX_lane_5", "130508_SN203_0177_AC1LMEACXX_lane_6", "130508_SN203_0177_AC1LMEACXX_lane_7", "130508_SN203_0177_AC1LMEACXX_lane_8", "130522_h803_0122_AC1N00ACXX_lane_5", "130522_h803_0122_AC1N00ACXX_lane_6", "130522_h803_0122_AC1N00ACXX_lane_7", "130522_h803_0122_AC1N00ACXX_lane_8", "130529_SN7001179_0124_BC0MVPACXX_lane_2", "130531_SN804_0118_BC0J20ACXX_lane_7" ],
+  "samples" : [ "CPCG_0235_Ly_R_PE_765_WG", "CPCG_0235_Ly_R_PE_788_WG", "CPCG_0235_Pr_P_PE_675_WG", "CPCG_0235_Pr_P_PE_729_WG", "CPCG_0235_Pr_P_PE_810_WG" ],
+  "workflows" : [ "GenomicAlignmentNovoalign" ],
+  "processingAlgorithms" : [ "PicardAddReadGroups" ],
+  "fileMetaTypes" : [ "application/bam" ],
+  "maxInputFiles" : 3,
+  "minInputFiles" : 2,
+  "totalInputFiles" : 11,
+  "workflowRuns" : [ {
+    "workflowIni" : {
+      "bundled_jre" : "jre1.7.0_51",
+      "data_dir" : "data",
+      "delly" : "delly_v0.5.5",
+      "delly_memory" : "8000",
+      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
+      "external_name" : "NA",
+      "group_id" : "NA",
+      "group_id_description" : "NA",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/23044011/SWID_539690_CPCG_0235_Pr_P_PE_729_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L005_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/26166850/SWID_541303_CPCG_0235_Pr_P_PE_729_WG_130522_h803_0122_AC1N00ACXX_NoIndex_L007_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/23044011/SWID_539690_CPCG_0235_Pr_P_PE_729_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L005_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/26166850/SWID_541303_CPCG_0235_Pr_P_PE_729_WG_130522_h803_0122_AC1N00ACXX_NoIndex_L007_R1_001.fastq.gz.annotated.bam",
+      "manual_output" : "false",
+      "mapping_quality" : "",
+      "metadata" : "metadata",
+      "output_dir" : "seqware-results",
+      "output_prefix" : "./",
+      "picard" : "picard-tools-1.89",
+      "picard_memory" : "6000",
+      "queue" : "",
+      "ref_fasta" : "/oicr/data/genomes/homo_sapiens/UCSC/Genomic/UCSC_hg19_random/fasta/hg19.fa",
+      "sample_name" : "CPCG_0235_Pr_P",
+      "samtools" : "samtools-0.1.19",
+      "tabix" : "tabix-0.2.6",
+      "vcftools" : "vcftools_0.1.10"
+    },
+    "files" : [ {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Pr_P_PE_729_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_5_1", "1433_7_1" ] ],
+        "sample.geo_template_id" : [ [ "31344" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
+      },
+      "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+      },
+      "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_5" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "5" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : -572801320
+    }, {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Pr_P_PE_729_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_5_1", "1433_7_1" ] ],
+        "sample.geo_template_id" : [ [ "31344" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
+      },
+      "sequencerRunName" : [ "130522_h803_0122_AC1N00ACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1433" ] ]
+      },
+      "laneName" : [ "130522_h803_0122_AC1N00ACXX_lane_7" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "7" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : -1347328022
+    } ]
+  }, {
+    "workflowIni" : {
+      "bundled_jre" : "jre1.7.0_51",
+      "data_dir" : "data",
+      "delly" : "delly_v0.5.5",
+      "delly_memory" : "8000",
+      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
+      "external_name" : "NA",
+      "group_id" : "NA",
+      "group_id_description" : "NA",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/4578536/SWID_541305_CPCG_0235_Pr_P_PE_675_WG_130522_h803_0122_AC1N00ACXX_NoIndex_L006_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/56776074/SWID_539692_CPCG_0235_Pr_P_PE_675_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L004_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/4578536/SWID_541305_CPCG_0235_Pr_P_PE_675_WG_130522_h803_0122_AC1N00ACXX_NoIndex_L006_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/56776074/SWID_539692_CPCG_0235_Pr_P_PE_675_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L004_R1_001.fastq.gz.annotated.bam",
+      "manual_output" : "false",
+      "mapping_quality" : "",
+      "metadata" : "metadata",
+      "output_dir" : "seqware-results",
+      "output_prefix" : "./",
+      "picard" : "picard-tools-1.89",
+      "picard_memory" : "6000",
+      "queue" : "",
+      "ref_fasta" : "/oicr/data/genomes/homo_sapiens/UCSC/Genomic/UCSC_hg19_random/fasta/hg19.fa",
+      "sample_name" : "CPCG_0235_Pr_P",
+      "samtools" : "samtools-0.1.19",
+      "tabix" : "tabix-0.2.6",
+      "vcftools" : "vcftools_0.1.10"
+    },
+    "files" : [ {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Pr_P_PE_675_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_4_1", "1433_6_1" ] ],
+        "sample.geo_template_id" : [ [ "31345" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
+      },
+      "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+      },
+      "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_4" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "4" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : -914513688
+    }, {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Pr_P_PE_675_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_4_1", "1433_6_1" ] ],
+        "sample.geo_template_id" : [ [ "31345" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
+      },
+      "sequencerRunName" : [ "130522_h803_0122_AC1N00ACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1433" ] ]
+      },
+      "laneName" : [ "130522_h803_0122_AC1N00ACXX_lane_6" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "6" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : -1329604003
+    } ]
+  }, {
+    "workflowIni" : {
+      "bundled_jre" : "jre1.7.0_51",
+      "data_dir" : "data",
+      "delly" : "delly_v0.5.5",
+      "delly_memory" : "8000",
+      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
+      "external_name" : "NA",
+      "group_id" : "NA",
+      "group_id_description" : "NA",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/57410195/SWID_539694_CPCG_0235_Ly_R_PE_788_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L008_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/4042501/SWID_541307_CPCG_0235_Ly_R_PE_788_WG_130522_h803_0122_AC1N00ACXX_NoIndex_L005_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/57410195/SWID_539694_CPCG_0235_Ly_R_PE_788_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L008_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/4042501/SWID_541307_CPCG_0235_Ly_R_PE_788_WG_130522_h803_0122_AC1N00ACXX_NoIndex_L005_R1_001.fastq.gz.annotated.bam",
+      "manual_output" : "false",
+      "mapping_quality" : "",
+      "metadata" : "metadata",
+      "output_dir" : "seqware-results",
+      "output_prefix" : "./",
+      "picard" : "picard-tools-1.89",
+      "picard_memory" : "6000",
+      "queue" : "",
+      "ref_fasta" : "/oicr/data/genomes/homo_sapiens/UCSC/Genomic/UCSC_hg19_random/fasta/hg19.fa",
+      "sample_name" : "CPCG_0235_Ly_R",
+      "samtools" : "samtools-0.1.19",
+      "tabix" : "tabix-0.2.6",
+      "vcftools" : "vcftools_0.1.10"
+    },
+    "files" : [ {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Ly_R_PE_788_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_8_1", "1433_5_1" ] ],
+        "sample.geo_template_id" : [ [ "31884" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
+        "sample.geo_tissue_type" : [ [ "R" ] ]
+      },
+      "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+      },
+      "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_8" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "8" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : 1722267216
+    }, {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Ly_R_PE_788_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_8_1", "1433_5_1" ] ],
+        "sample.geo_template_id" : [ [ "31884" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
+        "sample.geo_tissue_type" : [ [ "R" ] ]
+      },
+      "sequencerRunName" : [ "130522_h803_0122_AC1N00ACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1433" ] ]
+      },
+      "laneName" : [ "130522_h803_0122_AC1N00ACXX_lane_5" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "5" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : 254925786
+    } ]
+  }, {
+    "workflowIni" : {
+      "bundled_jre" : "jre1.7.0_51",
+      "data_dir" : "data",
+      "delly" : "delly_v0.5.5",
+      "delly_memory" : "8000",
+      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
+      "external_name" : "NA",
+      "group_id" : "NA",
+      "group_id_description" : "NA",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/952782/SWID_541301_CPCG_0235_Pr_P_PE_810_WG_130522_h803_0122_AC1N00ACXX_NoIndex_L008_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/97858864/SWID_539688_CPCG_0235_Pr_P_PE_810_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L006_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/952782/SWID_541301_CPCG_0235_Pr_P_PE_810_WG_130522_h803_0122_AC1N00ACXX_NoIndex_L008_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/97858864/SWID_539688_CPCG_0235_Pr_P_PE_810_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L006_R1_001.fastq.gz.annotated.bam",
+      "manual_output" : "false",
+      "mapping_quality" : "",
+      "metadata" : "metadata",
+      "output_dir" : "seqware-results",
+      "output_prefix" : "./",
+      "picard" : "picard-tools-1.89",
+      "picard_memory" : "6000",
+      "queue" : "",
+      "ref_fasta" : "/oicr/data/genomes/homo_sapiens/UCSC/Genomic/UCSC_hg19_random/fasta/hg19.fa",
+      "sample_name" : "CPCG_0235_Pr_P",
+      "samtools" : "samtools-0.1.19",
+      "tabix" : "tabix-0.2.6",
+      "vcftools" : "vcftools_0.1.10"
+    },
+    "files" : [ {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Pr_P_PE_810_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_6_1", "1433_8_1" ] ],
+        "sample.geo_template_id" : [ [ "31343" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
+      },
+      "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+      },
+      "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_6" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "6" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : 1439523423
+    }, {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Pr_P_PE_810_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_6_1", "1433_8_1" ] ],
+        "sample.geo_template_id" : [ [ "31343" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
+        "sample.geo_tissue_type" : [ [ "P" ] ]
+      },
+      "sequencerRunName" : [ "130522_h803_0122_AC1N00ACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1433" ] ]
+      },
+      "laneName" : [ "130522_h803_0122_AC1N00ACXX_lane_8" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "8" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : 315876567
+    } ]
+  }, {
+    "workflowIni" : {
+      "bundled_jre" : "jre1.7.0_51",
+      "data_dir" : "data",
+      "delly" : "delly_v0.5.5",
+      "delly_memory" : "8000",
+      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
+      "external_name" : "NA",
+      "group_id" : "NA",
+      "group_id_description" : "NA",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_8/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/88990518/SWID_800826_CPCG_0235_Ly_R_PE_765_WG_130529_SN7001179_0124_BC0MVPACXX_NoIndex_L002_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/73719648/SWID_539696_CPCG_0235_Ly_R_PE_765_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L007_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/70014094/SWID_552527_CPCG_0235_Ly_R_PE_765_WG_130531_SN804_0118_BC0J20ACXX_NoIndex_L007_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_8/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/88990518/SWID_800826_CPCG_0235_Ly_R_PE_765_WG_130529_SN7001179_0124_BC0MVPACXX_NoIndex_L002_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/73719648/SWID_539696_CPCG_0235_Ly_R_PE_765_WG_130508_SN203_0177_AC1LMEACXX_NoIndex_L007_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/70014094/SWID_552527_CPCG_0235_Ly_R_PE_765_WG_130531_SN804_0118_BC0J20ACXX_NoIndex_L007_R1_001.fastq.gz.annotated.bam",
+      "manual_output" : "false",
+      "mapping_quality" : "",
+      "metadata" : "metadata",
+      "output_dir" : "seqware-results",
+      "output_prefix" : "./",
+      "picard" : "picard-tools-1.89",
+      "picard_memory" : "6000",
+      "queue" : "",
+      "ref_fasta" : "/oicr/data/genomes/homo_sapiens/UCSC/Genomic/UCSC_hg19_random/fasta/hg19.fa",
+      "sample_name" : "CPCG_0235_Ly_R",
+      "samtools" : "samtools-0.1.19",
+      "tabix" : "tabix-0.2.6",
+      "vcftools" : "vcftools_0.1.10"
+    },
+    "files" : [ {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Ly_R_PE_765_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_7_1", "1442_2_2", "1456_7_2", "1460_2_2", "1699_2_2" ] ],
+        "sample.geo_template_id" : [ [ "31885" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
+        "sample.geo_tissue_type" : [ [ "R" ] ]
+      },
+      "sequencerRunName" : [ "130508_SN203_0177_AC1LMEACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1420" ] ]
+      },
+      "laneName" : [ "130508_SN203_0177_AC1LMEACXX_lane_7" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "7" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : 1377708275
+    }, {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Ly_R_PE_765_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_7_1", "1442_2_2", "1456_7_2", "1460_2_2", "1699_2_2" ] ],
+        "sample.geo_template_id" : [ [ "31885" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
+        "sample.geo_tissue_type" : [ [ "R" ] ]
+      },
+      "sequencerRunName" : [ "130529_SN7001179_0124_BC0MVPACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1699" ] ]
+      },
+      "laneName" : [ "130529_SN7001179_0124_BC0MVPACXX_lane_2" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "2" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : -2009998166
+    }, {
+      "studyTitle" : [ "CPC-GENE" ],
+      "studyAttributes" : {
+        "study.geo_lab_group_id" : [ [ "112" ] ]
+      },
+      "experimentName" : [ "Geo_CPC-GENE_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0235_Ly_R_PE_765_WG" ],
+      "sampleAttributes" : {
+        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
+        "sample.geo_run_id_and_position_and_slot" : [ [ "1420_7_1", "1442_2_2", "1456_7_2", "1460_2_2", "1699_2_2" ] ],
+        "sample.geo_template_id" : [ [ "31885" ] ],
+        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
+        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
+        "sample.geo_tissue_type" : [ [ "R" ] ]
+      },
+      "sequencerRunName" : [ "130531_SN804_0118_BC0J20ACXX" ],
+      "sequencerRunAttributes" : {
+        "sequencerrun.geo_instrument_run_id" : [ [ "1456" ] ]
+      },
+      "laneName" : [ "130531_SN804_0118_BC0J20ACXX_lane_7" ],
+      "laneAttributes" : {
+        "lane.geo_lane" : [ [ "7" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : 1813617903
+    } ]
+  } ]
+}
