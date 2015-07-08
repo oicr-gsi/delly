@@ -1,0 +1,32 @@
+{
+    "defaultDescription": "CNVDecider test",
+    "defaultMetricsResources": "/expected_output/development/",
+    "defaultParameters": {
+    },
+    "defaultIniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
+        "unique_string", "parent_accessions", "parent_accession", "input_file",
+        "input_files", "workflow_bundle_dir", "output_prefix"],
+    "tests": [
+        {
+            "id": "General sample test 1",
+            "parameters": {
+                "--root-sample-name": "PCSI_0101",
+                "--template-type": "WG"
+            }
+        },
+        {
+            "id": "General sample test 2",
+            "parameters": {
+                "--root-sample-name": "HALT_0032",
+                "--template-type": "TS"
+            }
+        },
+        {
+            "id": "General sample test 3",
+            "parameters": {
+                "--root-sample-name": "JDRT_0087",
+                "--template-type": "EX"
+            }
+        }
+    ]
+}
