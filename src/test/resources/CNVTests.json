@@ -1,0 +1,36 @@
+{
+    "defaults": {
+        "description": "CNV workflow test",
+        "metrics_calculate": "calculate.sh",
+        "metrics_compare": "compare.sh",
+        "input_config_dir": "/.mounts/labs/PDE/data/RegressionTests/CNV/workflow/input_config/",
+        "output_metrics_dir": "/.mounts/labs/PDE/data/RegressionTests/CNV/workflow/output_expectation/"
+    },
+    "tests": [
+        {
+            "id": "WG_Test",
+            "parameters": {
+                "input_files_normal": "/.mounts/labs/PDE/data/BICseq/test_data/normal_sorted.bam",
+                "input_files_tumor": "/.mounts/labs/PDE/data/BICseq/test_data/tumor_sorted.bam",
+                "reference_fasta": "/.mounts/labs/PDE/data/reference/hg18/hg18.fa",
+                "reference_gc":  "/.mounts/labs/PDE/data/HMMcopy/gc_hg18_chr22.wig",
+                "reference_map": "/.mounts/labs/PDE/data/HMMcopy/map_hg18_chr22.wig",
+                "reference_len_file": "/.mounts/labs/PDE/data/FREEC/hg18_chr.len",
+                "template_type": "WG"
+            }
+        },
+        {
+            "id": "EX_Test",
+            "parameters": {
+                "input_files_normal": "/.mounts/labs/PDE/data/testdata/genomic/bam/PCSI_0098EX_downsampled/PCSI_0098_Ly_R_PE_359_EX_110920_SN393_0187_BD04Y4ACXX_ATCACG_L007_R1_001.chr22.bam",
+                "input_files_tumor": "/.mounts/labs/PDE/data/testdata/genomic/bam/PCSI_0098EX_downsampled/PCSI_0098_Pa_P_PE_361_EX_110901_SN803_0064_BC046BACXX_lane_8.chr22.bam",
+                "reference_fasta": "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa",
+                "reference_gc": "/.mounts/labs/PDE/data/HMMcopy/gc_hg19_chr22.wig",
+                "reference_map": "/.mounts/labs/PDE/data/HMMcopy/map_hg19_chr22.wig",
+                "reference_len_file": "/.mounts/labs/PDE/data/FREEC/hg19_chr.len",
+                "target_file": "/.mounts/labs/PDE/data/TargetedSequencingQC/Agilent.SureSelect.All.Exon.V4/SureSelect_All_Exon_V4_Covered_Sorted.bed",
+                "template_type": "EX"
+            }
+        }
+    ]
+}
