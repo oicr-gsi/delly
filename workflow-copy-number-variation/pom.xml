@@ -45,15 +45,8 @@
         </dependency>
         <dependency>
             <groupId>R-packages</groupId>
-            <artifactId>DNAcopy</artifactId>
-            <version>1.22.1</version>
-            <type>zip</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>R</groupId>
-            <artifactId>R</artifactId>
-            <version>3.1.1</version>
+            <artifactId>CNV.R_modules</artifactId>
+            <version>3.2</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
@@ -73,4 +66,26 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>scripts_executable</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>chmod</executable>
+                            <commandlineArgs>-R 755 ${bundleDirectory}/dependencies</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
 </project>

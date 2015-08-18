@@ -18,7 +18,8 @@ public class CNVWorkflow extends OicrWorkflow {
     private String varscanVersion;
     private String samtoolsVersion;
     private String hmmcopyVersion;
-    private String rVersion;
+    private String rModule;
+    private String rLibDir;
     
     //FREEC
     private String chrLengthFile = "";
@@ -70,7 +71,6 @@ public class CNVWorkflow extends OicrWorkflow {
     private int bicseqInterval;
     private int bicseqSpread;
 
-    private boolean doCrosscheck = false;
     private boolean skipFlag;
     private static final String BICSEQ_I_DEFAULT         = "150";
     private static final String BICSEQ_S_DEFAULT         = "20";
@@ -81,6 +81,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private static final String  FREEC_PREFIX  = "freec_";
     private static final String HMMCOPY_PREFIX = "hmmcopy_";
     private static final String BICSEQ_PREFIX  = "bicseq_";
+    private static final String RLIBDIR_BASE   = "CNV.R_modules-";
     private static final String VARSCAN_PREFIX = "varscan_";
     private final static String WG           = "WG";
     
@@ -120,9 +121,7 @@ public class CNVWorkflow extends OicrWorkflow {
             this.queue = getProperty("queue");
             
             if (this.tumor.length != this.normal.length) {
-                    if (this.normal.length == 1) {
-                        this.doCrosscheck = true;
-                    } else {
+                    if (this.normal.length != 1) {
                         Logger.getLogger(CNVWorkflow.class.getName()).log(Level.SEVERE, "numbers for normal and tumor bam files are not the same, crosscheck isn't forced - "
                                 + "check your .ini file");
                         return (null);
@@ -136,7 +135,8 @@ public class CNVWorkflow extends OicrWorkflow {
             this.varscanVersion  = getProperty("varscan_version");
             this.samtoolsVersion = getProperty("samtools_version");
             this.hmmcopyVersion  = getProperty("hmmcopy_version");
-            this.rVersion        = getProperty("R_version");
+            this.rModule         = getProperty("R_module");
+            this.rLibDir         = RLIBDIR_BASE + getProperty("Rlibs_version");
             this.freecVarCoeff   = getOptionalProperty("freec_var_coefficient", FREEC_CV_DEFAULT);
             this.varscanMinCoverage = getOptionalProperty("varscan_min_coverage", null);
             this.varscanDelCoverage = getOptionalProperty("varscan_del_coverage", null);
@@ -337,7 +337,8 @@ public class CNVWorkflow extends OicrWorkflow {
         String resultID = BICSEQ_PREFIX + this.makeBasename(inputNormal, ".bam") + ".vs." 
                                         + this.makeBasename(inputTumor,  ".bam");
         
-        launchJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchBICseq.pl"
+        launchJob.setCommand("module load " + this.rModule + ";"
+                           + getWorkflowBaseDir() + "/dependencies/launchBICseq.pl"
                            + " --config-file " + this.dataDir + configFile
                            + " --outdir " + this.dataDir + resultDir
                            + " --bicseq-interval " + this.bicseqInterval
@@ -406,8 +407,9 @@ public class CNVWorkflow extends OicrWorkflow {
         Job hmmJob = this.getWorkflow().createBashJob("hmmcopy_launch");
         String resultID = HMMCOPY_PREFIX + this.makeBasename(inputNormal, ".bam") + ".vs." 
                                          + this.makeBasename(inputTumor,  ".bam");
-        hmmJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchHMMcopy.pl "
-                        + " --rhome-path " + getWorkflowBaseDir() + "/bin/R-" + this.rVersion
+        hmmJob.setCommand("module load " + this.rModule + ";"
+                        + getWorkflowBaseDir() + "/dependencies/launchHMMcopy.pl "
+                        + " --r-libdir "     + getWorkflowBaseDir() + "/bin/" + this.rLibDir
                         + " --normal-wig "   + this.makeBasename(inputNormal, ".bam") + "_reads.wig "
                         + " --tumor-wig "    + this.makeBasename(inputTumor, ".bam") + "_reads.wig "
                         + " --cg-file "      + this.refGCfile
@@ -463,11 +465,12 @@ public class CNVWorkflow extends OicrWorkflow {
         String outputDir = this.dataDir + "Varscan2." + id + "/"; 
         String resultID = VARSCAN_PREFIX + this.makeBasename(inputNormal, ".bam") + ".vs." 
                                          + this.makeBasename(inputTumor,  ".bam");
-        varscanJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchVarscan2.pl"
+        varscanJob.setCommand("module load " + this.rModule + ";"
+                            + getWorkflowBaseDir() + "/dependencies/launchVarscan2.pl"
                             + " --input-normal " + inputNormal
                             + " --input-tumor "  + inputTumor
                             + " --output-dir "   + outputDir
-                            + " --rlibs-dir "    + getWorkflowBaseDir() + "/bin"
+                            + " --r-libdir "     + getWorkflowBaseDir() + "/bin/" + this.rLibDir
                             + " --ref-fasta "    + refFasta
                             + " --java "         + getWorkflowBaseDir() + "/bin/jre" + getProperty("jre-version") + "/bin/java"
                             + " --varscan "      + getWorkflowBaseDir() + "/bin/VarScan.v" + varscanVersion + ".jar"
@@ -546,8 +549,9 @@ public class CNVWorkflow extends OicrWorkflow {
         Job freecJob = this.getWorkflow().createBashJob("freec_launch");
         String outputDir = this.dataDir + "FREEC." + id + "/";
         String resultID  = FREEC_PREFIX + this.makeBasename(inputTumor,  ".bam") + ".bam";
-        freecJob.setCommand(getWorkflowBaseDir() + "/dependencies/launchFREEC.pl"
-                            + " --rhome-path "   + getWorkflowBaseDir() + "/bin/R-" + this.rVersion
+        freecJob.setCommand("module load " + this.rModule + ";"
+                            + getWorkflowBaseDir() + "/dependencies/launchFREEC.pl"
+                            + " --r-libdir "     + getWorkflowBaseDir() + "/bin/" + this.rLibDir
                             + " --input-normal " + inputNormal
                             + " --input-tumor "  + inputTumor
                             + " --lenfile "      + this.chrLengthFile
