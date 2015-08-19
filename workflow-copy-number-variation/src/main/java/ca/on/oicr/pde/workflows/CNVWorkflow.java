@@ -497,7 +497,7 @@ public class CNVWorkflow extends OicrWorkflow {
             varscanJob.getCommand().addArgument(" --recenter-down "+ this.varscanRecenterDown);
         }
 
-        varscanJob.setMaxMemory("10000");
+        varscanJob.setMaxMemory("12000");
         if (parents != null) {
             for (Job p : parents) {
                 varscanJob.addParent(p);
