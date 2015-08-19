@@ -12,7 +12,8 @@
   "totalInputFiles" : 4,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "R_version" : "3.1.1",
+      "R_module" : "R/3.2.1",
+      "Rlibs_version" : "3.2",
       "bicseq_version" : "1.1.2",
       "data_dir" : "data",
       "do_sort" : "true",
@@ -23,13 +24,13 @@
       "group_id_description" : "NA",
       "hmmcopy_version" : "0.99.0",
       "input_files_normal" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/7353225/SWID_1841035_JDRT_0087_nn_R_PE_352_EX_150428_D00343_0085_AC5UT4ANXX_ATTGGCTC_L007_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/95681978/SWID_1848026_JDRT_0087_nn_R_PE_352_EX_150501_D00353_0102_AC6VTDANXX_ATTGGCTC_L008_R1_001.annotated.bam",
-      "input_files_tumor" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/59426989/SWID_1793392_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L002_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/86465980/SWID_1793393_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L001_R1_001.annotated.bam",
+      "input_files_tumor" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/66949362/SWID_1793392_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L002_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/37719118/SWID_1793393_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L001_R1_001.annotated.bam",
       "jre-version" : "1.7.0_51",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
       "queue" : "",
-      "reference_fasta" : "/.mounts/labs/PDE/data/MutectStrelka/hg19/hg19_random.fa",
+      "reference_fasta" : "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa",
       "reference_gc" : "/.mounts/labs/PDE/data/HMMcopy/hg19_random.gc.wig",
       "reference_len_file" : "/.mounts/labs/PDE/data/FREEC/hg19_chr.len",
       "reference_map" : "/.mounts/labs/PDE/data/HMMcopy/hg19_random.map.wig",
@@ -141,7 +142,7 @@
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : 969673576
+      "fileId" : 12060263
     }, {
       "studyTitle" : [ "JDRT" ],
       "studyAttributes" : {
@@ -175,7 +176,7 @@
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : -286784388
+      "fileId" : -217048431
     } ]
   } ]
 }

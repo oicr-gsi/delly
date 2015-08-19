@@ -12,22 +12,22 @@ use constant DEBUG=>0;
  and may run with WholeGenome and Exome data (currently this script supports only WG)
  bare-bone run:
 
- ./launchFREEC.pl --input-normal normal.bam --input-tumor tumor.bam --freec /bin/freec --id someID --lenfile hg19.len --samtools /bin/samtools
+ ./launchFREEC.pl --input-normal normal.bam --input-tumor tumor.bam --freec /bin/freec --id someID --lenfile hg19.len --samtools /bin/samtools --r-libdir My/R_modules
 
  will write into ./data/FREEC_someID directory by default
 
 =cut
 
-my $USAGE = "launchFREEC.pl --input-tumor [tumor input] --input-normal [normal input] --data-type [optional, default is WG, EX supported] ".
-            " --outdir [root data dir] --config-file [name of template config file] --samtools [path to samtools] --prefix [prefix for result files]\n";
+my $USAGE = "launchFREEC.pl --input-tumor [tumor input] --input-normal [normal input] --data-type [optional, default is WG, EX supported]".
+            " --r-libdir [R lib dir] --outdir [root data dir] --config-file [name of template config file] --samtools [path to samtools] --prefix [prefix for result files]\n";
 
 # Required parameters
 my($input_n,$input_t,$type,$id,$config,$lenfile,$samtools,$freec,$prefix);
 # Optional parameters
-my($datadir,$ploidy,$makebedgraph,$matetype,$logfile,$targetFile,$cvar,$quiet,$window,$rhome);
+my($datadir,$ploidy,$makebedgraph,$matetype,$logfile,$targetFile,$cvar,$quiet,$window,$rlibdir);
 my $results = GetOptions ("input-normal=s" =>  \$input_n,
                           "input-tumor=s"  =>  \$input_t,
-                          "rhome-path=s"   =>  \$rhome,
+                          "r-libdir=s"     =>  \$rlibdir,
                           "samtools=s"     =>  \$samtools,
                           "lenfile=s"      =>  \$lenfile,
                           "freec=s"        =>  \$freec,
@@ -45,18 +45,10 @@ my $results = GetOptions ("input-normal=s" =>  \$input_n,
                           "make-bedgraph=s"=> \$makebedgraph,
                           "mate-type=s"    =>\$matetype);
 
-if (!$input_t || !$input_n || !$samtools || !$freec || !$id) { die $USAGE; }
+if (!$input_t || !$input_n || !$samtools || !$freec || !$id || !$rlibdir) { die $USAGE; }
 if ($type && $type ne "WG" && (!$targetFile || !-e $targetFile)) { die "Exome data passed, but no target .bed provided!"; }
 
-# Set up R
-# Set up environmental variables
-my $rlibdir = join("/",($rhome,"library"));
-
-$ENV{R_HOME}     = $rhome;
-$ENV{R_HOME_DIR} = $rhome;
-$ENV{R_LIBS}     = $rlibdir;
-
-my $rscript = join("/",($rhome,"bin/Rscript"));
+$ENV{R_LIBS} = $rlibdir;
 
 # Set defaults
 $datadir  ||= "data/";
@@ -188,8 +180,8 @@ if (@files && @files > 1) {
 
  if ($freec_dir) {
    print STDERR "Adding significance values to called variations in [$freec_dir/$ratioFile]\n";
-   print STDERR "Command: $rscript $Bin/assess_significance.R $freec_dir/$ratioFile $freec_dir/$cnvFile\n" if DEBUG;
-   `$rscript $Bin/assess_significance.R $freec_dir/$ratioFile $freec_dir/$cnvFile`;
+   print STDERR "Command: Rscript $Bin/assess_significance.R $freec_dir/$ratioFile $freec_dir/$cnvFile\n" if DEBUG;
+   `Rscript $Bin/assess_significance.R $freec_dir/$ratioFile $freec_dir/$cnvFile`;
  }
 
 
@@ -217,7 +209,7 @@ if (@files && @files > 1) {
   close OUT;
 
   print STDERR "Making CNV visualization for [$freec_dir/$ratioFile]\n" if DEBUG;
-  `$rscript $Bin/makeGraph.R $ploidy $freec_dir/$noNAfile`;
+  `Rscript $Bin/makeGraph.R $ploidy $freec_dir/$noNAfile`;
  
  }
 
@@ -246,7 +238,7 @@ if (@files && @files > 1) {
 sub guessMate {
 
  my $bam = shift @_;
- my @flaglines = grep {/paired/} `samtools flagstat $bam`;
+ my @flaglines = grep {/paired/} `$samtools flagstat $bam`;
  if ($flaglines[0] =~/^0/) {return 0;}
  
  # Return FR (Illumina paired-end sequencing, SOLID is 'SS' and Illumina Mate Pair data 'RF'

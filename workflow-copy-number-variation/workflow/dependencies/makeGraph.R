@@ -1,7 +1,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 
 dataTable <-read.table(args[2], header=TRUE);
-
+options(bitmapType="cairo")
 ratio<-data.frame(dataTable)
 ploidy <- type.convert(args[1])
 

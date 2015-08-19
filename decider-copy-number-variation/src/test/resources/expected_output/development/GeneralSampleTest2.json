@@ -12,7 +12,8 @@
   "totalInputFiles" : 4,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "R_version" : "3.1.1",
+      "R_module" : "R/3.2.1",
+      "Rlibs_version" : "3.2",
       "bicseq_version" : "1.1.2",
       "data_dir" : "data",
       "do_sort" : "true",
@@ -29,7 +30,7 @@
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
       "queue" : "",
-      "reference_fasta" : "/.mounts/labs/PDE/data/MutectStrelka/hg19/hg19_random.fa",
+      "reference_fasta" : "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa",
       "reference_gc" : "/.mounts/labs/PDE/data/HMMcopy/hg19_random.gc.wig",
       "reference_len_file" : "/.mounts/labs/PDE/data/FREEC/hg19_chr.len",
       "reference_map" : "/.mounts/labs/PDE/data/HMMcopy/hg19_random.map.wig",

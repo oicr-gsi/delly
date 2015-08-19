@@ -37,6 +37,7 @@ tsvFile<-paste(outputBasename, "tsv", sep = ".")
 rangedDataToSeg(tum_corrected_copy, file = segFile)
 write.table(segmented_copy$segs, file = tsvFile, quote = FALSE, sep = "\t")
 
+options(bitmapType="cairo")
 # 4. Visualization - produce some images with hard-coded dimensions
 
 # Bias plots:

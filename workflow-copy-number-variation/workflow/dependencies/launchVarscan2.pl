@@ -21,8 +21,8 @@ use FindBin qw($Bin);
 use Getopt::Long;
 use constant DEBUG=>0;
 
-my($normal, $tumor, $out_dir, $rlibs_dir, $ref_fasta, $samtools, $java, $varscan, $id, $min_coverage, $del_threshold, $min_region_size, $recenter_up, $recenter_down);
-my $USAGE = "launchVarscan2.pl --input-normal [normal .bam file] --input-tumor [tumor .bam file] --output-dir [Output directory] --ref-fasta [Reference fasta] --samtools [Path to samtools] --rlibs-dir [path to directory with R libs] --id [unique id]";
+my($normal, $tumor, $out_dir, $rlibdir, $ref_fasta, $samtools, $java, $varscan, $id, $min_coverage, $del_threshold, $min_region_size, $recenter_up, $recenter_down);
+my $USAGE = "launchVarscan2.pl --input-normal [normal .bam file] --input-tumor [tumor .bam file] --output-dir [Output directory] --ref-fasta [Reference fasta] --samtools [Path to samtools] --r-libdir [path to directory with R libs] --id [unique id]";
 my $result = GetOptions('input-normal=s'    => \$normal,
                         'input-tumor=s'     => \$tumor,
                         'output-dir=s'      => \$out_dir,
@@ -30,7 +30,7 @@ my $result = GetOptions('input-normal=s'    => \$normal,
                         'java=s'            => \$java,
                         'varscan=s'         => \$varscan,
                         'id=s'              => \$id,
-                        'rlibs-dir=s'       => \$rlibs_dir,
+                        'r-libdir=s'        => \$rlibdir,
                         'samtools=s'        => \$samtools,
                         'min-coverage=s'    => \$min_coverage,
                         'del-coverage=s'    => \$del_threshold,
@@ -38,7 +38,7 @@ my $result = GetOptions('input-normal=s'    => \$normal,
                         'recenter-up=s'     => \$recenter_up,
                         'recenter-down=s'   => \$recenter_down);
 
-if (!$varscan || !$normal || !$tumor || !$out_dir || !$ref_fasta || !$samtools || !$rlibs_dir) {die $USAGE;}
+if (!$varscan || !$normal || !$tumor || !$out_dir || !$ref_fasta || !$samtools || !$rlibdir ) {die $USAGE;}
 if (!-e $out_dir || !-d $out_dir) {
  mkpath($out_dir);
 }
@@ -49,6 +49,8 @@ print STDERR "Will run command $pileup_command\n" if DEBUG;
 
 `$pileup_command`;
 print STDERR "Pileup data produced, starting actual analysis...\n" if DEBUG;
+
+$ENV{R_LIBS} = $rlibdir;
 
 =head2 Running analysis
 
@@ -132,7 +134,7 @@ if (-e "$out_dir/$id.copynumber") {
 
  `$filterCommand`;
  
- $ENV{R_LIBS} = $rlibs_dir;
+ $ENV{R_LIBS} = $rlibdir;
 
  print STDERR "Will run CBS script to reduce noise in data\n" if DEBUG;
  my $message = `Rscript $Bin/smooth_varscan.r $out_dir/$id.copynumber $id`;

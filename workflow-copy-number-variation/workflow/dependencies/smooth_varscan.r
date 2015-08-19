@@ -15,6 +15,7 @@ segs <- segment(CNA.smoothed, verbose=0, min.width=2)
 segs2 = segs$output
 write.table(segs2[,2:6], file=varscanSmoothed, row.names=F, col.names=F, quote=F, sep="\t")
 
+options(bitmapType="cairo")
 # Visualizaton 1 of 2
 png_plot_w = paste(varscanResults, "w_plot", "png", sep=".")
 
