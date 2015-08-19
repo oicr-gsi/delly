@@ -1,15 +1,15 @@
 {
   "workflowRunCount" : 1,
   "studies" : [ "JDRT" ],
-  "sequencerRuns" : [ "150423_D00353_0101_AC6JH4ANXX", "150428_D00343_0085_AC5UT4ANXX", "150501_D00353_0102_AC6VTDANXX", "150715_D00355_0088_BC6UPTANXX", "150721_D00355_0089_AC6C9UANXX" ],
-  "lanes" : [ "150423_D00353_0101_AC6JH4ANXX_lane_1", "150423_D00353_0101_AC6JH4ANXX_lane_2", "150428_D00343_0085_AC5UT4ANXX_lane_7", "150501_D00353_0102_AC6VTDANXX_lane_8", "150715_D00355_0088_BC6UPTANXX_lane_8", "150721_D00355_0089_AC6C9UANXX_lane_1" ],
-  "samples" : [ "JDRT_0087_nn_R_PE_352_EX", "JDRT_0087_nn_T_PE_320_EX", "JDRT_0087_nn_T_PE_366_EX" ],
+  "sequencerRuns" : [ "150423_D00353_0101_AC6JH4ANXX", "150428_D00343_0085_AC5UT4ANXX", "150501_D00353_0102_AC6VTDANXX" ],
+  "lanes" : [ "150423_D00353_0101_AC6JH4ANXX_lane_1", "150423_D00353_0101_AC6JH4ANXX_lane_2", "150428_D00343_0085_AC5UT4ANXX_lane_7", "150501_D00353_0102_AC6VTDANXX_lane_8" ],
+  "samples" : [ "JDRT_0087_nn_R_PE_352_EX", "JDRT_0087_nn_T_PE_366_EX" ],
   "workflows" : [ "GenomicAlignmentNovoalign_V2.07.15b" ],
   "processingAlgorithms" : [ "ProvisionFiles" ],
   "fileMetaTypes" : [ "application/bam" ],
-  "maxInputFiles" : 6,
-  "minInputFiles" : 6,
-  "totalInputFiles" : 6,
+  "maxInputFiles" : 4,
+  "minInputFiles" : 4,
+  "totalInputFiles" : 4,
   "workflowRuns" : [ {
     "workflowIni" : {
       "R_module" : "R/3.2.1",
@@ -24,7 +24,7 @@
       "group_id_description" : "NA",
       "hmmcopy_version" : "0.99.0",
       "input_files_normal" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/7353225/SWID_1841035_JDRT_0087_nn_R_PE_352_EX_150428_D00343_0085_AC5UT4ANXX_ATTGGCTC_L007_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/95681978/SWID_1848026_JDRT_0087_nn_R_PE_352_EX_150501_D00353_0102_AC6VTDANXX_ATTGGCTC_L008_R1_001.annotated.bam",
-      "input_files_tumor" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/66949362/SWID_1793392_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L002_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/37719118/SWID_1793393_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L001_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/53545014/SWID_2276867_JDRT_0087_nn_T_PE_320_EX_150715_D00355_0088_BC6UPTANXX_CGAACTTA_L008_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/85527566/SWID_2322013_JDRT_0087_nn_T_PE_320_EX_150721_D00355_0089_AC6C9UANXX_CGAACTTA_L001_R1_001.annotated.bam",
+      "input_files_tumor" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/66949362/SWID_1793392_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L002_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/37719118/SWID_1793393_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L001_R1_001.annotated.bam",
       "jre-version" : "1.7.0_51",
       "manual_output" : "false",
       "metadata" : "metadata",
@@ -109,74 +109,6 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 2021090947
-    }, {
-      "studyTitle" : [ "JDRT" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "191" ] ]
-      },
-      "experimentName" : [ "Geo_JDRT_ILLUMINA_EX_{F*126}{..}{R*126}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "JDRT_0087_nn_T_PE_320_EX" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "EX" ] ],
-        "sample.geo_prep_kit" : [ [ "Agilent SureSelect XT2" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "2293_8_2", "2296_1_1" ] ],
-        "sample.geo_targeted_resequencing" : [ [ "SureSelect v4" ] ],
-        "sample.geo_template_id" : [ [ "79039" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "150715_D00355_0088_BC6UPTANXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "2293" ] ]
-      },
-      "laneName" : [ "150715_D00355_0088_BC6UPTANXX_lane_8" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
-      },
-      "iusTag" : [ "CGAACTTA" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "GenomicAlignmentNovoalign_V2.07.15b" ],
-      "processingAlgorithm" : [ "ProvisionFiles" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 572083134
-    }, {
-      "studyTitle" : [ "JDRT" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "191" ] ]
-      },
-      "experimentName" : [ "Geo_JDRT_ILLUMINA_EX_{F*126}{..}{R*126}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "JDRT_0087_nn_T_PE_320_EX" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "EX" ] ],
-        "sample.geo_prep_kit" : [ [ "Agilent SureSelect XT2" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "2293_8_2", "2296_1_1" ] ],
-        "sample.geo_targeted_resequencing" : [ [ "SureSelect v4" ] ],
-        "sample.geo_template_id" : [ [ "79039" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "150721_D00355_0089_AC6C9UANXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "2296" ] ]
-      },
-      "laneName" : [ "150721_D00355_0089_AC6C9UANXX_lane_1" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "1" ] ]
-      },
-      "iusTag" : [ "CGAACTTA" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "GenomicAlignmentNovoalign_V2.07.15b" ],
-      "processingAlgorithm" : [ "ProvisionFiles" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1134767220
     }, {
       "studyTitle" : [ "JDRT" ],
       "studyAttributes" : {
