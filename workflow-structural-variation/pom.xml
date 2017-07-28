@@ -6,12 +6,12 @@
     <parent>
         <groupId>ca.on.oicr.pde.config</groupId>
         <artifactId>workflows</artifactId>
-        <version>3</version>
+        <version>3.1</version>
     </parent>
 
     <groupId>ca.on.oicr.pde.workflows</groupId>
     <artifactId>StructuralVariation</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>${display-name}</name>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>delly</groupId>
             <artifactId>delly</artifactId>
-            <version>v0.5.5</version>
+            <version>v0.7.2</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
