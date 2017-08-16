@@ -44,6 +44,8 @@ public class CNVDecider extends OicrDecider {
     private String manual_output   = "false";
     private String forceCrosscheck = "true";
     private String do_sort         = "false";
+    private String varscanPvalueThreshold;
+    private String varscanJavaXmx;
 
     private final static String BAM_METATYPE = "application/bam";
     private final static String WG           = "WG";
@@ -75,6 +77,8 @@ public class CNVDecider extends OicrDecider {
         parser.accepts("do-sort", "Optional: Set the flag (true or false) to indicate if need to sort bam files. Default: false").withRequiredArg();
         parser.accepts("skip-missing-files","Optional. Set the flag for skipping non-existing files to true or false "
                 + "when running the workflow, the default is true").withRequiredArg();
+        parser.accepts("varscan-pvalue", "Optional: Set the threshold p-value for Varscan variant calls (0.05 is the default)").withRequiredArg();
+        parser.accepts("varscan-java-xmx", "Optional: Set the memory heap in Gigabytes for Varscan java").withRequiredArg();
         parser.accepts("verbose", "Optional: Enable verbose Logging").withRequiredArg();
     }
 
@@ -188,6 +192,14 @@ public class CNVDecider extends OicrDecider {
             Log.error("Rsconfig file did not load properly, exeception stack trace:\n" + e.getStackTrace());
             rv.setExitStatus(ReturnValue.FAILURE);
             return rv;
+        }
+        
+        if (options.has("varscan-java-xmx")) {
+            this.varscanJavaXmx = options.valueOf("varscan-java-xmx").toString();
+        }
+        
+        if (options.has("varscan-pvalue")) {
+            this.varscanPvalueThreshold = options.valueOf("varscan-pvalue").toString();
         }
 
         return rv;
@@ -422,6 +434,12 @@ public class CNVDecider extends OicrDecider {
          iniFileMap.put("queue", this.queue);
         } else {
          iniFileMap.put("queue", " ");
+        }
+        if (!this.varscanJavaXmx.isEmpty()) {
+            iniFileMap.put("varscan_java_xmx", this.varscanJavaXmx);
+        }
+        if (!this.varscanPvalueThreshold.isEmpty()) {
+            iniFileMap.put("varscan_pvalue", this.varscanPvalueThreshold);
         }
 
         iniFileMap.put("manual_output",  this.manual_output);
