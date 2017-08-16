@@ -12,13 +12,13 @@
 
     <groupId>ca.on.oicr.pde.deciders</groupId>
     <artifactId>CNVDecider</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>${display-name}</name>
 
     <properties>
-        <workflow-version>1.0.1</workflow-version>
+        <workflow-version>1.1</workflow-version>
         <main-class>ca.on.oicr.pde.deciders.CNVDecider</main-class>
         <testSuite>src/test/resources/testng.xml</testSuite>
     </properties>

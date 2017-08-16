@@ -12,7 +12,7 @@
 
     <groupId>ca.on.oicr.pde.workflows</groupId>
     <artifactId>CNV</artifactId>
-    <version>1.0.1</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>${display-name}</name>
@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>FREEC</groupId>
-            <artifactId>${freec-version}</artifactId>
+            <artifactId>FREEC</artifactId>
             <version>${freec-version}</version>
             <type>zip</type>
             <scope>provided</scope>
