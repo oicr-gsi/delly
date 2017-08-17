@@ -46,6 +46,13 @@ public class CNVDecider extends OicrDecider {
     private String do_sort         = "false";
     private String varscanPvalueThreshold;
     private String varscanJavaXmx;
+    
+    //Additional Parameters for VarScan:
+    private String varscanMinCoverage;
+    private String varscanDelCoverage;
+    private String varscanMinRegion;
+    private String varscanRecenterUp;
+    private String varscanRecenterDown;                   
 
     private final static String BAM_METATYPE = "application/bam";
     private final static String WG           = "WG";
@@ -73,6 +80,11 @@ public class CNVDecider extends OicrDecider {
         parser.accepts("output-folder", "Optional: the name of the folder to put the output into relative to "
 	        + "the output-path. Corresponds to output-dir in INI file. Default: seqware-results").withRequiredArg();
         parser.accepts("queue", "Optional: Set the queue (Default: not set)").withRequiredArg();
+        parser.accepts("varscan-min-coverage","Optional. VarScan filtering parameter, see Varscan Manual").withRequiredArg();
+        parser.accepts("varscan-del-coverage","Optional. VarScan filtering parameter, see Varscan Manual").withRequiredArg();
+        parser.accepts("varscan-min-region","Optional. VarScan filtering parameter, see Varscan Manual").withRequiredArg();
+        parser.accepts("varscan-recenter-up","Optional. VarScan filtering parameter, see Varscan Manual").withRequiredArg();
+        parser.accepts("varscan-recenter-down","Optional. VarScan filtering parameter, see Varscan Manual").withRequiredArg();
         parser.accepts("tumor-type", "Optional: Set tumor tissue type to something other than primary tumor (P), i.e. X . Default: Not set (All)").withRequiredArg();
         parser.accepts("do-sort", "Optional: Set the flag (true or false) to indicate if need to sort bam files. Default: false").withRequiredArg();
         parser.accepts("skip-missing-files","Optional. Set the flag for skipping non-existing files to true or false "
@@ -202,6 +214,26 @@ public class CNVDecider extends OicrDecider {
             this.varscanPvalueThreshold = options.valueOf("varscan-pvalue").toString();
         }
 
+        if (options.has("varscan-min-coverage")) {
+            this.varscanMinCoverage = options.valueOf("varscan-min-coverage").toString();
+        }
+        
+        if (options.has("varscan-del-coverage")) {
+            this.varscanDelCoverage = options.valueOf("varscan-del-coverage").toString();
+        }
+        
+        if (options.has("varscan-min-region")) {
+            this.varscanMinRegion = options.valueOf("varscan-min-region").toString();
+        }
+        
+        if (options.has("varscan-recenter-up")) {
+            this.varscanRecenterUp = options.valueOf("varscan-recenter-up").toString();
+        }
+        
+        if (options.has("varscan-recenter-down")) {
+            this.varscanRecenterDown = options.valueOf("varscan-recenter-down").toString();
+        }
+        
         return rv;
     }
 
@@ -440,6 +472,21 @@ public class CNVDecider extends OicrDecider {
         }
         if (!this.varscanPvalueThreshold.isEmpty()) {
             iniFileMap.put("varscan_pvalue", this.varscanPvalueThreshold);
+        }
+        if (!this.varscanMinCoverage.isEmpty()) {
+            iniFileMap.put("varscan_min_coverage", this.varscanMinCoverage);
+        }
+        if (!this.varscanDelCoverage.isEmpty()) {
+            iniFileMap.put("varscan_del_coverage", this.varscanDelCoverage);
+        }
+        if (!this.varscanMinRegion.isEmpty()) {
+            iniFileMap.put("varscan_min_region", this.varscanMinRegion);
+        }
+        if (!this.varscanRecenterUp.isEmpty()) {
+            iniFileMap.put("varscan_recenter_up", this.varscanRecenterUp);
+        }
+        if (!this.varscanRecenterDown.isEmpty()) {
+            iniFileMap.put("varscan_recenter_down", this.varscanRecenterDown);
         }
 
         iniFileMap.put("manual_output",  this.manual_output);
