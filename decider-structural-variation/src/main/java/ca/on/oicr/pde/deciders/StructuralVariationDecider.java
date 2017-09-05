@@ -52,9 +52,9 @@ public class StructuralVariationDecider extends OicrDecider {
 	        + "the output-path. Corresponds to output-dir in INI file. Default: seqware-results").withRequiredArg();
         parser.accepts("queue", "Optional: Override the default queue setting (production) setting it to something else").withRequiredArg();
         parser.accepts("ref-fasta", "Optional: the path to reference fasta used by Delly "
-	        + " Default: /oicr/data/genomes/homo_sapiens/UCSC/Genomic/UCSC_hg19_random/fasta/hg19.fa").withRequiredArg();
+	        + " Default: /.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa").withRequiredArg();
         parser.accepts("exclude-list", "Optional: the path to file with targets not used by Delly "
-	        + " Default: bundled human.hg19h.excl.tsv").withRequiredArg();
+	        + " Default: /.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv").withRequiredArg();
         parser.accepts("mapping-quality", "Optional: parameter used by Delly, not set by default ").withRequiredArg();
     }
 
