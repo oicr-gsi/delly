@@ -30,7 +30,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
     private Map<String, SqwFile> inputFiles;
     private static final String[] DELLY_TYPES = {"DEL", "DUP", "INV", "TRA"};  // Subject to change in future DELLY versions?
     private static final String DEDUP_BAM_SUFFIX  = ".dupmarked.bam";
-    private static final String FILTR_BAM_SUFFIX  = ".dupmarked.filtered.bam";
+    //private static final String FILTR_BAM_SUFFIX  = ".dupmarked.filtered.bam";
     private static final String VCF_MERGED_SUFFIX = ".delly.merged.vcf";
 
 
@@ -225,7 +225,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             // Filtering job - 1280 means Remove Reads which are:
             // * not primary alignment
             // * are PCR or optical duplicates
-            Job filterJob = workflow.createBashJob("samtools_filtering");
+            /* Job filterJob = workflow.createBashJob("samtools_filtering");
             filterJob.setCommand(this.samtools
                     + "/samtools view -b -F 1280 "
                     + this.dataDir + this.sampleName + DEDUP_BAM_SUFFIX
@@ -235,16 +235,16 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             filterJob.addParent(picardJob);
             if (!this.queue.isEmpty()) {
                 filterJob.setQueue(this.queue);
-            }
+            }*/
 
             // Indexing job - we needs this since DELLY uses index file
             Job indexJob = workflow.createBashJob("samtools_indexed");
             indexJob.setCommand(this.samtools
                     + "/samtools index "
-                    + this.dataDir + this.sampleName + FILTR_BAM_SUFFIX);
+                    + this.dataDir + this.sampleName + DEDUP_BAM_SUFFIX);
 
             indexJob.setMaxMemory("3000");
-            indexJob.addParent(filterJob);
+            indexJob.addParent(picardJob);
             if (!this.queue.isEmpty()) {
                 indexJob.setQueue(this.queue);
             }
@@ -262,7 +262,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                         + " -o " + outputFile
                         + " -q " + this.mappingQuality
                         + " -g " + this.refFasta + " "
-                        + this.dataDir + this.sampleName + FILTR_BAM_SUFFIX);
+                        + this.dataDir + this.sampleName + DEDUP_BAM_SUFFIX);
                 dellyJob.setMaxMemory(getProperty("delly_memory"));
                 dellyJob.addParent(indexJob);
                 if (!this.queue.isEmpty()) {
