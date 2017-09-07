@@ -14,7 +14,6 @@ import net.sourceforge.seqware.common.module.ReturnValue;
 import net.sourceforge.seqware.common.util.Log;
 import net.sourceforge.seqware.common.util.maptools.MapTools;
 
-
 /**
  *
  * @author pruzanov@oicr.on.ca
@@ -23,7 +22,6 @@ public class StructuralVariationDecider extends OicrDecider {
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
     private Map<String, BeSmall> fileSwaToSmall;
-    
     private String templateTypeFilter = "";
     private String picard_memory = "6000";
     private String delly_memory  = "8000";
@@ -35,7 +33,12 @@ public class StructuralVariationDecider extends OicrDecider {
     private String excludeList = "";
     private String mappingQuality = " ";
     private String manualOutput = "false";
+    private String callMode = "";
+    private List<String> duplicates;
     private final static String BAM_METATYPE = "application/bam";
+    private static final String ALIGNER_TOKEN = "file.aligner";
+    private final static String GERMLINE = "germline";
+    private final static String SOMATIC  = "somatic";
  
     public StructuralVariationDecider() {
         super();
@@ -55,6 +58,9 @@ public class StructuralVariationDecider extends OicrDecider {
 	        + " Default: /.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa").withRequiredArg();
         parser.accepts("exclude-list", "Optional: the path to file with targets not used by Delly "
 	        + " Default: /.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv").withRequiredArg();
+        parser.accepts("mode", "Required: Either somatic or germline").withRequiredArg();
+        parser.accepts("exclude-list", "Optional: the path to file with targets not used by Delly "
+	        + " Default: /.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv").withRequiredArg();
         parser.accepts("mapping-quality", "Optional: parameter used by Delly, not set by default ").withRequiredArg();
     }
 
@@ -62,8 +68,7 @@ public class StructuralVariationDecider extends OicrDecider {
     public ReturnValue init() {
         Log.stdout("INIT");
 	this.setMetaType(Arrays.asList(BAM_METATYPE)); // It seems that this does not have effect 
-        this.setGroupingStrategy(Header.FILE_SWA); // Need to check if we need it to be so
-                
+                        
         //Handle .ini file - we accept only memeory size allocated to different steps
         if (options.has("ini-file")) {
             File file = new File(options.valueOf("ini-file").toString());
@@ -71,10 +76,10 @@ public class StructuralVariationDecider extends OicrDecider {
                 String iniFile = file.getAbsolutePath();
                 Map<String, String> iniFileMap = new HashMap<String, String>();
                 MapTools.ini2Map(iniFile, iniFileMap);
-                
+   
 		this.delly_memory = iniFileMap.get("delly_memory");
 		this.picard_memory = iniFileMap.get("picard_memory");
-                } else {
+            } else {
                 Log.stderr("The given INI file does not exist: " + file.getAbsolutePath());
                 System.exit(1);
             }
@@ -130,6 +135,17 @@ public class StructuralVariationDecider extends OicrDecider {
               }
         }
         
+        if (this.options.has("mode")) {
+             this.callMode = options.valueOf("mode").toString();
+              if (!this.callMode.equals(SOMATIC) && !this.callMode.equals(GERMLINE)) {
+                 Log.stderr("Mode needs to be specified as either germline or somatic");
+                 return new ReturnValue(ReturnValue.INVALIDPARAMETERS);                 
+              }
+        } else {
+            Log.stderr("Mode is a required parameter and needs to be specified");
+            return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+        }
+        
         if (this.options.has("output-folder")) {
             this.output_dir = options.valueOf("output-folder").toString();
 	}
@@ -143,6 +159,71 @@ public class StructuralVariationDecider extends OicrDecider {
         return val;
     }
 
+    /**
+     * Final check
+     * @param commaSeparatedFilePaths
+     * @param commaSeparatedParentAccessions
+     * @return    */
+    @Override
+    protected ReturnValue doFinalCheck(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
+        String[] filePaths = commaSeparatedFilePaths.split(",");
+        boolean haveNorm = false;
+        boolean haveTumr = false;
+        int tumorFiles  = 0;
+        int normalFiles = 0;
+        int groupIds = 0;
+
+        // Check for duplicate file names and exclude them from analysis
+        this.duplicates = detectDuplicates(commaSeparatedFilePaths);
+        
+        if (this.callMode.equals(GERMLINE) && filePaths.length > 0) {
+            return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
+        }
+        
+        for (String p : filePaths) {
+             if (null != this.duplicates && this.duplicates.contains(p)) {
+                Log.stderr("File [" + p + "] has a name that cannot be disambiguated in current set, will skip it");
+                continue;
+            }
+             
+            for (BeSmall bs : fileSwaToSmall.values()) {
+                if (!bs.getPath().equals(p)) {
+                    continue;
+                }
+                String tt = bs.getTissueType();
+                //GP-598: make sure we have group_ids for tumor files if there is more than one
+                if (!tt.isEmpty() && tt.equals("R")) {
+                    haveNorm = true;
+                    normalFiles++;
+                } else if (!tt.isEmpty()) {
+                    haveTumr = true;
+                    tumorFiles++;
+                    String gi = bs.getGroupID();
+                    if (null != gi && !gi.equals("NA")) {
+                        groupIds++;
+                    }
+                }
+            }
+        }
+
+        if (tumorFiles > 1 && (tumorFiles != groupIds)) {
+            Log.error("We have multiple tumor files but not all of them have group id value, WON'T RUN");
+            return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+        }
+        
+        if (normalFiles > 1) {
+            Log.error("We have multiple normal files but we can only run the analysis with one normal, WON'T RUN");
+            return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+        }
+
+        if (haveNorm && haveTumr) {
+            return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
+        }
+
+        String absent = haveNorm ? "Tumor" : "Normal";
+        Log.error("Data for " + absent + " tissue are not available, WON'T RUN");
+        return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+    }
 
     @Override
     protected boolean checkFileDetails(ReturnValue returnValue, FileMetadata fm) {
@@ -182,7 +263,6 @@ public class StructuralVariationDecider extends OicrDecider {
                      metatypeOK = true;
                } catch (Exception e) {
                  Log.stderr("Error checking a file");
-                 continue;
                }
             }
             if (!metatypeOK)
@@ -234,7 +314,7 @@ public class StructuralVariationDecider extends OicrDecider {
             
             List<ReturnValue> vs = map.get(currVal);
             if (vs == null) {
-                vs = new ArrayList<ReturnValue>();
+                vs = new ArrayList<>();
             }
             vs.add(r);
             map.put(currVal, vs);
@@ -246,19 +326,43 @@ public class StructuralVariationDecider extends OicrDecider {
     
    @Override
     public ReturnValue customizeRun(WorkflowRun run) {
-        String inputFiles    = "";
-                
+        String inputFile          = "";
+        StringBuilder inputTumors = new StringBuilder();
+                 
         for (FileAttributes atts : run.getFiles()) {
-            if (!inputFiles.isEmpty()) {
-                inputFiles += ",";
-            }
-            inputFiles += atts.getPath();
-        }
+            String p = atts.getPath();
+            for (BeSmall bs : fileSwaToSmall.values()) {
+                if (!bs.getPath().equals(p)) {
+                    continue;
+                }
 
-        FileAttributes fa = run.getFiles()[0];
-        String tubeId = fa.getLimsValue(Lims.TUBE_ID);
+                if (this.callMode.equals(GERMLINE)) {
+                    if (inputTumors.length() != 0) {
+                        inputTumors.append(",");
+                    }
+                    inputTumors.append(p);
+                    continue;
+                }
+                    
+                String tt = bs.getTissueType();
+                if (!tt.isEmpty() && tt.equals("R")) {
+                    inputFile = p;
+                } else if (!tt.isEmpty()) {
+                    if (inputTumors.length() != 0) {
+                        inputTumors.append(",");
+                    }
+                    inputTumors.append(p);
+                }
+            }
+        }
+        
+        if (this.callMode.equals(GERMLINE)) {
+            run.addProperty("input_bams", inputTumors.toString());
+        } else {
+            run.addProperty("input_bams", inputFile);
+            run.addProperty("input_tumors", inputTumors.toString());
+        }
                
-        run.addProperty("input_bams", inputFiles);
         run.addProperty("picard_memory", this.picard_memory);
         run.addProperty("delly_memory", this.delly_memory);
         run.addProperty("data_dir", "data");
@@ -268,40 +372,21 @@ public class StructuralVariationDecider extends OicrDecider {
         run.addProperty("sample_name", this.sampleName);
         run.addProperty("manual_output", this.manualOutput);
         run.addProperty("mapping_quality", this.mappingQuality);
+        run.addProperty("mode", this.callMode);
         
         if (!this.refFasta.isEmpty())
             run.addProperty("ref_fasta", this.refFasta);
         
         if(!this.excludeList.isEmpty())
             run.addProperty("exclude_list", this.excludeList);       
-                
-        String g_id = fa.getLimsValue(Lims.GROUP_ID);
-        if (null != g_id && !g_id.equalsIgnoreCase("NA")) {
-          run.addProperty("group_id", g_id);
-        } else {
-          run.addProperty("group_id", "NA");    
-        }
-        
-        String g_id_desc = fa.getLimsValue(Lims.GROUP_DESC);
-        if (null != g_id_desc && !g_id_desc.equalsIgnoreCase("NA")) {
-          run.addProperty("group_id_description", g_id_desc);
-        } else {
-          run.addProperty("group_id_description", "NA");    
-        }
-        
-        if (null != tubeId && !tubeId.equalsIgnoreCase("NA")) {
-          run.addProperty("external_name", tubeId);
-        } else {
-          run.addProperty("external_name", "NA");    
-        }
-        
+                              
         return new ReturnValue();
     }
 
    
    public static void main(String args[]){
  
-        List<String> params = new ArrayList<String>();
+        List<String> params = new ArrayList<>();
         params.add("--plugin");
         params.add(StructuralVariationDecider.class.getCanonicalName());
         params.add("--");
@@ -311,11 +396,47 @@ public class StructuralVariationDecider extends OicrDecider {
          
     }
    
+   /*
+    * Utility function for detecting duplicate file names
+   */
+   public static List<String> detectDuplicates(String commaSeparatedFilePaths) {
+       
+       String [] filePaths = commaSeparatedFilePaths.split(",");
+       List<String> list    = new ArrayList<>();
+       List<String> checker = new ArrayList<>();
+       
+       for (String path : filePaths) {
+           String baseName = makeBasename(path, ".bam");
+           
+           if (checker.contains(baseName) && !list.contains(path)) {
+               list.add(path);
+           } else {
+               checker.add(baseName);
+           }
+       }
+
+       return list.isEmpty() ? null : list;
+       
+   }
+   
+   /**
+     * Utility function
+     * 
+     * @param path
+     * @param extension
+     * @return 
+     */
+    public static String makeBasename(String path, String extension) {
+        return path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf(extension));
+    }
+   
    private class BeSmall {
 
         private Date   date = null;
         private String iusDetails = null;
+        private String groupID = null;
         private String groupByAttribute = null;
+        private String tissueType = null;
         private String path = null;
         
         public BeSmall(ReturnValue rv) {
@@ -328,22 +449,41 @@ public class StructuralVariationDecider extends OicrDecider {
             FileAttributes fa = new FileAttributes(rv, rv.getFiles().get(0));
             //TODO check if metatype is doing what it is supposed to do (adding MIME type here)
             iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + fa.getMetatype();
-            
+            tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
             //groupByAttribute = fa.getDonor() + ":" + fa.getLimsValue(Lims.TISSUE_ORIGIN) + ":" + fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE);
-            groupByAttribute = fa.getLibrarySample();
+            groupID    = fa.getLimsValue(Lims.GROUP_ID);
+            if (null == groupID || groupID.isEmpty()) {
+                groupID = "NA";
+            }
             
-            if (null != fa.getLimsValue(Lims.TISSUE_TYPE))
-                 groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_TYPE));
             
-            if (null != fa.getLimsValue(Lims.TISSUE_PREP))
-                 groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_PREP));
+            StringBuilder gba = new StringBuilder();
+
+            if (callMode.equals(GERMLINE)) {
+                gba.append(fa.getLibrarySample());
+                
+                if (null != fa.getLimsValue(Lims.TISSUE_TYPE))
+                 gba.append(":").append(fa.getLimsValue(Lims.TISSUE_TYPE));
             
-            if (null != fa.getLimsValue(Lims.TISSUE_REGION))
-                 groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.TISSUE_REGION)); 
+                if (null != fa.getLimsValue(Lims.TISSUE_PREP))
+                 gba.append(":").append(fa.getLimsValue(Lims.TISSUE_PREP));
             
-            if (null != fa.getLimsValue(Lims.GROUP_ID)) 
-                groupByAttribute = groupByAttribute.concat(":" + fa.getLimsValue(Lims.GROUP_ID));
+                if (null != fa.getLimsValue(Lims.TISSUE_REGION))
+                 gba.append(":").append(fa.getLimsValue(Lims.TISSUE_REGION));
+            } else {
+                gba.append(fa.getDonor());
+            }
             
+            if (null != fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE))
+             gba.append(":").append(fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE));
+            
+            String aligner = rv.getAttribute(ALIGNER_TOKEN);
+            if (null != aligner && !aligner.isEmpty()) {
+                gba.append(":").append(aligner);
+            }
+            
+                                           
+            groupByAttribute = gba.toString();
             path = rv.getFiles().get(0).getFilePath() + "";
         }
 
@@ -377,6 +517,24 @@ public class StructuralVariationDecider extends OicrDecider {
 
         public void setPath(String path) {
             this.path = path;
+        }
+        
+        public String getTissueType() {
+            return tissueType;
+        }
+
+        /**
+         * @return the groupID
+         */
+        public String getGroupID() {
+            return groupID;
+        }
+
+        /**
+         * @param groupID the groupID to set
+         */
+        public void setGroupID(String groupID) {
+            this.groupID = groupID;
         }
     }
     

@@ -9,21 +9,31 @@
         {
             "id": "DellyStudyNameTest",
             "parameters": {
-                "--study-name": "ABvsInvitrogenReagentComp"
+                "--study-name": "ABvsInvitrogenReagentComp",
+                "--mode": "germline"
             }
         },
         {
             "id": "DellyRootSampleTest",
             "parameters": {
-                "--root-sample-name": "CPCG_0235"
+                "--root-sample-name": "CPCG_0235",
+                "--mode": "germline"
             }
         },
         {
             "id": "DellySequencerRunTest",
             "parameters": {
-                "--sequencer-run-name": "120525_h803_0088_AC0M4JACXX"
+                "--sequencer-run-name": "120525_h803_0088_AC0M4JACXX",
+                "--mode": "germline"
             }
 
+        },
+{
+            "id": "SomaticSampleTest",
+            "parameters": {
+                "--root-sample-name": "DYS_1096",
+                "--mode": "somatic"
+            }
         }
     ]
 }
