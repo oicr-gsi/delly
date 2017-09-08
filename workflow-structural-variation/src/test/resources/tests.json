@@ -7,13 +7,13 @@
         "output_metrics_dir": "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/output_expectation/${project.version}"
     },
     "tests": [
-        "id": "Delly_defaults",
-            "parameters":{
+        {
+            "description": "Delly_defaults",
             "input_config": "workflow.ini",
             "mode": "germline"
         },
-        "id": "Delly_somatic",
-            "parameters": {
+        {
+                "description": "Delly_somatic"
                 "input_config": "workflow.ini",
                 "mode": "somatic",
                 "input_files" : "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/input_data/QPS0001R.chr7.libB.bam,/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/input_data/QPS0001R.chr7.libC.bam",
