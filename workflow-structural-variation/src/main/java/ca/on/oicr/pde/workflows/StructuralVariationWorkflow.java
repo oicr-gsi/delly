@@ -268,8 +268,8 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             
             // After everything is ready we can process files with DELLY
             // Note that in Somatic mode normal bam is in normal_bam_input
-            List<String> indexedVcfs = new ArrayList<>();
-            List<Job>    tabixJobs   = new ArrayList<>();
+            List<String> indexedVcfs = new ArrayList<String>();
+            List<Job>    tabixJobs   = new ArrayList<Job>();
             
             for (String inputBamFile : inputBamFiles) {
                 String sampleName = StructuralVariationWorkflow.makeBasename(inputBamFile);
