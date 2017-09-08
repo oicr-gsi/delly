@@ -234,7 +234,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             }
             // Picard job
             String [] inputBams = getProperty("input_files").split(",");
-            List <Job> upstreamJobs = new ArrayList();
+            List <Job> upstreamJobs = new ArrayList<Job>();
             
             for (String inputBam : inputBams) {
                 String sampleName = StructuralVariationWorkflow.makeBasename(inputBam);
