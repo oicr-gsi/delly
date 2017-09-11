@@ -374,10 +374,10 @@ public class StructuralVariationDecider extends OicrDecider {
         run.addProperty("mapping_quality", this.mappingQuality);
         run.addProperty("mode", this.callMode);
         
-        if (!this.refFasta.isEmpty())
+        if (this.refFasta != null && !this.refFasta.isEmpty())
             run.addProperty("ref_fasta", this.refFasta);
         
-        if(!this.excludeList.isEmpty())
+        if(this.excludeList != null && !this.excludeList.isEmpty())
             run.addProperty("exclude_list", this.excludeList);       
                               
         return new ReturnValue();

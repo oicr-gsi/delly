@@ -44,15 +44,15 @@ public class CNVDecider extends OicrDecider {
     private String manual_output   = "false";
     private String forceCrosscheck = "true";
     private String do_sort         = "false";
-    private String varscanPvalueThreshold;
-    private String varscanJavaXmx;
+    private String varscanPvalueThreshold = "";
+    private String varscanJavaXmx = "";
     
     //Additional Parameters for VarScan:
-    private String varscanMinCoverage;
-    private String varscanDelCoverage;
-    private String varscanMinRegion;
-    private String varscanRecenterUp;
-    private String varscanRecenterDown;                   
+    private String varscanMinCoverage  = "";
+    private String varscanDelCoverage  = "";
+    private String varscanMinRegion    = "";
+    private String varscanRecenterUp   = "";
+    private String varscanRecenterDown = "";                   
 
     private final static String BAM_METATYPE = "application/bam";
     private final static String WG           = "WG";

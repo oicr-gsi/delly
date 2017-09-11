@@ -16,76 +16,13 @@
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
-      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
-      "external_name" : "CPCG_0198_F2",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/20700969/SWID_218576_CPCG_0198_Pr_P_PE_354_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L002_R1_001.fastq.gz.annotated.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/20700969/SWID_218576_CPCG_0198_Pr_P_PE_354_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L002_R1_001.fastq.gz.annotated.bam",
-      "manual_output" : "false",
-      "mapping_quality" : "",
-      "metadata" : "metadata",
-      "output_dir" : "seqware-results",
-      "output_prefix" : "./",
-      "picard" : "picard-tools-1.89",
-      "picard_memory" : "6000",
-      "queue" : "",
-      "ref_fasta" : "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa",
-      "sample_name" : "CPCG_0198_Pr_P",
-      "samtools" : "samtools-0.1.19",
-      "tabix" : "tabix-0.2.6",
-      "vcftools" : "vcftools_0.1.10"
-    },
-    "files" : [ {
-      "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "53" ] ]
-      },
-      "experimentName" : [ "Geo_ABvsInvitrogenReagentComp_ILLUMINA_WG_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "CPCG_0198_Pr_P_PE_354_WG" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "6722" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1006_2_1" ] ],
-        "sample.geo_template_id" : [ [ "19262" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1006" ] ]
-      },
-      "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_2" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "2" ] ]
-      },
-      "iusTag" : [ "NoIndex" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "GenomicAlignmentNovoalign" ],
-      "processingAlgorithm" : [ "PicardAddReadGroups" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 6049875
-    } ]
-  }, {
-    "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
-      "data_dir" : "data",
-      "delly" : "delly_v0.7.2",
-      "delly_memory" : "8000",
-      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
-      "external_name" : "CPCG_0198_F2",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
+      "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
       "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/82214936/SWID_218578_CPCG_0198_Pr_P_PE_332_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L001_R1_001.fastq.gz.annotated.bam",
       "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/82214936/SWID_218578_CPCG_0198_Pr_P_PE_332_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L001_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
+      "mode" : "germline",
       "output_dir" : "seqware-results",
       "output_prefix" : "./",
       "picard" : "picard-tools-1.89",
@@ -100,28 +37,36 @@
     "files" : [ {
       "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
-      "experimentName" : [ "Geo_ABvsInvitrogenReagentComp_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0198_Pr_P_PE_332_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "6721" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1006_1_1" ] ],
-        "sample.geo_template_id" : [ [ "19260" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0198" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_reaction_id" : [ [ "6721" ] ],
+        "geo_receive_date" : [ [ "2012-02-27", "2012-02-28" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1006_1_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "18933", "18965", "19127", "19259", "19260" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "2" ] ],
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "CPCG_0198_F2" ] ]
       },
       "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1006" ] ]
+        "geo_instrument_run_id" : [ [ "1006" ] ]
       },
       "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_1" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "1" ] ]
+        "geo_lane" : [ [ "1" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -138,22 +83,20 @@
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
-      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
-      "external_name" : "CPCG_0199_F2",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/15030983/SWID_218574_CPCG_0199_Pr_P_PE_391_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L003_R1_001.fastq.gz.annotated.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/15030983/SWID_218574_CPCG_0199_Pr_P_PE_391_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L003_R1_001.fastq.gz.annotated.bam",
+      "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/20700969/SWID_218576_CPCG_0198_Pr_P_PE_354_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L002_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/20700969/SWID_218576_CPCG_0198_Pr_P_PE_354_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L002_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
+      "mode" : "germline",
       "output_dir" : "seqware-results",
       "output_prefix" : "./",
       "picard" : "picard-tools-1.89",
       "picard_memory" : "6000",
       "queue" : "",
       "ref_fasta" : "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa",
-      "sample_name" : "CPCG_0199_Pr_P",
+      "sample_name" : "CPCG_0198_Pr_P",
       "samtools" : "samtools-0.1.19",
       "tabix" : "tabix-0.2.6",
       "vcftools" : "vcftools_0.1.10"
@@ -161,28 +104,36 @@
     "files" : [ {
       "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
-      "experimentName" : [ "Geo_ABvsInvitrogenReagentComp_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
-      "sampleName" : [ "CPCG_0199_Pr_P_PE_391_WG" ],
+      "sampleName" : [ "CPCG_0198_Pr_P_PE_354_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "6723" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1006_3_1" ] ],
-        "sample.geo_template_id" : [ [ "19287" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0198" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_reaction_id" : [ [ "6722" ] ],
+        "geo_receive_date" : [ [ "2012-02-27", "2012-02-28" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1006_2_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "18933", "18965", "19127", "19261", "19262" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "2" ] ],
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "CPCG_0198_F2" ] ]
       },
       "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1006" ] ]
+        "geo_instrument_run_id" : [ [ "1006" ] ]
       },
-      "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_3" ],
+      "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_2" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "3" ] ]
+        "geo_lane" : [ [ "2" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -191,7 +142,7 @@
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : -293568300
+      "fileId" : 6049875
     } ]
   }, {
     "workflowIni" : {
@@ -199,15 +150,13 @@
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
-      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
-      "external_name" : "CPCG_0199_F2",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
+      "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
       "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/48442371/SWID_218572_CPCG_0199_Pr_P_PE_335_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L004_R1_001.fastq.gz.annotated.bam",
       "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/48442371/SWID_218572_CPCG_0199_Pr_P_PE_335_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L004_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
+      "mode" : "germline",
       "output_dir" : "seqware-results",
       "output_prefix" : "./",
       "picard" : "picard-tools-1.89",
@@ -222,28 +171,36 @@
     "files" : [ {
       "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
-      "experimentName" : [ "Geo_ABvsInvitrogenReagentComp_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0199_Pr_P_PE_335_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "6724" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1006_4_1" ] ],
-        "sample.geo_template_id" : [ [ "19289" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0199" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_reaction_id" : [ [ "6724" ] ],
+        "geo_receive_date" : [ [ "2012-02-27", "2012-02-28" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1006_4_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "18936", "18966", "19129", "19288", "19289" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "2" ] ],
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "CPCG_0199_F2" ] ]
       },
       "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1006" ] ]
+        "geo_instrument_run_id" : [ [ "1006" ] ]
       },
       "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_4" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "4" ] ]
+        "geo_lane" : [ [ "4" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -260,15 +217,80 @@
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
-      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
-      "external_name" : "CPCG_0201_F2",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
+      "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/15030983/SWID_218574_CPCG_0199_Pr_P_PE_391_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L003_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/15030983/SWID_218574_CPCG_0199_Pr_P_PE_391_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L003_R1_001.fastq.gz.annotated.bam",
+      "manual_output" : "false",
+      "mapping_quality" : "",
+      "metadata" : "metadata",
+      "mode" : "germline",
+      "output_dir" : "seqware-results",
+      "output_prefix" : "./",
+      "picard" : "picard-tools-1.89",
+      "picard_memory" : "6000",
+      "queue" : "",
+      "ref_fasta" : "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa",
+      "sample_name" : "CPCG_0199_Pr_P",
+      "samtools" : "samtools-0.1.19",
+      "tabix" : "tabix-0.2.6",
+      "vcftools" : "vcftools_0.1.10"
+    },
+    "files" : [ {
+      "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
+      "studyAttributes" : {
+        "geo_lab_group_id" : [ [ "53" ] ]
+      },
+      "experimentName" : [ ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "CPCG_0199_Pr_P_PE_391_WG" ],
+      "sampleAttributes" : {
+        "geo_external_name" : [ [ "CPCG_0199" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_reaction_id" : [ [ "6723" ] ],
+        "geo_receive_date" : [ [ "2012-02-27", "2012-02-28" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1006_3_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "18936", "18966", "19129", "19286", "19287" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "2" ] ],
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "CPCG_0199_F2" ] ]
+      },
+      "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
+      "sequencerRunAttributes" : {
+        "geo_instrument_run_id" : [ [ "1006" ] ]
+      },
+      "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_3" ],
+      "laneAttributes" : {
+        "geo_lane" : [ [ "3" ] ]
+      },
+      "iusTag" : [ "NoIndex" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : -293568300
+    } ]
+  }, {
+    "workflowIni" : {
+      "bundled_jre" : "jre1.7.0_51",
+      "data_dir" : "data",
+      "delly" : "delly_v0.7.2",
+      "delly_memory" : "8000",
+      "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
       "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/46642158/SWID_218568_CPCG_0201_Pr_P_PE_349_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L006_R1_001.fastq.gz.annotated.bam",
       "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/46642158/SWID_218568_CPCG_0201_Pr_P_PE_349_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L006_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
+      "mode" : "germline",
       "output_dir" : "seqware-results",
       "output_prefix" : "./",
       "picard" : "picard-tools-1.89",
@@ -283,28 +305,36 @@
     "files" : [ {
       "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
-      "experimentName" : [ "Geo_ABvsInvitrogenReagentComp_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0201_Pr_P_PE_349_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "6726" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1006_6_1" ] ],
-        "sample.geo_template_id" : [ [ "19297" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0201" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_reaction_id" : [ [ "6726" ] ],
+        "geo_receive_date" : [ [ "2012-02-27", "2012-02-28" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1006_6_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "18940", "18968", "19133", "19296", "19297" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "2" ] ],
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "CPCG_0201_F2" ] ]
       },
       "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1006" ] ]
+        "geo_instrument_run_id" : [ [ "1006" ] ]
       },
       "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_6" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
+        "geo_lane" : [ [ "6" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -321,15 +351,13 @@
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
-      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
-      "external_name" : "CPCG_0201_F2",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
+      "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
       "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/98813712/SWID_218570_CPCG_0201_Pr_P_PE_369_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L005_R1_001.fastq.gz.annotated.bam",
       "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/98813712/SWID_218570_CPCG_0201_Pr_P_PE_369_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L005_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
+      "mode" : "germline",
       "output_dir" : "seqware-results",
       "output_prefix" : "./",
       "picard" : "picard-tools-1.89",
@@ -344,28 +372,36 @@
     "files" : [ {
       "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
-      "experimentName" : [ "Geo_ABvsInvitrogenReagentComp_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0201_Pr_P_PE_369_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "6725" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1006_5_1" ] ],
-        "sample.geo_template_id" : [ [ "19295" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0201" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_reaction_id" : [ [ "6725" ] ],
+        "geo_receive_date" : [ [ "2012-02-27", "2012-02-28" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1006_5_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "18940", "18968", "19133", "19294", "19295" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "2" ] ],
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "CPCG_0201_F2" ] ]
       },
       "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1006" ] ]
+        "geo_instrument_run_id" : [ [ "1006" ] ]
       },
       "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_5" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "5" ] ]
+        "geo_lane" : [ [ "5" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -382,15 +418,13 @@
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
-      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
-      "external_name" : "CPCG_0203_F2",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
+      "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
       "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/26918717/SWID_218566_CPCG_0203_Pr_P_PE_320_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L007_R1_001.fastq.gz.annotated.bam",
       "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/26918717/SWID_218566_CPCG_0203_Pr_P_PE_320_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L007_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
+      "mode" : "germline",
       "output_dir" : "seqware-results",
       "output_prefix" : "./",
       "picard" : "picard-tools-1.89",
@@ -405,28 +439,36 @@
     "files" : [ {
       "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
-      "experimentName" : [ "Geo_ABvsInvitrogenReagentComp_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0203_Pr_P_PE_320_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "6727" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1006_7_1" ] ],
-        "sample.geo_template_id" : [ [ "19303" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0203" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_reaction_id" : [ [ "6727" ] ],
+        "geo_receive_date" : [ [ "2012-02-27", "2012-02-28" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1006_7_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "18942", "18969", "19135", "19302", "19303" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "2" ] ],
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "CPCG_0203_F2" ] ]
       },
       "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1006" ] ]
+        "geo_instrument_run_id" : [ [ "1006" ] ]
       },
       "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_7" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "7" ] ]
+        "geo_lane" : [ [ "7" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
@@ -443,15 +485,13 @@
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
-      "exclude_list" : "${workflow_bundle_dir}/data/human.hg19h.excl.tsv",
-      "external_name" : "CPCG_0203_F2",
-      "group_id" : "NA",
-      "group_id_description" : "NA",
+      "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
       "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/56463812/SWID_218564_CPCG_0203_Pr_P_PE_340_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L008_R1_001.fastq.gz.annotated.bam",
       "input_files" : "/oicr/data/archive/seqware/seqware_analysis_3/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/56463812/SWID_218564_CPCG_0203_Pr_P_PE_340_WG_120525_h803_0088_AC0M4JACXX_NoIndex_L008_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
+      "mode" : "germline",
       "output_dir" : "seqware-results",
       "output_prefix" : "./",
       "picard" : "picard-tools-1.89",
@@ -466,28 +506,36 @@
     "files" : [ {
       "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
-      "experimentName" : [ "Geo_ABvsInvitrogenReagentComp_ILLUMINA_WG_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "CPCG_0203_Pr_P_PE_340_WG" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "WG" ] ],
-        "sample.geo_prep_kit" : [ [ "GA_PE" ] ],
-        "sample.geo_reaction_id" : [ [ "6728" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1006_8_1" ] ],
-        "sample.geo_template_id" : [ [ "19305" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pr" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CPCG_0203" ] ],
+        "geo_library_source_template_type" : [ [ "WG" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_prep_kit" : [ [ "GA_PE" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_reaction_id" : [ [ "6728" ] ],
+        "geo_receive_date" : [ [ "2012-02-27", "2012-02-28" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1006_8_1" ] ],
+        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_template_id" : [ [ "18942", "18969", "19135", "19304", "19305" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Pr" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
+        "geo_tissue_region" : [ [ "2" ] ],
+        "geo_tissue_type" : [ [ "P" ] ],
+        "geo_tube_id" : [ [ "CPCG_0203_F2" ] ]
       },
       "sequencerRunName" : [ "120525_h803_0088_AC0M4JACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1006" ] ]
+        "geo_instrument_run_id" : [ [ "1006" ] ]
       },
       "laneName" : [ "120525_h803_0088_AC0M4JACXX_lane_8" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
+        "geo_lane" : [ [ "8" ] ]
       },
       "iusTag" : [ "NoIndex" ],
       "iusAttributes" : { },
