@@ -91,7 +91,6 @@ public class CNVDecider extends OicrDecider {
                 + "when running the workflow, the default is true").withRequiredArg();
         parser.accepts("varscan-pvalue", "Optional: Set the threshold p-value for Varscan variant calls (0.05 is the default)").withRequiredArg();
         parser.accepts("varscan-java-xmx", "Optional: Set the memory heap in Gigabytes for Varscan java").withRequiredArg();
-        parser.accepts("verbose", "Optional: Enable verbose Logging").withRequiredArg();
     }
 
     @Override
@@ -155,10 +154,6 @@ public class CNVDecider extends OicrDecider {
               this.forceCrosscheck = crosscheck.equalsIgnoreCase("true") ? "true" : "false";
               Log.debug("Setting force crosscheck to " + this.forceCrosscheck);
             }
-	} 
-        
-        if (this.options.has("verbose")) {
-            Log.setVerbose(true);
 	} 
         
         if (this.options.has("do-sort")) {
