@@ -1,10 +1,12 @@
 {
-    "defaultDescription": "Structural Variation decider test",
-    "defaultMetricsResources": "/expected_output/development/",
-    "defaultParameters": {
+    "defaults": {
+        "description": "Structural Variation decider test",
+        "metricsResources": "/expected_output/development/",
+        "parameters": {
+        },
+        "iniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
+            "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", "force-run-all"]
     },
-    "defaultIniExclusions": ["parent-accessions", "workflow_run_accession", "workflow-run-accession",
-        "unique_string", "parent_accessions", "parent_accession", "input_file", "workflow_bundle_dir", "force-run-all"],
     "tests": [
         {
             "id": "DellyStudyNameTest",
@@ -26,9 +28,8 @@
                 "--sequencer-run-name": "120525_h803_0088_AC0M4JACXX",
                 "--mode": "germline"
             }
-
         },
-{
+        {
             "id": "SomaticSampleTest",
             "parameters": {
                 "--root-sample-name": "DYS_1096",
