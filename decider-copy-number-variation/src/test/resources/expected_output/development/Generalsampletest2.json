@@ -12,7 +12,7 @@
   "totalInputFiles" : 4,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "R_module" : "R/3.2.1",
+      "R_module" : "R/3.2.1-deb8",
       "Rlibs_version" : "3.2",
       "bicseq_version" : "1.1.2",
       "data_dir" : "data",
@@ -20,7 +20,7 @@
       "external_name" : "NA,NA,NA",
       "force_crosscheck" : "true",
       "freec_version" : "7.2",
-      "group_id" : "33000008&CIRM33000008,31000341&CIRM31000341,33000008&CIRM33000008",
+      "group_id" : "33000008,31000341&CIRM31000341,33000008",
       "group_id_description" : "NA,NA,NA",
       "hmmcopy_version" : "0.99.0",
       "input_files_normal" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/63570923/SWID_569156_HALT_0032_Ly_R_PE_455_TS_130626_SN7001179_0132_AC2A1UACXX_ACACAGAA_L006_R1_001.fastq.gz.annotated.bam",
@@ -39,98 +39,40 @@
       "supported_chromosomes" : "chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY",
       "target_file" : "/.mounts/labs/PDE/data/TargetedSequencingQC/HALT/halt_coding_exons_sorted_nov2013.bed",
       "template_type" : "TS",
-      "varscan_version" : "2.3.7"
+      "varscan_java_xmx" : "6",
+      "varscan_pvalue" : "0.05",
+      "varscan_version" : "2.4.3"
     },
     "files" : [ {
       "studyTitle" : [ "HALT" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "154" ] ]
+        "geo_lab_group_id" : [ [ "154" ] ]
       },
-      "experimentName" : [ "Geo_HALT_ILLUMINA_EX_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "HALT_0032_Ly_R_PE_455_TS" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "TS" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1469_6_1", "1484_6_1" ] ],
-        "sample.geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
-        "sample.geo_template_id" : [ [ "37679" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Ly" ] ],
-        "sample.geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "130626_SN7001179_0132_AC2A1UACXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1484" ] ]
-      },
-      "laneName" : [ "130626_SN7001179_0132_AC2A1UACXX_lane_6" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
-      },
-      "iusTag" : [ "ACACAGAA" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "GenomicAlignmentNovoalign" ],
-      "processingAlgorithm" : [ "PicardAddReadGroups" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : -716762627
-    }, {
-      "studyTitle" : [ "HALT" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "154" ] ]
-      },
-      "experimentName" : [ "Geo_HALT_ILLUMINA_EX_{F*101}{..}{R*101}" ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "HALT_0032_Pb_P_PE_418_TS" ],
-      "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "TS" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1469_6_1", "1484_6_1" ] ],
-        "sample.geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
-        "sample.geo_template_id" : [ [ "37678" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Pb", "nn" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
-      },
-      "sequencerRunName" : [ "130626_SN7001179_0132_AC2A1UACXX" ],
-      "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1484" ] ]
-      },
-      "laneName" : [ "130626_SN7001179_0132_AC2A1UACXX_lane_6" ],
-      "laneAttributes" : {
-        "lane.geo_lane" : [ [ "6" ] ]
-      },
-      "iusTag" : [ "AAGGTACA" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "GenomicAlignmentNovoalign" ],
-      "processingAlgorithm" : [ "PicardAddReadGroups" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : { },
-      "fileId" : 1855117
-    }, {
-      "studyTitle" : [ "HALT" ],
-      "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "154" ] ]
-      },
-      "experimentName" : [ "Geo_HALT_ILLUMINA_TS_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "HALT_0032_Bm_P_PE_396_TS" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "TS" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1709_8_1", "1821_8_1", "1861_2_2", "2263_8_1" ] ],
-        "sample.geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
-        "sample.geo_template_id" : [ [ "52144" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Bm" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CIRM31000340, CIRM31000341, CIRM33000008" ] ],
+        "geo_group_id" : [ [ "33000008" ] ],
+        "geo_library_source_template_type" : [ [ "TS" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2012-12-18" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1709_8_1", "1821_8_1", "1861_2_2", "2263_8_1" ] ],
+        "geo_str_result" : [ [ "Pass", "Submitted" ] ],
+        "geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
+        "geo_template_id" : [ [ "31132", "31138", "50954", "52103", "52144" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA", "gDNA_wga" ] ],
+        "geo_tissue_origin" : [ [ "Bm" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "140109_SN804_0171_AC3KVTACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "2263" ] ]
+        "geo_instrument_run_id" : [ [ "2263" ] ]
       },
       "laneName" : [ "140109_SN804_0171_AC3KVTACXX_lane_8" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "8" ] ]
+        "geo_lane" : [ [ "8" ] ]
       },
       "iusTag" : [ "GGAGAACA" ],
       "iusAttributes" : { },
@@ -143,27 +85,33 @@
     }, {
       "studyTitle" : [ "HALT" ],
       "studyAttributes" : {
-        "study.geo_lab_group_id" : [ [ "154" ] ]
+        "geo_lab_group_id" : [ [ "154" ] ]
       },
-      "experimentName" : [ "Geo_HALT_ILLUMINA_TS_{F*101}{..}{R*101}" ],
+      "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "HALT_0032_Bm_P_PE_396_TS" ],
       "sampleAttributes" : {
-        "sample.geo_library_source_template_type" : [ [ "TS" ] ],
-        "sample.geo_run_id_and_position_and_slot" : [ [ "1709_8_1", "1821_8_1", "1861_2_2", "2263_8_1" ] ],
-        "sample.geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
-        "sample.geo_template_id" : [ [ "52144" ] ],
-        "sample.geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "sample.geo_tissue_origin" : [ [ "Bm" ] ],
-        "sample.geo_tissue_type" : [ [ "P" ] ]
+        "geo_external_name" : [ [ "CIRM31000340, CIRM31000341, CIRM33000008" ] ],
+        "geo_group_id" : [ [ "33000008" ] ],
+        "geo_library_source_template_type" : [ [ "TS" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2012-12-18" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1709_8_1", "1821_8_1", "1861_2_2", "2263_8_1" ] ],
+        "geo_str_result" : [ [ "Pass", "Submitted" ] ],
+        "geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
+        "geo_template_id" : [ [ "31132", "31138", "50954", "52103", "52144" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA", "gDNA_wga" ] ],
+        "geo_tissue_origin" : [ [ "Bm" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "140417_SN7001205_0212_BC4CAWACXX" ],
       "sequencerRunAttributes" : {
-        "sequencerrun.geo_instrument_run_id" : [ [ "1861" ] ]
+        "geo_instrument_run_id" : [ [ "1861" ] ]
       },
       "laneName" : [ "140417_SN7001205_0212_BC4CAWACXX_lane_2" ],
       "laneAttributes" : {
-        "lane.geo_lane" : [ [ "2" ] ]
+        "geo_lane" : [ [ "2" ] ]
       },
       "iusTag" : [ "GGAGAACA" ],
       "iusAttributes" : { },
@@ -173,6 +121,84 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1612894200
+    }, {
+      "studyTitle" : [ "HALT" ],
+      "studyAttributes" : {
+        "geo_lab_group_id" : [ [ "154" ] ]
+      },
+      "experimentName" : [ ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "HALT_0032_Ly_R_PE_455_TS" ],
+      "sampleAttributes" : {
+        "geo_external_name" : [ [ "CIRM31000340, CIRM31000341, CIRM33000008" ] ],
+        "geo_group_id" : [ [ "31000340", "CIRM31000340" ] ],
+        "geo_library_source_template_type" : [ [ "TS" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2012-10-18" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1469_6_1", "1484_6_1" ] ],
+        "geo_str_result" : [ [ "Not Submitted", "Pass" ] ],
+        "geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
+        "geo_template_id" : [ [ "31132", "31140", "33685", "37565", "37679" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA", "gDNA_wga" ] ],
+        "geo_tissue_origin" : [ [ "Ly" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
+      },
+      "sequencerRunName" : [ "130626_SN7001179_0132_AC2A1UACXX" ],
+      "sequencerRunAttributes" : {
+        "geo_instrument_run_id" : [ [ "1484" ] ]
+      },
+      "laneName" : [ "130626_SN7001179_0132_AC2A1UACXX_lane_6" ],
+      "laneAttributes" : {
+        "geo_lane" : [ [ "6" ] ]
+      },
+      "iusTag" : [ "ACACAGAA" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : -716762627
+    }, {
+      "studyTitle" : [ "HALT" ],
+      "studyAttributes" : {
+        "geo_lab_group_id" : [ [ "154" ] ]
+      },
+      "experimentName" : [ ],
+      "experimentAttributes" : { },
+      "sampleName" : [ "HALT_0032_Pb_P_PE_418_TS" ],
+      "sampleAttributes" : {
+        "geo_external_name" : [ [ "CIRM31000340, CIRM31000341, CIRM33000008" ] ],
+        "geo_group_id" : [ [ "31000341", "CIRM31000341" ] ],
+        "geo_library_source_template_type" : [ [ "TS" ] ],
+        "geo_organism" : [ [ "Homo sapiens" ] ],
+        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_receive_date" : [ [ "2012-10-18" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "1469_6_1", "1484_6_1" ] ],
+        "geo_str_result" : [ [ "Pass", "Submitted" ] ],
+        "geo_targeted_resequencing" : [ [ "HALT Agilent  0488571" ] ],
+        "geo_template_id" : [ [ "31132", "31139", "33684", "37564", "37678" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA", "gDNA_wga" ] ],
+        "geo_tissue_origin" : [ [ "Pb", "nn" ] ],
+        "geo_tissue_type" : [ [ "P" ] ]
+      },
+      "sequencerRunName" : [ "130626_SN7001179_0132_AC2A1UACXX" ],
+      "sequencerRunAttributes" : {
+        "geo_instrument_run_id" : [ [ "1484" ] ]
+      },
+      "laneName" : [ "130626_SN7001179_0132_AC2A1UACXX_lane_6" ],
+      "laneAttributes" : {
+        "geo_lane" : [ [ "6" ] ]
+      },
+      "iusTag" : [ "AAGGTACA" ],
+      "iusAttributes" : { },
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
+      "processingAttributes" : { },
+      "fileMetaType" : [ "application/bam" ],
+      "fileAttributes" : { },
+      "fileId" : 1855117
     } ]
   } ]
 }
