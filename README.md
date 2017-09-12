@@ -1,5 +1,5 @@
 ## Overview
-Copy Number Variation pipeline is being replaced by a set of stand-alone tool-specific worklfows and Deciders, so the elements of CNV pipeline
+Copy Number Variation pipeline is being replaced by a set of stand-alone tool-specific workflows and deciders, so the elements of CNV pipeline
 are described elsewhere.
 
 Delly2 workflow produces a set of vcf files with different types of structural variant calls: Translocation, Deletion, Inversion and Duplications
@@ -17,7 +17,7 @@ Picard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates.
 ```
  java -jar MarkDuplicates.jar
  INPUT=sample.bam
- OUTPUT=sample.dedup.bam    
+ OUTPUT=sample.dedup.bam
  METRICS_FILE=sample.metrics
 ```
 
@@ -66,4 +66,4 @@ sample.bam
 ```
 ### Post-processing
 Each DELLY tool produces several files, which will all need to be merged together after the chromosomes are finished processing. The output format is described on the DELLY webpage. The merging script may require a small parser to combine the output from multiple runs in together.
-Merge DELLY results with vcftools
+Merge DELLY results with vcftools.
