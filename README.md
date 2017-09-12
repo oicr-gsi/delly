@@ -1,13 +1,15 @@
 ## Overview
+Copy Number Variation pipeline is being replaced by a set of stand-alone tool-specific worklfows and Deciders, so the elements of CNV pipeline
+are described elsewhere.
 
-Delly workflow produces a set of vcf files with different types of structural variant calls: Translocation, Deletion, Inversion and Duplications
+Delly2 workflow produces a set of vcf files with different types of structural variant calls: Translocation, Deletion, Inversion and Duplications
 It uses .bam files as input. The below graph describes the process:
 
 ![delly flowchart](workflow-structural-variation/docs/delly-wf.png)
 
 ## Preprocessing
 
-The expected inputs for the DELLY tool are library-level BAMs with distinct insert size and median. In most cases, this means that the BAM files will not need to be merged prior to processing. However, the DELLY website recommends the removal of non-unique, multi-mapped reads and marking duplicate reads. We may also have to realign around indels and perform base recalibration.
+The expected inputs for the DELLY tool are library-level BAMs with distinct insert size and median. In most cases, this means that the BAM files will not need to be merged prior to processing. However, the DELLY website recommends marking duplicate reads. We may also [optionally] realign around indels and perform base recalibration.
 
 ### Mark duplicates
 
