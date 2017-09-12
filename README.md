@@ -26,7 +26,7 @@ Picard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates.
 delly
 -t DEL
 -x excludeList.tsv
--o sample.jumpy.bam
+-o sample.DEL.bam
 -q 0
 -g hn19.fa
 sample.bam
@@ -37,7 +37,7 @@ sample.bam
 delly
 -t DUP
 -x excludeList.tsv
--o sample.jumpy.bam
+-o sample.DUP.bam
 -q 0
 -g hn19.fa
 sample.bam
@@ -48,7 +48,7 @@ sample.bam
 delly
 -t INV
 -x excludeList.tsv
--o sample.jumpy.bam
+-o sample.INV.bam
 -q 0
 -g hn19.fa
 sample.bam
@@ -59,7 +59,7 @@ Detect translocations
 delly
 -t TRA
 -x excludeList.tsv
--o sample.jumpy.bam
+-o sample.TRA.bam
 -q 0
 -g hn19.fa
 sample.bam
