@@ -4,55 +4,61 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>ca.on.oicr.pde.config</groupId>
-        <artifactId>workflows</artifactId>
-        <version>3</version>
+        <groupId>ca.on.oicr.gsi</groupId>
+        <artifactId>pipedev-workflow-parent</artifactId>
+        <version>2.2</version>
+        <relativePath/>
     </parent>
 
     <groupId>ca.on.oicr.pde.workflows</groupId>
     <artifactId>StructuralVariation</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>${display-name}</name>
 
     <properties>
         <workflow-name>StructuralVariation</workflow-name>
+        <samtools-version>0.1.19</samtools-version>
+        <delly-version>v0.7.2</delly-version>
+        <vcftools-version>0.1.10</vcftools-version>
+        <tabix-version>0.2.6</tabix-version>
+        <picard-version>1.89</picard-version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.sourceforge</groupId>
             <artifactId>vcftools</artifactId>
-            <version>0.1.10</version>
+            <version>${vcftools-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>samtools</groupId>
             <artifactId>tabix</artifactId>
-            <version>0.2.6</version>
+            <version>${tabix-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>samtools</groupId>
             <artifactId>samtools</artifactId>
-            <version>0.1.19</version>
+            <version>${samtools-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>picard</groupId>
             <artifactId>picard-tools</artifactId>
-            <version>1.89</version>
+            <version>${picard-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>delly</groupId>
             <artifactId>delly</artifactId>
-            <version>v0.5.5</version>
+            <version>${delly-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>

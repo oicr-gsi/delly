@@ -66,9 +66,9 @@ sub process_bam {
      print STDERR "File(s) exist, will not create seq files for $bamSeq\n" if DEBUG;
    }
 
-   if ($aligner=~/BWA/ && !-e $bamSeq) {
+   if ($aligner=~/BWA/i && !-e $bamSeq) {
      `$samtools view -U BWA,$datadir/$bamSeq,N,N $bam`;
-   } elsif ($aligner=~/Bowtie/ && !-e $bamSeq) {
+   } elsif ($aligner=~/Bowtie/i && !-e $bamSeq) {
      `$samtools view -U Bowtie,$datadir/$bamSeq,N,N $bam`;
    } else {
      print STDERR "BICseq supports Bowtie and BWA aligners only, will terminate\n";

@@ -4,14 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ca.on.oicr.pde.config</groupId>
-        <artifactId>workflows</artifactId>
-        <version>4-SNAPSHOT</version>
+        <groupId>ca.on.oicr.gsi</groupId>
+        <artifactId>pipedev-workflow-parent</artifactId>
+        <version>2.2</version>
+        <relativePath/>
     </parent>
 
     <groupId>ca.on.oicr.pde.workflows</groupId>
     <artifactId>CNV</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>${display-name}</name>
@@ -19,48 +20,54 @@
     <properties>
         <workflow-name>CNV</workflow-name>
         <testSuite>src/test/resources/testng.xml</testSuite>
+        <samtools-version>0.1.19</samtools-version>
+        <freec-version>7.2</freec-version>
+        <bicseq-version>1.1.2</bicseq-version>
+        <hmmcopy-version>0.99.0</hmmcopy-version>
+        <varscan-version>2.4.3</varscan-version>
+        <r-packages-version>3.2</r-packages-version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>samtools</groupId>
             <artifactId>samtools</artifactId>
-            <version>0.1.19</version>
+            <version>${samtools-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>FREEC</groupId>
             <artifactId>FREEC</artifactId>
-            <version>7.2</version>
+            <version>${freec-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>BICseq</groupId>
             <artifactId>BICseq</artifactId>
-            <version>1.1.2</version>
+            <version>${bicseq-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>R-packages</groupId>
             <artifactId>CNV.R_modules</artifactId>
-            <version>3.2</version>
+            <version>${r-packages-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>HMMcopy</groupId>
             <artifactId>HMMcopy</artifactId>
-            <version>0.99.0</version>
+            <version>${hmmcopy-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>VarScan</groupId>
             <artifactId>VarScan</artifactId>
-            <version>2.3.7</version>
+            <version>${varscan-version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>

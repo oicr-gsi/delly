@@ -40,8 +40,18 @@ if (!$tabix_check) {
  print STDERR "Found tabix, proceeding...\n" if DEBUG;
 }
 
+chomp($list);
+my @listed = grep {/\S+/} split(" ",$list);
+my @existing = ();
+map{push @existing, $_ if (-e $_ && -s $_)} (@listed);
+print STDERR Dumper(@existing) if DEBUG;
+my $vetted_list = join(" ",@existing);
 #============================================================
 # vcf-merge wrapping
 #============================================================
-print STDERR "Command: ".$vcf_merge." ".$list." > ".$outfile."\n" if DEBUG;
-`$vcf_merge $list > $outfile`;
+if (@existing > 0) {
+my $vetted_list = join(" ",@existing);
+ my $c = $vcf_merge." ".$vetted_list." > ".$outfile;
+ print STDERR "Command: $c\n" if DEBUG;
+ `$c`;
+}

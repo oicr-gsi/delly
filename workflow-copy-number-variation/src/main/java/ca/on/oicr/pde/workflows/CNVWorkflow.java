@@ -56,6 +56,8 @@ public class CNVWorkflow extends OicrWorkflow {
     private String varscanMinRegion;
     private String varscanRecenterUp;
     private String varscanRecenterDown;
+    private String varscanPvalueThreshold;
+    private String varscanJavaXmx;
     
     //Data
     private String[] normal;
@@ -84,6 +86,8 @@ public class CNVWorkflow extends OicrWorkflow {
     private static final String RLIBDIR_BASE   = "CNV.R_modules-";
     private static final String VARSCAN_PREFIX = "varscan_";
     private final static String WG           = "WG";
+    private final static String PVALUE         = "0.05";
+    private static final String VARSCAN_JAVA_MEM = "4";
     
     
     /**
@@ -108,6 +112,8 @@ public class CNVWorkflow extends OicrWorkflow {
 
             
             String fileSkipFlag = this.getOptionalProperty("skip_missing_files", Boolean.toString(DEFAULT_SKIP_IF_MISSING));
+            this.varscanPvalueThreshold = this.getOptionalProperty("varscan_pvalue", PVALUE);
+            this.varscanJavaXmx = this.getOptionalProperty("varscan_java_xmx", VARSCAN_JAVA_MEM);
             this.skipFlag = Boolean.valueOf(fileSkipFlag);
             
             //allow all template types other than WG (given that their have valid interval file associated)
@@ -475,6 +481,8 @@ public class CNVWorkflow extends OicrWorkflow {
                             + " --java "         + getWorkflowBaseDir() + "/bin/jre" + getProperty("jre-version") + "/bin/java"
                             + " --varscan "      + getWorkflowBaseDir() + "/bin/VarScan.v" + varscanVersion + ".jar"
                             + " --id "           + resultID
+                            + " --xmxmem "       + this.varscanJavaXmx
+                            + " --p-value "      + this.varscanPvalueThreshold
                             + " --samtools "     + getWorkflowBaseDir() + "/bin/samtools-" 
                                                  + this.samtoolsVersion + "/samtools");
         if (null != this.varscanMinCoverage) {

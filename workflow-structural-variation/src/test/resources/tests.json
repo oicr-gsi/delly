@@ -3,12 +3,22 @@
         "description": "StructuralVariation workflow test",
 	"metrics_calculate": "calculate.sh",
         "metrics_compare": "compare.sh",
-        "input_config_dir": "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/input_config/",
-        "output_metrics_dir": "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/output_expectation/"
+        "input_config_dir": "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/input_config/${project.version}",
+        "output_metrics_dir": "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/output_expectation/${project.version}"
     },
     "tests": [
         {
-            "input_config": "workflow.ini"
+         "id": "Delly_defaults",
+            "parameters": {
+                "mode": "germline"
+            },
+         "id": "Delly_somatic",
+            "parameters": {
+                "mode": "somatic",
+                "input_files" : "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/input_data/QPS0001R.chr7.libB.bam,/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/input_data/QPS0001R.chr7.libC.bam",
+                "input_bams" : "/.mounts/labs/PDE/data/testdata/genomic/bam/QPS_0001/QPS0001R.chr7.libB.bam",
+                "input_tumors" : "/.mounts/labs/PDE/data/RegressionTests/StructuralVariation/workflow/input_data/QPS0001R.chr7.libC.bam"
+            }
         }
     ]
 }

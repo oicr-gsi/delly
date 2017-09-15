@@ -12,6 +12,12 @@
 
  samtools mpileup -q 1 -f hg18.fa normal_sorted.bam tumor_sorted.bam | awk -F"\t" '$4 > 0 && $7 > 0' > normtumor_sorted.pileup
 
+ The command will be run according to parameters supplied by user, will look like this:
+
+ java -Xmx4G -jar VarScan.jar copynumber normtumor_sorted.pileup output_basename -mpileup 1 --p-value 0.01 --min-coverage 10
+
+ Note that user may specify p-value (threshold) but the default is set to 0.05
+
 =cut
 
 use strict;
@@ -21,7 +27,7 @@ use FindBin qw($Bin);
 use Getopt::Long;
 use constant DEBUG=>0;
 
-my($normal, $tumor, $out_dir, $rlibdir, $ref_fasta, $samtools, $java, $varscan, $id, $min_coverage, $del_threshold, $min_region_size, $recenter_up, $recenter_down);
+my($normal, $tumor, $out_dir, $rlibdir, $ref_fasta, $samtools, $java, $varscan, $id, $min_coverage, $del_threshold, $min_region_size, $recenter_up, $recenter_down, $pvalue, $xmxmem);
 my $USAGE = "launchVarscan2.pl --input-normal [normal .bam file] --input-tumor [tumor .bam file] --output-dir [Output directory] --ref-fasta [Reference fasta] --samtools [Path to samtools] --r-libdir [path to directory with R libs] --id [unique id]";
 my $result = GetOptions('input-normal=s'    => \$normal,
                         'input-tumor=s'     => \$tumor,
@@ -29,9 +35,11 @@ my $result = GetOptions('input-normal=s'    => \$normal,
                         'ref-fasta=s'       => \$ref_fasta,
                         'java=s'            => \$java,
                         'varscan=s'         => \$varscan,
+                        'xmxmem=i'          => \$xmxmem,
                         'id=s'              => \$id,
                         'r-libdir=s'        => \$rlibdir,
                         'samtools=s'        => \$samtools,
+                        'p-value=s'         => \$pvalue,
                         'min-coverage=s'    => \$min_coverage,
                         'del-coverage=s'    => \$del_threshold,
                         'min-region-size=s' => \$min_region_size,
@@ -42,6 +50,8 @@ if (!$varscan || !$normal || !$tumor || !$out_dir || !$ref_fasta || !$samtools |
 if (!-e $out_dir || !-d $out_dir) {
  mkpath($out_dir);
 }
+$pvalue ||= 0.05; # Default threshold for p-value
+$xmxmem ||= 6;
 
 map{if(!/\.bam$/){die "Files are not in .bam format!";}} ($normal,$tumor);
 my $pileup_command = "$samtools mpileup -q 1 -f $ref_fasta $normal $tumor | awk -F \"\t\" '\$4 > 0 && \$7 > 0' > $out_dir/normtumor_sorted.pileup";
@@ -65,7 +75,7 @@ my $resultsOK = undef;
 if (-e "$out_dir/normtumor_sorted.pileup" && -s "$out_dir/normtumor_sorted.pileup") {
   my $cvg = undef;
   do {
-      my $varscan_command = "$java -jar $varscan copynumber $out_dir/normtumor_sorted.pileup $out_dir/$id -mpileup 1";
+      my $varscan_command = "$java -Xmx".$xmxmem."G -jar $varscan copynumber $out_dir/normtumor_sorted.pileup $out_dir/$id -mpileup 1 --p-value $pvalue";
       $varscan_command .= " --min-coverage $cvg" if $cvg;
       print STDERR "Command: $varscan_command\n" if DEBUG; 
       $result = `$varscan_command 2>&1`;
@@ -82,6 +92,9 @@ if (-e "$out_dir/normtumor_sorted.pileup" && -s "$out_dir/normtumor_sorted.pileu
           print STDERR "Coverage threshold too high, trying min-coverage $cvg...\n" if DEBUG;
         } else {
           $resultsOK = 1;
+          if ($min_coverage > $cvg) {
+              $min_coverage = $cvg;
+          }
         }
       }
     
@@ -109,7 +122,7 @@ if (-e "$out_dir/$id.copynumber") {
 
  print STDERR "Will run Additional filtering on results\n" if DEBUG;
  
- my $filterCommand = "$java -jar $varscan copyCaller $out_dir/$id.copynumber --output-file $out_dir/$id.copynumber.filtered";
+ my $filterCommand = "$java -Xmx".$xmxmem."G -jar $varscan copyCaller $out_dir/$id.copynumber --output-file $out_dir/$id.copynumber.filtered";
 
  # Include filtering options, if set
  if ($min_coverage) {
