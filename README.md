@@ -67,3 +67,33 @@ sample.bam
 ### Post-processing
 Each DELLY tool produces several files, which will all need to be merged together after the chromosomes are finished processing. The output format is described on the DELLY webpage. The merging script may require a small parser to combine the output from multiple runs in together.
 Merge DELLY results with vcftools.
+
+## Workflow Options
+This workflow runs Structural Variation discovery tool DELLY using its four modes, merging the results into a single file at the end.
+
+Parameter|Value|Description
+---|---|---
+ref_fasta | hg19.fa | Reference fasta file - Genome sequence, default is hg19.fa
+exclude_list | human.hg19h.excl.tsv | To save runtime it is advisable to exclude telomere and centromere regions. For human, DELLY ships with such an exclude list
+sample_name | TestSample | Sample name - should be derived automatically by the Decider
+mapping_quality | 30 | customizable
+input_bams | | comma-separated list of input .bam files
+output_dir | seqware-results | A standard SeqWare parameter specifying the sub-directory where the output files will be provisioned
+output_prefix | ./ | A standard SeqWare parameter specifying the root directory where the output files will be provisioned
+manual_output | false | Whether or not to use manual output. When false, a random integer will be inserted into the path of the file in order to ensure uniqueness. When true, the output files will be moved to the location of output_prefix/output_dir
+mode | | Mode: somatic OR germline
+
+## Decider Options
+This decider prepares .ini files for Structural Variation workflow runs, it extracts .bam files with assumption that they were not sorted or indexed (the former is conditioned on a flag). It will also pick the latest file if duplicates are present
+
+Parameter|Value|Description
+---|---|---
+--ref-fasta | hg19.fa | Reference fasta file - Genome sequence, default is hg19.fa
+--exclude-list | human.hg19h.excl.tsv | To save run time it is advisable to exclude telomere and centromere regions. For human, DELLY ships with such an exclude list.
+--mapping-quality | | Not set by default, but customizable
+--picard-memory | 6000 | memory (in Megabytes) allocated to Picard
+--delly-memory | 8000 | memory (in Megabytes) allocated to Delly
+--queue | | cluster queue
+--output-dir | seqware-results | A standard SeqWare parameter specifying the sub-directory where the output files will be provisioned
+--output-prefix | ./ | A standard SeqWare parameter specifying the root directory where the output files will be provisioned
+--mode | | Mode: somatic OR germline
