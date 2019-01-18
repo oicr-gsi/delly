@@ -578,7 +578,7 @@ public class CNVWorkflow extends OicrWorkflow {
          freecJob.getCommand().addArgument(" --window "      + this.freecWindow);
         }
                 
-        freecJob.setMaxMemory("8000");
+        freecJob.setMaxMemory("16000");
         if (parents != null) {
             for (Job p : parents) {
                 freecJob.addParent(p);
