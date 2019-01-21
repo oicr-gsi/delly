@@ -1,25 +1,28 @@
 {
   "workflowRunCount" : 1,
-  "studies" : [ "EACdysplasia" ],
+  "studies" : [ "DYS" ],
   "sequencerRuns" : [ "151021_D00343_0104_BC7PEWANXX" ],
   "lanes" : [ "151021_D00343_0104_BC7PEWANXX_lane_1" ],
   "samples" : [ "DYS_1096_Es_P_PE_360_TS", "DYS_1096_Es_R_PE_360_TS" ],
-  "workflows" : [ "BamMergePreprocessing" ],
+  "workflows" : [ "BamFilterMergeCollapse" ],
   "processingAlgorithms" : [ "ProvisionFiles" ],
   "fileMetaTypes" : [ "application/bam" ],
   "maxInputFiles" : 2,
   "minInputFiles" : 2,
   "totalInputFiles" : 2,
+  "maxOutputFileProvenanceRecords" : 2,
+  "minOutputFileProvenanceRecords" : 2,
+  "totalOutputFileProvenanceRecords" : 2,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BamMergePreprocessing_1.0/40909178/DYS_1096_Es_R_TS.sorted.filter.realigned.recal.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BamMergePreprocessing_1.0/38399656/DYS_1096_Es_P_TS.sorted.filter.realigned.recal.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BamMergePreprocessing_1.0/40909178/DYS_1096_Es_R_TS.sorted.filter.realigned.recal.bam",
-      "input_tumors" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BamMergePreprocessing_1.0/38399656/DYS_1096_Es_P_TS.sorted.filter.realigned.recal.bam",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/28285460/DYS_1096_Es_R_TS.sorted.filter.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/94665400/DYS_1096_Es_P_TS_1-2.sorted.filter.bam,/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/28285460/DYS_1096_Es_R_TS.sorted.filter.bam",
+      "input_tumors" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/94665400/DYS_1096_Es_P_TS_1-2.sorted.filter.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
@@ -36,52 +39,47 @@
       "vcftools" : "vcftools_0.1.10"
     },
     "files" : [ {
-      "studyTitle" : [ "EACdysplasia" ],
-      "studyAttributes" : {
-        "geo_lab_group_id" : [ [ "206" ] ]
-      },
+      "studyTitle" : [ "DYS" ],
+      "studyAttributes" : { },
       "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "DYS_1096_Es_P_PE_360_TS" ],
       "sampleAttributes" : {
         "geo_external_name" : [ [ "DYS_1096" ] ],
+        "geo_group_id" : [ [ "1-2" ] ],
+        "geo_group_id_description" : [ [ "BE" ] ],
         "geo_library_source_template_type" : [ [ "TS" ] ],
         "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "AmpliSeq-KAPA Hyper Prep V1" ] ],
-        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_purpose" : [ [ "Library" ] ],
         "geo_receive_date" : [ [ "2015-03-12" ] ],
-        "geo_run_id_and_position_and_slot" : [ [ "2345_1_2" ] ],
+        "geo_run_id_and_position" : [ [ "740_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "DYS_IAD78789_185" ] ],
-        "geo_template_id" : [ [ "74131", "80139", "86108", "87700", "87722" ] ],
-        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library" ] ],
         "geo_tissue_origin" : [ [ "Es" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
       },
       "sequencerRunName" : [ "151021_D00343_0104_BC7PEWANXX" ],
       "sequencerRunAttributes" : {
-        "geo_instrument_run_id" : [ [ "2345" ] ]
+        "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "151021_D00343_0104_BC7PEWANXX_lane_1" ],
-      "laneAttributes" : {
-        "geo_lane" : [ [ "1" ] ]
-      },
+      "laneAttributes" : { },
       "iusTag" : [ "ACATTGGC" ],
       "iusAttributes" : { },
-      "workflowName" : [ "BamMergePreprocessing" ],
+      "workflowName" : [ "BamFilterMergeCollapse" ],
       "processingAlgorithm" : [ "ProvisionFiles" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : {
-        "aligner" : [ [ "BWA" ] ],
-        "cvterms" : [ [ "EDAM:format_2572,EDAM:operation_2089" ] ]
+        "aligner" : [ [ "BWA" ] ]
       },
-      "fileId" : -23235977
+      "fileId" : 1534686420
     }, {
-      "studyTitle" : [ "EACdysplasia" ],
-      "studyAttributes" : {
-        "geo_lab_group_id" : [ [ "206" ] ]
-      },
+      "studyTitle" : [ "DYS" ],
+      "studyAttributes" : { },
       "experimentName" : [ ],
       "experimentAttributes" : { },
       "sampleName" : [ "DYS_1096_Es_R_PE_360_TS" ],
@@ -90,35 +88,33 @@
         "geo_library_source_template_type" : [ [ "TS" ] ],
         "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "AmpliSeq-KAPA Hyper Prep V1" ] ],
-        "geo_purpose" : [ [ "Library", "Stock" ] ],
+        "geo_purpose" : [ [ "Library" ] ],
         "geo_receive_date" : [ [ "2015-01-14" ] ],
-        "geo_run_id_and_position_and_slot" : [ [ "2345_1_2" ] ],
+        "geo_run_id_and_position" : [ [ "740_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "DYS_IAD78789_185" ] ],
-        "geo_template_id" : [ [ "74131", "74623", "86107", "87694", "87723" ] ],
-        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library" ] ],
         "geo_tissue_origin" : [ [ "Es" ] ],
+        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
       },
       "sequencerRunName" : [ "151021_D00343_0104_BC7PEWANXX" ],
       "sequencerRunAttributes" : {
-        "geo_instrument_run_id" : [ [ "2345" ] ]
+        "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "151021_D00343_0104_BC7PEWANXX_lane_1" ],
-      "laneAttributes" : {
-        "geo_lane" : [ [ "1" ] ]
-      },
+      "laneAttributes" : { },
       "iusTag" : [ "ACCACTGT" ],
       "iusAttributes" : { },
-      "workflowName" : [ "BamMergePreprocessing" ],
+      "workflowName" : [ "BamFilterMergeCollapse" ],
       "processingAlgorithm" : [ "ProvisionFiles" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : {
-        "aligner" : [ [ "BWA" ] ],
-        "cvterms" : [ [ "EDAM:format_2572,EDAM:operation_2089" ] ]
+        "aligner" : [ [ "BWA" ] ]
       },
-      "fileId" : 884746834
-    } ]
+      "fileId" : 1607339504
+    } ],
+    "outputFileProvenanceRecords" : 2
   } ]
 }

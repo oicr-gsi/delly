@@ -10,6 +10,9 @@
   "maxInputFiles" : 4,
   "minInputFiles" : 4,
   "totalInputFiles" : 4,
+  "maxOutputFileProvenanceRecords" : 4,
+  "minOutputFileProvenanceRecords" : 4,
+  "totalOutputFileProvenanceRecords" : 4,
   "workflowRuns" : [ {
     "workflowIni" : {
       "R_module" : "R/3.2.1-deb8",
@@ -25,7 +28,7 @@
       "hmmcopy_version" : "0.99.0",
       "input_files_normal" : "/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/63570923/SWID_569156_HALT_0032_Ly_R_PE_455_TS_130626_SN7001179_0132_AC2A1UACXX_ACACAGAA_L006_R1_001.fastq.gz.annotated.bam",
       "input_files_tumor" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/results/GenomicAlignmentNovoalign_V2.07.15b_2.2.1/91609659/SWID_1792242_HALT_0032_Bm_P_PE_396_TS_33000008_140109_SN804_0171_AC3KVTACXX_GGAGAACA_L008_R1_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_7/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/62334360/SWID_569157_HALT_0032_Pb_P_PE_418_TS_130626_SN7001179_0132_AC2A1UACXX_AAGGTACA_L006_R1_001.fastq.gz.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/92633564/SWID_881973_HALT_0032_Bm_P_PE_396_TS_140417_SN7001205_0212_BC4CAWACXX_GGAGAACA_L002_R1_001.fastq.gz.annotated.bam",
-      "jre-version" : "1.7.0_51",
+      "jre-version" : "1.8.0_45",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -199,6 +202,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1855117
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 4
   } ]
 }
