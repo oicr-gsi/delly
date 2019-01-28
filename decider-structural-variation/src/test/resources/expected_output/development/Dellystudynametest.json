@@ -1,18 +1,21 @@
 {
   "workflowRunCount" : 16,
-  "studies" : [ "ABvsInvitrogenReagentComp", "PCSI" ],
-  "sequencerRuns" : [ "111027_SN203_0127_BC08J8ACXX", "111110_h1080_0084_AC08UPACXX", "120525_h803_0088_AC0M4JACXX", "121011_SN802_0091_AD1DDBACXX", "121031_h239_0164_AC1F4JACXX" ],
-  "lanes" : [ "111027_SN203_0127_BC08J8ACXX_lane_4", "111027_SN203_0127_BC08J8ACXX_lane_5", "111027_SN203_0127_BC08J8ACXX_lane_6", "111027_SN203_0127_BC08J8ACXX_lane_7", "111027_SN203_0127_BC08J8ACXX_lane_8", "111110_h1080_0084_AC08UPACXX_lane_5", "111110_h1080_0084_AC08UPACXX_lane_6", "111110_h1080_0084_AC08UPACXX_lane_7", "111110_h1080_0084_AC08UPACXX_lane_8", "120525_h803_0088_AC0M4JACXX_lane_1", "120525_h803_0088_AC0M4JACXX_lane_2", "120525_h803_0088_AC0M4JACXX_lane_3", "120525_h803_0088_AC0M4JACXX_lane_4", "120525_h803_0088_AC0M4JACXX_lane_5", "120525_h803_0088_AC0M4JACXX_lane_6", "120525_h803_0088_AC0M4JACXX_lane_7", "120525_h803_0088_AC0M4JACXX_lane_8", "121011_SN802_0091_AD1DDBACXX_lane_3", "121031_h239_0164_AC1F4JACXX_lane_1", "121031_h239_0164_AC1F4JACXX_lane_2", "121031_h239_0164_AC1F4JACXX_lane_3" ],
-  "samples" : [ "CPCG_0198_Pr_P_PE_332_WG", "CPCG_0198_Pr_P_PE_354_WG", "CPCG_0199_Pr_P_PE_335_WG", "CPCG_0199_Pr_P_PE_391_WG", "CPCG_0201_Pr_P_PE_349_WG", "CPCG_0201_Pr_P_PE_369_WG", "CPCG_0203_Pr_P_PE_320_WG", "CPCG_0203_Pr_P_PE_340_WG", "PCSI_0100_Ly_R_PE_446_EX", "PCSI_0100_Pa_P_PE_425_EX", "PCSI_0112_Ly_R_PE_389_EX", "PCSI_0112_Ly_R_PE_446_EX", "PCSI_0112_Pa_P_PE_394_EX", "PCSI_0112_Pa_P_PE_430_EX", "PCSI_0115_Ly_R_PE_449_EX", "PCSI_0115_Pa_P_PE_380_EX", "PCSI_0115_Pa_P_PE_428_EX", "PCSI_0116_Sp_R_PE_444_EX", "PCSI_0117_Pa_P_PE_433_EX", "PCSI_0117_St_R_PE_434_EX", "PCSI_0118_Pa_P_PE_390_EX", "PCSI_0118_Pa_P_PE_433_EX", "PCSI_0118_Sp_R_PE_432_EX", "PCSI_0119_Sp_R_PE_428_EX", "PCSI_0120_Pa_P_PE_430_EX", "PCSI_0120_St_R_PE_420_EX" ],
+  "studies" : [ "ABvsInvitrogenReagentComp" ],
+  "sequencerRuns" : [ "111027_SN203_0127_BC08J8ACXX", "111110_h1080_0084_AC08UPACXX", "120525_h803_0088_AC0M4JACXX" ],
+  "lanes" : [ "111027_SN203_0127_BC08J8ACXX_lane_7", "111027_SN203_0127_BC08J8ACXX_lane_8", "111110_h1080_0084_AC08UPACXX_lane_5", "111110_h1080_0084_AC08UPACXX_lane_6", "120525_h803_0088_AC0M4JACXX_lane_1", "120525_h803_0088_AC0M4JACXX_lane_2", "120525_h803_0088_AC0M4JACXX_lane_3", "120525_h803_0088_AC0M4JACXX_lane_4", "120525_h803_0088_AC0M4JACXX_lane_5", "120525_h803_0088_AC0M4JACXX_lane_6", "120525_h803_0088_AC0M4JACXX_lane_7", "120525_h803_0088_AC0M4JACXX_lane_8" ],
+  "samples" : [ "CPCG_0198_Pr_P_PE_332_WG", "CPCG_0198_Pr_P_PE_354_WG", "CPCG_0199_Pr_P_PE_335_WG", "CPCG_0199_Pr_P_PE_391_WG", "CPCG_0201_Pr_P_PE_349_WG", "CPCG_0201_Pr_P_PE_369_WG", "CPCG_0203_Pr_P_PE_320_WG", "CPCG_0203_Pr_P_PE_340_WG", "PCSI_0100_Ly_R_PE_446_EX", "PCSI_0112_Ly_R_PE_446_EX", "PCSI_0115_Ly_R_PE_449_EX", "PCSI_0116_Sp_R_PE_444_EX", "PCSI_0117_St_R_PE_434_EX", "PCSI_0118_Sp_R_PE_432_EX", "PCSI_0119_Sp_R_PE_428_EX", "PCSI_0120_St_R_PE_420_EX" ],
   "workflows" : [ "GATKRecalibrationAndVariantCallingHg19Exomes", "GenomicAlignmentNovoalign" ],
   "processingAlgorithms" : [ "PicardAddReadGroups", "SummaryOfWorkflowOutputs" ],
   "fileMetaTypes" : [ "application/bam" ],
   "maxInputFiles" : 1,
   "minInputFiles" : 1,
   "totalInputFiles" : 16,
+  "maxOutputFileProvenanceRecords" : 1,
+  "minOutputFileProvenanceRecords" : 1,
+  "totalOutputFileProvenanceRecords" : 16,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -76,10 +79,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1939545106
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -143,10 +147,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 6049875
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -210,10 +215,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1461027409
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -277,10 +283,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -293568300
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -344,10 +351,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -178805054
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -411,10 +419,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1806044369
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -478,10 +487,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1447789221
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -545,16 +555,17 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1075624768
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/4429750/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam,/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/4429750/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/4429750/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/97921918/SWID_11653_PCSI_0100_Ly_R_PE_446_EX_111027_SN203_0127_BC08J8ACXX_ATCACG_L007_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.13.5_GenomicAlignmentNovoalign-0.10.4/97921918/SWID_11653_PCSI_0100_Ly_R_PE_446_EX_111027_SN203_0127_BC08J8ACXX_ATCACG_L007_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
@@ -571,53 +582,53 @@
       "vcftools" : "vcftools_0.1.10"
     },
     "files" : [ {
-      "studyTitle" : [ "ABvsInvitrogenReagentComp", "PCSI" ],
+      "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "geo_lab_group_id" : [ [ "33" ], [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
       "experimentName" : [ ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0100_Ly_R_PE_446_EX", "PCSI_0100_Pa_P_PE_425_EX" ],
+      "sampleName" : [ "PCSI_0100_Ly_R_PE_446_EX" ],
       "sampleAttributes" : {
-        "geo_external_name" : [ [ "2011-04-19", "2537-1" ], [ "2537-1" ] ],
+        "geo_external_name" : [ [ "2011-04-19", "2537-1" ] ],
         "geo_library_source_template_type" : [ [ "EX" ] ],
         "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_multiplex" ] ],
-        "geo_reaction_id" : [ [ "5388" ], [ "5397" ] ],
-        "geo_receive_date" : [ [ "2011-09-08" ] ],
-        "geo_run_id_and_position_and_slot" : [ [ "852_4_1" ], [ "852_7_1" ] ],
+        "geo_reaction_id" : [ [ "5388" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "852_7_1" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect ICGC/Sanger Exon" ] ],
-        "geo_template_id" : [ [ "13147", "13158", "13594", "14419", "14420" ], [ "13147", "13159", "13320", "13908", "14099", "14100" ] ],
-        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "Primary Tumor Tissue", "gDNA" ], [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
-        "geo_tissue_origin" : [ [ "Ly" ], [ "Pa" ] ],
-        "geo_tissue_type" : [ [ "P" ], [ "R" ] ]
+        "geo_template_id" : [ [ "13147", "13158", "13594", "14419", "14420" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Ly" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
       "sequencerRunName" : [ "111027_SN203_0127_BC08J8ACXX" ],
       "sequencerRunAttributes" : {
         "geo_instrument_run_id" : [ [ "852" ] ]
       },
-      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_4", "111027_SN203_0127_BC08J8ACXX_lane_7" ],
+      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_7" ],
       "laneAttributes" : {
-        "geo_lane" : [ [ "4" ], [ "7" ] ]
+        "geo_lane" : [ [ "7" ] ]
       },
-      "iusTag" : [ "ATCACG", "CGATGT" ],
+      "iusTag" : [ "ATCACG" ],
       "iusAttributes" : { },
-      "workflowName" : [ "GATKRecalibrationAndVariantCallingHg19Exomes" ],
-      "processingAlgorithm" : [ "SummaryOfWorkflowOutputs" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : 1239777427
-    } ]
+      "fileId" : 426926655
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/66632736/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam,/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/66632736/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/66632736/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/78719328/SWID_11652_PCSI_0112_Ly_R_PE_446_EX_111027_SN203_0127_BC08J8ACXX_CGATGT_L007_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/78719328/SWID_11652_PCSI_0112_Ly_R_PE_446_EX_111027_SN203_0127_BC08J8ACXX_CGATGT_L007_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
@@ -634,55 +645,53 @@
       "vcftools" : "vcftools_0.1.10"
     },
     "files" : [ {
-      "studyTitle" : [ "ABvsInvitrogenReagentComp", "PCSI" ],
+      "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "geo_lab_group_id" : [ [ "33" ], [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
       "experimentName" : [ ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0112_Ly_R_PE_389_EX", "PCSI_0112_Ly_R_PE_446_EX", "PCSI_0112_Pa_P_PE_394_EX", "PCSI_0112_Pa_P_PE_430_EX" ],
+      "sampleName" : [ "PCSI_0112_Ly_R_PE_446_EX" ],
       "sampleAttributes" : {
         "geo_external_name" : [ [ "932-1" ] ],
         "geo_library_source_template_type" : [ [ "EX" ] ],
         "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_multiplex" ] ],
-        "geo_purpose" : [ [ "Library" ] ],
-        "geo_reaction_id" : [ [ "5389" ], [ "5398" ], [ "7851" ], [ "8126" ] ],
-        "geo_receive_date" : [ [ "2011-09-08" ] ],
-        "geo_run_id_and_position_and_slot" : [ [ "1184_3_1" ], [ "1206_1_1" ], [ "852_4_1" ], [ "852_7_1" ] ],
-        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_reaction_id" : [ [ "5389" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "852_7_1" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect ICGC/Sanger Exon" ] ],
-        "geo_template_id" : [ [ "13117", "13160", "13595", "14421", "14422" ], [ "13117", "13160", "20903", "23819", "23820" ], [ "13117", "13161", "13321", "13909", "14101", "14102" ], [ "13117", "13161", "13909", "23587", "24291", "24292" ] ],
-        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "Primary Tumor Tissue", "gDNA" ], [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
-        "geo_tissue_origin" : [ [ "Ly" ], [ "Pa" ] ],
-        "geo_tissue_type" : [ [ "P" ], [ "R" ] ]
+        "geo_template_id" : [ [ "13117", "13160", "13595", "14421", "14422" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Ly" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
-      "sequencerRunName" : [ "111027_SN203_0127_BC08J8ACXX", "121011_SN802_0091_AD1DDBACXX", "121031_h239_0164_AC1F4JACXX" ],
+      "sequencerRunName" : [ "111027_SN203_0127_BC08J8ACXX" ],
       "sequencerRunAttributes" : {
-        "geo_instrument_run_id" : [ [ "1184" ], [ "1206" ], [ "852" ] ]
+        "geo_instrument_run_id" : [ [ "852" ] ]
       },
-      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_4", "111027_SN203_0127_BC08J8ACXX_lane_7", "121011_SN802_0091_AD1DDBACXX_lane_3", "121031_h239_0164_AC1F4JACXX_lane_1" ],
+      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_7" ],
       "laneAttributes" : {
-        "geo_lane" : [ [ "1" ], [ "3" ], [ "4" ], [ "7" ] ]
+        "geo_lane" : [ [ "7" ] ]
       },
-      "iusTag" : [ "ACAGTG", "CGATGT", "GGCTAC", "TTAGGC" ],
+      "iusTag" : [ "CGATGT" ],
       "iusAttributes" : { },
-      "workflowName" : [ "GATKRecalibrationAndVariantCallingHg19Exomes" ],
-      "processingAlgorithm" : [ "SummaryOfWorkflowOutputs" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : 206184167
-    } ]
+      "fileId" : -703303744
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/58160830/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam,/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/58160830/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/58160830/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/50424611/SWID_11651_PCSI_0115_Ly_R_PE_449_EX_111027_SN203_0127_BC08J8ACXX_TTAGGC_L007_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/50424611/SWID_11651_PCSI_0115_Ly_R_PE_449_EX_111027_SN203_0127_BC08J8ACXX_TTAGGC_L007_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
@@ -699,49 +708,47 @@
       "vcftools" : "vcftools_0.1.10"
     },
     "files" : [ {
-      "studyTitle" : [ "ABvsInvitrogenReagentComp", "PCSI" ],
+      "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "geo_lab_group_id" : [ [ "33" ], [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
       "experimentName" : [ ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0115_Ly_R_PE_449_EX", "PCSI_0115_Pa_P_PE_380_EX", "PCSI_0115_Pa_P_PE_428_EX" ],
+      "sampleName" : [ "PCSI_0115_Ly_R_PE_449_EX" ],
       "sampleAttributes" : {
         "geo_external_name" : [ [ "1196-1" ] ],
         "geo_library_source_template_type" : [ [ "EX" ] ],
         "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_multiplex" ] ],
-        "geo_purpose" : [ [ "Library" ] ],
-        "geo_reaction_id" : [ [ "5390" ], [ "5399" ], [ "8127" ] ],
-        "geo_receive_date" : [ [ "2011-09-08" ] ],
-        "geo_run_id_and_position_and_slot" : [ [ "1206_2_1" ], [ "852_5_1" ], [ "852_7_1" ] ],
-        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_reaction_id" : [ [ "5390" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "852_7_1" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect ICGC/Sanger Exon" ] ],
-        "geo_template_id" : [ [ "13120", "13165", "13593", "14423", "14424" ], [ "13120", "13166", "13322", "13912", "14103", "14104" ], [ "13120", "13166", "13912", "23589", "24293", "24294" ] ],
-        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "Primary Tumor Tissue", "gDNA" ], [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
-        "geo_tissue_origin" : [ [ "Ly" ], [ "Pa" ] ],
-        "geo_tissue_type" : [ [ "P" ], [ "R" ] ]
+        "geo_template_id" : [ [ "13120", "13165", "13593", "14423", "14424" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Ly" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
-      "sequencerRunName" : [ "111027_SN203_0127_BC08J8ACXX", "121031_h239_0164_AC1F4JACXX" ],
+      "sequencerRunName" : [ "111027_SN203_0127_BC08J8ACXX" ],
       "sequencerRunAttributes" : {
-        "geo_instrument_run_id" : [ [ "1206" ], [ "852" ] ]
+        "geo_instrument_run_id" : [ [ "852" ] ]
       },
-      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_5", "111027_SN203_0127_BC08J8ACXX_lane_7", "121031_h239_0164_AC1F4JACXX_lane_2" ],
+      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_7" ],
       "laneAttributes" : {
-        "geo_lane" : [ [ "2" ], [ "5" ], [ "7" ] ]
+        "geo_lane" : [ [ "7" ] ]
       },
-      "iusTag" : [ "GCCAAT", "TGACCA", "TTAGGC" ],
+      "iusTag" : [ "TTAGGC" ],
       "iusAttributes" : { },
-      "workflowName" : [ "GATKRecalibrationAndVariantCallingHg19Exomes" ],
-      "processingAlgorithm" : [ "SummaryOfWorkflowOutputs" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : -1090121761
-    } ]
+      "fileId" : -1147141977
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -800,16 +807,17 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 622722388
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/37180965/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam,/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/37180965/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/37180965/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/97504901/SWID_11648_PCSI_0117_St_R_PE_434_EX_111027_SN203_0127_BC08J8ACXX_ACAGTG_L008_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/97504901/SWID_11648_PCSI_0117_St_R_PE_434_EX_111027_SN203_0127_BC08J8ACXX_ACAGTG_L008_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
@@ -826,53 +834,53 @@
       "vcftools" : "vcftools_0.1.10"
     },
     "files" : [ {
-      "studyTitle" : [ "ABvsInvitrogenReagentComp", "PCSI" ],
+      "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "geo_lab_group_id" : [ [ "33" ], [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
       "experimentName" : [ ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0117_Pa_P_PE_433_EX", "PCSI_0117_St_R_PE_434_EX" ],
+      "sampleName" : [ "PCSI_0117_St_R_PE_434_EX" ],
       "sampleAttributes" : {
         "geo_external_name" : [ [ "1454" ] ],
         "geo_library_source_template_type" : [ [ "EX" ] ],
         "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_multiplex" ] ],
-        "geo_reaction_id" : [ [ "5392" ], [ "5401" ] ],
-        "geo_receive_date" : [ [ "2011-09-08" ] ],
-        "geo_run_id_and_position_and_slot" : [ [ "852_6_1" ], [ "852_8_1" ] ],
+        "geo_reaction_id" : [ [ "5392" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "852_8_1" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect ICGC/Sanger Exon" ] ],
-        "geo_template_id" : [ [ "13122", "13169", "13597", "14427", "14428" ], [ "13122", "13170", "13323", "13916", "14107", "14108" ] ],
-        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "Primary Tumor Tissue", "gDNA" ], [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
-        "geo_tissue_origin" : [ [ "Pa" ], [ "St" ] ],
-        "geo_tissue_type" : [ [ "P" ], [ "R" ] ]
+        "geo_template_id" : [ [ "13122", "13169", "13597", "14427", "14428" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "St" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
       "sequencerRunName" : [ "111027_SN203_0127_BC08J8ACXX" ],
       "sequencerRunAttributes" : {
         "geo_instrument_run_id" : [ [ "852" ] ]
       },
-      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_6", "111027_SN203_0127_BC08J8ACXX_lane_8" ],
+      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_8" ],
       "laneAttributes" : {
-        "geo_lane" : [ [ "6" ], [ "8" ] ]
+        "geo_lane" : [ [ "8" ] ]
       },
-      "iusTag" : [ "ACAGTG", "GCCAAT" ],
+      "iusTag" : [ "ACAGTG" ],
       "iusAttributes" : { },
-      "workflowName" : [ "GATKRecalibrationAndVariantCallingHg19Exomes" ],
-      "processingAlgorithm" : [ "SummaryOfWorkflowOutputs" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : 401833593
-    } ]
+      "fileId" : -1503593347
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/74302069/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam,/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/74302069/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/74302069/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/92094936/SWID_11647_PCSI_0118_Sp_R_PE_432_EX_111027_SN203_0127_BC08J8ACXX_GCCAAT_L008_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/92094936/SWID_11647_PCSI_0118_Sp_R_PE_432_EX_111027_SN203_0127_BC08J8ACXX_GCCAAT_L008_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
@@ -889,49 +897,47 @@
       "vcftools" : "vcftools_0.1.10"
     },
     "files" : [ {
-      "studyTitle" : [ "ABvsInvitrogenReagentComp", "PCSI" ],
+      "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "geo_lab_group_id" : [ [ "33" ], [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
       "experimentName" : [ ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0118_Pa_P_PE_390_EX", "PCSI_0118_Pa_P_PE_433_EX", "PCSI_0118_Sp_R_PE_432_EX" ],
+      "sampleName" : [ "PCSI_0118_Sp_R_PE_432_EX" ],
       "sampleAttributes" : {
         "geo_external_name" : [ [ "1458" ] ],
         "geo_library_source_template_type" : [ [ "EX" ] ],
         "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_multiplex" ] ],
-        "geo_purpose" : [ [ "Library" ] ],
-        "geo_reaction_id" : [ [ "5393" ], [ "5402" ], [ "8128" ] ],
-        "geo_receive_date" : [ [ "2011-09-08" ] ],
-        "geo_run_id_and_position_and_slot" : [ [ "1206_3_1" ], [ "852_6_1" ], [ "852_8_1" ] ],
-        "geo_str_result" : [ [ "Pass" ] ],
+        "geo_reaction_id" : [ [ "5393" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "852_8_1" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect ICGC/Sanger Exon" ] ],
-        "geo_template_id" : [ [ "13123", "13171", "13598", "14429", "14430" ], [ "13123", "13172", "13324", "13917", "14109", "14110" ], [ "13123", "13172", "13917", "23590", "24295", "24296" ] ],
-        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "Primary Tumor Tissue", "gDNA" ], [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
-        "geo_tissue_origin" : [ [ "Pa" ], [ "Sp" ] ],
-        "geo_tissue_type" : [ [ "P" ], [ "R" ] ]
+        "geo_template_id" : [ [ "13123", "13171", "13598", "14429", "14430" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "Sp" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
-      "sequencerRunName" : [ "111027_SN203_0127_BC08J8ACXX", "121031_h239_0164_AC1F4JACXX" ],
+      "sequencerRunName" : [ "111027_SN203_0127_BC08J8ACXX" ],
       "sequencerRunAttributes" : {
-        "geo_instrument_run_id" : [ [ "1206" ], [ "852" ] ]
+        "geo_instrument_run_id" : [ [ "852" ] ]
       },
-      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_6", "111027_SN203_0127_BC08J8ACXX_lane_8", "121031_h239_0164_AC1F4JACXX_lane_3" ],
+      "laneName" : [ "111027_SN203_0127_BC08J8ACXX_lane_8" ],
       "laneAttributes" : {
-        "geo_lane" : [ [ "3" ], [ "6" ], [ "8" ] ]
+        "geo_lane" : [ [ "8" ] ]
       },
-      "iusTag" : [ "CAGATC", "GCCAAT" ],
+      "iusTag" : [ "GCCAAT" ],
       "iusAttributes" : { },
-      "workflowName" : [ "GATKRecalibrationAndVariantCallingHg19Exomes" ],
-      "processingAlgorithm" : [ "SummaryOfWorkflowOutputs" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : 1066950033
-    } ]
+      "fileId" : 894179426
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -990,16 +996,17 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1780431889
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
-      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/25568737/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam,/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/25568737/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_6/sqwprod/results/seqware-0.12.5-full_GATKREcalibrationAndVariantCalling-1.3.16-6/25568737/recalibration_and_variant_calling_for_exomes_gatk.gatk.merged.realigned.markdup.recalibrated.bam",
+      "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_2/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/72768328/SWID_16943_PCSI_0120_St_R_PE_420_EX_111110_h1080_0084_AC08UPACXX_NoIndex_L006_R1_001.fastq.gz.annotated.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_2/sqwprod/results/seqware-0.10.0_GenomicAlignmentNovoalign-0.10.1/72768328/SWID_16943_PCSI_0120_St_R_PE_420_EX_111110_h1080_0084_AC08UPACXX_NoIndex_L006_R1_001.fastq.gz.annotated.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
       "metadata" : "metadata",
@@ -1016,43 +1023,43 @@
       "vcftools" : "vcftools_0.1.10"
     },
     "files" : [ {
-      "studyTitle" : [ "ABvsInvitrogenReagentComp", "PCSI" ],
+      "studyTitle" : [ "ABvsInvitrogenReagentComp" ],
       "studyAttributes" : {
-        "geo_lab_group_id" : [ [ "33" ], [ "53" ] ]
+        "geo_lab_group_id" : [ [ "53" ] ]
       },
       "experimentName" : [ ],
       "experimentAttributes" : { },
-      "sampleName" : [ "PCSI_0120_Pa_P_PE_430_EX", "PCSI_0120_St_R_PE_420_EX" ],
+      "sampleName" : [ "PCSI_0120_St_R_PE_420_EX" ],
       "sampleAttributes" : {
         "geo_external_name" : [ [ "1465" ] ],
         "geo_library_source_template_type" : [ [ "EX" ] ],
         "geo_organism" : [ [ "Homo sapiens" ] ],
         "geo_prep_kit" : [ [ "GA_multiplex" ] ],
-        "geo_reaction_id" : [ [ "5395" ], [ "5403", "5511" ] ],
-        "geo_receive_date" : [ [ "2011-09-08" ] ],
-        "geo_run_id_and_position_and_slot" : [ [ "860_6_1" ], [ "860_7_1", "860_8_1" ] ],
+        "geo_reaction_id" : [ [ "5395" ] ],
+        "geo_run_id_and_position_and_slot" : [ [ "860_6_1" ] ],
         "geo_targeted_resequencing" : [ [ "Agilent SureSelect ICGC/Sanger Exon" ] ],
-        "geo_template_id" : [ [ "13125", "13175", "13600", "14433", "14434" ], [ "13125", "13176", "13325", "13918", "14111", "14112" ] ],
-        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "Primary Tumor Tissue", "gDNA" ], [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
-        "geo_tissue_origin" : [ [ "Pa" ], [ "St" ] ],
-        "geo_tissue_type" : [ [ "P" ], [ "R" ] ]
+        "geo_template_id" : [ [ "13125", "13175", "13600", "14433", "14434" ] ],
+        "geo_template_type" : [ [ "Identity", "Illumina PE Library", "Illumina PE Library Seq", "gDNA" ] ],
+        "geo_tissue_origin" : [ [ "St" ] ],
+        "geo_tissue_type" : [ [ "R" ] ]
       },
       "sequencerRunName" : [ "111110_h1080_0084_AC08UPACXX" ],
       "sequencerRunAttributes" : {
         "geo_instrument_run_id" : [ [ "860" ] ]
       },
-      "laneName" : [ "111110_h1080_0084_AC08UPACXX_lane_6", "111110_h1080_0084_AC08UPACXX_lane_7", "111110_h1080_0084_AC08UPACXX_lane_8" ],
+      "laneName" : [ "111110_h1080_0084_AC08UPACXX_lane_6" ],
       "laneAttributes" : {
-        "geo_lane" : [ [ "6" ], [ "7" ], [ "8" ] ]
+        "geo_lane" : [ [ "6" ] ]
       },
       "iusTag" : [ "ACTTGA" ],
       "iusAttributes" : { },
-      "workflowName" : [ "GATKRecalibrationAndVariantCallingHg19Exomes" ],
-      "processingAlgorithm" : [ "SummaryOfWorkflowOutputs" ],
+      "workflowName" : [ "GenomicAlignmentNovoalign" ],
+      "processingAlgorithm" : [ "PicardAddReadGroups" ],
       "processingAttributes" : { },
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
-      "fileId" : -940889659
-    } ]
+      "fileId" : 1594761901
+    } ],
+    "outputFileProvenanceRecords" : 1
   } ]
 }

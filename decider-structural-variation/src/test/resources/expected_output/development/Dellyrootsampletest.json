@@ -10,9 +10,12 @@
   "maxInputFiles" : 3,
   "minInputFiles" : 2,
   "totalInputFiles" : 11,
+  "maxOutputFileProvenanceRecords" : 3,
+  "minOutputFileProvenanceRecords" : 2,
+  "totalOutputFileProvenanceRecords" : 11,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -154,10 +157,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1813617903
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 3
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -259,10 +263,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 254925786
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -364,10 +369,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1329604003
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -469,10 +475,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1347328022
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 2
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -574,6 +581,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 315876567
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 2
   } ]
 }

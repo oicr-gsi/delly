@@ -10,9 +10,12 @@
   "maxInputFiles" : 1,
   "minInputFiles" : 1,
   "totalInputFiles" : 8,
+  "maxOutputFileProvenanceRecords" : 1,
+  "minOutputFileProvenanceRecords" : 1,
+  "totalOutputFileProvenanceRecords" : 8,
   "workflowRuns" : [ {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -76,10 +79,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1939545106
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -143,10 +147,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 6049875
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -210,10 +215,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1461027409
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -277,10 +283,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -293568300
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -344,10 +351,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -178805054
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -411,10 +419,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1806044369
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -478,10 +487,11 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : -1447789221
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   }, {
     "workflowIni" : {
-      "bundled_jre" : "jre1.7.0_51",
+      "bundled_jre" : "jre1.8.0_45",
       "data_dir" : "data",
       "delly" : "delly_v0.7.2",
       "delly_memory" : "8000",
@@ -545,6 +555,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 1075624768
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 1
   } ]
 }

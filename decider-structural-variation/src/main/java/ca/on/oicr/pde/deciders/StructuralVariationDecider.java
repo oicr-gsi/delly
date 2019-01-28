@@ -26,13 +26,10 @@ public class StructuralVariationDecider extends OicrDecider {
     private String picard_memory = "6000";
     private String delly_memory  = "8000";
     private String sampleName     = "";
-    private String output_prefix  = "./";
-    private String output_dir = "seqware-results";
     private String refFasta = "";
     private String queue = " ";
     private String excludeList = "";
     private String mappingQuality = " ";
-    private String manualOutput = "false";
     private String callMode = "";
     private List<String> duplicates;
     private final static String BAM_METATYPE = "application/bam";
@@ -49,10 +46,6 @@ public class StructuralVariationDecider extends OicrDecider {
                 + "when running Picard merge collapse step, the default is 8000").withRequiredArg();
         parser.accepts("delly-memory","Optional. Set the memory allocated to java heap "
                 + "when running Delly step, the default is 4000").withRequiredArg();
-        parser.accepts("output-path", "Optional: the path where the files should be copied to "
-                + "after analysis. Corresponds to output-prefix in INI file. Default: ./").withRequiredArg();
-        parser.accepts("output-folder", "Optional: the name of the folder to put the output into relative to "
-	        + "the output-path. Corresponds to output-dir in INI file. Default: seqware-results").withRequiredArg();
         parser.accepts("queue", "Optional: Override the default queue setting (production) setting it to something else").withRequiredArg();
         parser.accepts("ref-fasta", "Optional: the path to reference fasta used by Delly "
 	        + " Default: /.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa").withRequiredArg();
@@ -127,14 +120,7 @@ public class StructuralVariationDecider extends OicrDecider {
             this.mappingQuality = options.valueOf("mapping-quality").toString();
             Log.stdout("Changing mapping-quality " + this.mappingQuality);
         }
-        
-        if (this.options.has("output-path")) {
-             this.output_prefix = options.valueOf("output-path").toString();
-              if (!this.output_prefix.endsWith("/")) {
-                 this.output_prefix += "/";
-              }
-        }
-        
+
         if (this.options.has("mode")) {
              this.callMode = options.valueOf("mode").toString();
               if (!this.callMode.equals(SOMATIC) && !this.callMode.equals(GERMLINE)) {
@@ -145,15 +131,7 @@ public class StructuralVariationDecider extends OicrDecider {
             Log.stderr("Mode is a required parameter and needs to be specified");
             return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
         }
-        
-        if (this.options.has("output-folder")) {
-            this.output_dir = options.valueOf("output-folder").toString();
-	}
-        // according to Mei, setting manual_output to true if ouput_prefix is not "./" should not be used, SEQPROD want randomly 
-        // named directory in seqware-results dir tree
-        if (this.options.has("manual-output") && this.options.valueOf("output-folder").toString().equalsIgnoreCase("true")) {
-            this.manualOutput = "true";
-	}
+
         //allows anything defined on the command line to override the defaults here.
         ReturnValue val = super.init();
         return val;
@@ -366,11 +344,8 @@ public class StructuralVariationDecider extends OicrDecider {
         run.addProperty("picard_memory", this.picard_memory);
         run.addProperty("delly_memory", this.delly_memory);
         run.addProperty("data_dir", "data");
-	run.addProperty("output_prefix",this.output_prefix);
-	run.addProperty("output_dir", this.output_dir);
         run.addProperty("queue", this.queue);
         run.addProperty("sample_name", this.sampleName);
-        run.addProperty("manual_output", this.manualOutput);
         run.addProperty("mapping_quality", this.mappingQuality);
         run.addProperty("mode", this.callMode);
         

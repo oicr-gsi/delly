@@ -10,6 +10,9 @@
   "maxInputFiles" : 5,
   "minInputFiles" : 5,
   "totalInputFiles" : 5,
+  "maxOutputFileProvenanceRecords" : 6,
+  "minOutputFileProvenanceRecords" : 6,
+  "totalOutputFileProvenanceRecords" : 6,
   "workflowRuns" : [ {
     "workflowIni" : {
       "R_module" : "R/3.2.1-deb8",
@@ -25,7 +28,7 @@
       "hmmcopy_version" : "0.99.0",
       "input_files_normal" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BWA_1.4/97415724/SWID_1848026_JDRT_0087_nn_R_PE_352_EX_150501_D00353_0102_AC6VTDANXX_ATTGGCTC_L008_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BWA_1.4/15416395/SWID_1841035_JDRT_0087_nn_R_PE_352_EX_150428_D00343_0085_AC5UT4ANXX_ATTGGCTC_L007_001.annotated.bam",
       "input_files_tumor" : "/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BWA_1.4/25081207/SWID_1793393_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L001_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BWA_1.4/93719520/SWID_1793392_JDRT_0087_nn_T_PE_366_EX_150423_D00353_0101_AC6JH4ANXX_ATCATTCC_L002_001.annotated.bam,/oicr/data/archive/seqware/seqware_analysis_8/hsqwprod/seqware-results/BamFilterMergeCollapse_1.2/68673003/JDRT_0087_nn_P_EX.merged.sorted.filter.dedup.bam",
-      "jre-version" : "1.7.0_51",
+      "jre-version" : "1.8.0_45",
       "manual_output" : "false",
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
@@ -233,6 +236,7 @@
       "fileMetaType" : [ "application/bam" ],
       "fileAttributes" : { },
       "fileId" : 99545603
-    } ]
+    } ],
+    "outputFileProvenanceRecords" : 6
   } ]
 }

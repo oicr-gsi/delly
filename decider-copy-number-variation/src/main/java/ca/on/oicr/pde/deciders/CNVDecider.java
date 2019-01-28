@@ -67,18 +67,12 @@ public class CNVDecider extends OicrDecider {
         super();
         fileSwaToSmall  = new HashMap<String, BeSmall>();
         parser.acceptsAll(Arrays.asList("ini-file"), "Optional: the location of the INI file.").withRequiredArg();
-        parser.accepts("manual-output","Optional*. Set the manual output "
-                + "either to true or false").withRequiredArg();
         parser.accepts("template-type","Required. Set the template type to limit the workflow run "
                 + "so that it runs on data only of this template type").withRequiredArg();
         parser.accepts("aligner-software","Optional. Set the name of the aligner software "
                 + "when running the workflow, the default is novocraft").withRequiredArg();
         parser.accepts("force-crosscheck","Optional. Set the crosscheck to true or false "
                 + "when running the workflow, the default is true").withRequiredArg();
-        parser.accepts("output-path", "Optional: the path where the files should be copied to "
-                + "after analysis. Corresponds to output-prefix in INI file. Default: ./").withRequiredArg();
-        parser.accepts("output-folder", "Optional: the name of the folder to put the output into relative to "
-	        + "the output-path. Corresponds to output-dir in INI file. Default: seqware-results").withRequiredArg();
         parser.accepts("queue", "Optional: Set the queue (Default: not set)").withRequiredArg();
         parser.accepts("varscan-min-coverage","Optional. VarScan filtering parameter, see Varscan Manual").withRequiredArg();
         parser.accepts("varscan-del-coverage","Optional. VarScan filtering parameter, see Varscan Manual").withRequiredArg();
@@ -136,13 +130,7 @@ public class CNVDecider extends OicrDecider {
                 }
             } 
 	}
-        
-        if (this.options.has("manual-output")) {
-            this.manual_output = options.valueOf("manual_output").toString();
-            Log.debug("Setting manual output, default is false and needs to be set only in special cases");
-	}
-        
-        
+
         if (this.options.has("tumor-type")) {
             this.tumorType = options.valueOf("tumor-type").toString();
             Log.debug("Setting tumor type to " + this.tumorType +  " as requested");
@@ -162,17 +150,6 @@ public class CNVDecider extends OicrDecider {
                 this.do_sort = tempSort.toLowerCase();
         }
 
-        if (this.options.has("output-path")) {
-             this.output_prefix = options.valueOf("output-path").toString();
-              if (!this.output_prefix.endsWith("/")) {
-                 this.output_prefix += "/";
-              }
-        }
-        
-        if (this.options.has("output-folder")) {
-            this.output_dir = options.valueOf("output-folder").toString();
-	}
-        
         // Warn about using force-run-all (may not be relevant after 1.0.17 release)
         if (options.has("force-run-all")) {
             Log.stderr("Using --force-run-all WILL BREAK THE LOGIC OF THIS DECIDER, USE AT YOUR OWN RISK");
@@ -447,16 +424,14 @@ public class CNVDecider extends OicrDecider {
          this.setTest(true);
         }       
         
-        Map<String, String> iniFileMap = new TreeMap<String, String>();
+        Map<String, String> iniFileMap = super.modifyIniFile(commaSeparatedFilePaths, commaSeparatedParentAccessions);
         
         iniFileMap.put("input_files_normal", inputNormFiles.toString());
         iniFileMap.put("input_files_tumor",  inputTumrFiles.toString());
         iniFileMap.put("data_dir", "data");
         iniFileMap.put("template_type", this.templateType);
         iniFileMap.put("target_file", this.targetFile);
- 
-	iniFileMap.put("output_prefix",this.output_prefix);
-	iniFileMap.put("output_dir", this.output_dir);
+
         if (!this.queue.isEmpty()) {
          iniFileMap.put("queue", this.queue);
         } else {
@@ -484,7 +459,6 @@ public class CNVDecider extends OicrDecider {
             iniFileMap.put("varscan_recenter_down", this.varscanRecenterDown);
         }
 
-        iniFileMap.put("manual_output",  this.manual_output);
         iniFileMap.put("force_crosscheck",  this.forceCrosscheck);
         iniFileMap.put("skip_missing_files", this.skipMissing);
         iniFileMap.put("do_sort", this.do_sort);

@@ -12,7 +12,7 @@
         {
             "id": "GeneralSampleTest1",
             "parameters": {
-                "--root-sample-name": "PCSI_0101",
+                "--root-sample-name": "PCSI_0676",
                 "--template-type": "WG"
             }
         },
