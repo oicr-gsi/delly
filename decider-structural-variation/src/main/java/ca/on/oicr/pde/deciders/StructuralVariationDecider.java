@@ -34,7 +34,7 @@ public class StructuralVariationDecider extends OicrDecider {
     private List<String> duplicates;
     private final static String BAM_METATYPE = "application/bam";
     private static final String ALIGNER_TOKEN = "file.aligner";
-    private final static String GERMLINE = "germline";
+    private final static String UNMATCHED = "unmatched";
     private final static String SOMATIC  = "somatic";
  
     public StructuralVariationDecider() {
@@ -51,7 +51,7 @@ public class StructuralVariationDecider extends OicrDecider {
 	        + " Default: /.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa").withRequiredArg();
         parser.accepts("exclude-list", "Optional: the path to file with targets not used by Delly "
 	        + " Default: /.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv").withRequiredArg();
-        parser.accepts("mode", "Required: Either somatic or germline").withRequiredArg();
+        parser.accepts("mode", "Required: Either somatic or unmatched").withRequiredArg();
         parser.accepts("exclude-list", "Optional: the path to file with targets not used by Delly "
 	        + " Default: /.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv").withRequiredArg();
         parser.accepts("mapping-quality", "Optional: parameter used by Delly, not set by default ").withRequiredArg();
@@ -123,8 +123,8 @@ public class StructuralVariationDecider extends OicrDecider {
 
         if (this.options.has("mode")) {
              this.callMode = options.valueOf("mode").toString();
-              if (!this.callMode.equals(SOMATIC) && !this.callMode.equals(GERMLINE)) {
-                 Log.stderr("Mode needs to be specified as either germline or somatic");
+              if (!this.callMode.equals(SOMATIC) && !this.callMode.equals(UNMATCHED)) {
+                 Log.stderr("Mode needs to be specified as either unmatched or somatic");
                  return new ReturnValue(ReturnValue.INVALIDPARAMETERS);                 
               }
         } else {
@@ -154,7 +154,7 @@ public class StructuralVariationDecider extends OicrDecider {
         // Check for duplicate file names and exclude them from analysis
         this.duplicates = detectDuplicates(commaSeparatedFilePaths);
         
-        if (this.callMode.equals(GERMLINE) && filePaths.length > 0) {
+        if (this.callMode.equals(UNMATCHED) && filePaths.length > 0) {
             return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
         }
         
@@ -314,7 +314,7 @@ public class StructuralVariationDecider extends OicrDecider {
                     continue;
                 }
 
-                if (this.callMode.equals(GERMLINE)) {
+                if (this.callMode.equals(UNMATCHED)) {
                     if (inputTumors.length() != 0) {
                         inputTumors.append(",");
                     }
@@ -334,7 +334,7 @@ public class StructuralVariationDecider extends OicrDecider {
             }
         }
         
-        if (this.callMode.equals(GERMLINE)) {
+        if (this.callMode.equals(UNMATCHED)) {
             run.addProperty("input_bams", inputTumors.toString());
         } else {
             run.addProperty("input_bams", inputFile);
@@ -434,7 +434,7 @@ public class StructuralVariationDecider extends OicrDecider {
             
             StringBuilder gba = new StringBuilder();
 
-            if (callMode.equals(GERMLINE)) {
+            if (callMode.equals(UNMATCHED)) {
                 gba.append(fa.getLibrarySample());
                 
                 if (null != fa.getLimsValue(Lims.TISSUE_TYPE))
