@@ -12,21 +12,21 @@
             "id": "DellyStudyNameTest",
             "parameters": {
                 "--study-name": "ABvsInvitrogenReagentComp",
-                "--mode": "germline"
+                "--mode": "unmatched"
             }
         },
         {
             "id": "DellyRootSampleTest",
             "parameters": {
                 "--root-sample-name": "CPCG_0235",
-                "--mode": "germline"
+                "--mode": "unmatched"
             }
         },
         {
             "id": "DellySequencerRunTest",
             "parameters": {
                 "--sequencer-run-name": "120525_h803_0088_AC0M4JACXX",
-                "--mode": "germline"
+                "--mode": "unmatched"
             }
         },
         {

@@ -10,7 +10,7 @@
         {
          "id": "Delly_defaults",
             "parameters": {
-                "mode": "germline"
+                "mode": "unmatched"
             },
          "id": "Delly_somatic",
             "parameters": {

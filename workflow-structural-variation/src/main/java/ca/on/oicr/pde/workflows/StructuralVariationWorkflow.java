@@ -14,7 +14,7 @@ import net.sourceforge.seqware.pipeline.workflowV2.model.Workflow;
 
 /*
    This workflow will run delly2 (SV prediction tool) on a list of bam files either in
-   germline mode (all files passed as "input_bams", mode det to germline) or
+   unmatched mode (all files passed as "input_bams" or
    somatic  mode (input_tumors used for tumor bams and input_bams will pass a normal sample bam 
      - only one normal allowed!
 
@@ -45,7 +45,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
     private static final String DEDUP_BAM_SUFFIX  = ".dupmarked.bam";
     private static final boolean DEFAULT_SKIP_IF_MISSING = true;  // Conditional provisioning
     private static final String VCF_MERGED_SUFFIX = ".delly.merged.vcf";
-    private final static String GERMLINE = "germline";
+    private final static String UNMATCHED = "unmatched";
     private final static String SOMATIC  = "somatic";
 
 
@@ -161,16 +161,16 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             
             if (getProperty("mode") != null) {
                 this.callMode = getProperty("mode");
-                if (!this.callMode.equals(GERMLINE) && !this.callMode.equals(SOMATIC)) {
-                    Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "mode is not set correctly, needs to be either germline or somatic");
+                if (!this.callMode.equals(UNMATCHED) && !this.callMode.equals(SOMATIC)) {
+                    Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "mode is not set correctly, needs to be either unmatched or somatic");
                     return (null);
                 }
             } else {
-                Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "mode is not set, needs to be either germline or somatic");
+                Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "mode is not set, needs to be either unmatched or somatic");
                 return (null);
             }
             
-            if (callMode.equals(GERMLINE)) {
+            if (callMode.equals(UNMATCHED)) {
                 inputBamFiles = getProperty("input_bams").split(",");
             } else {
                 inputBamFiles = getProperty("input_tumors").split(",");
