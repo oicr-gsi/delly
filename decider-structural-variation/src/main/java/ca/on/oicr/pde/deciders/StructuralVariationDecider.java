@@ -20,7 +20,7 @@ import net.sourceforge.seqware.common.util.maptools.MapTools;
  * @author pruzanov@oicr.on.ca
  */
 public class StructuralVariationDecider extends OicrDecider {
-    private final Logger logger = LogManager.getLogger(OicrDecider.class);
+    private final Logger logger = LogManager.getLogger(StructuralVariationDecider.class);
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
     private Map<String, BeSmall> fileSwaToSmall;
     private String templateTypeFilter = "";
