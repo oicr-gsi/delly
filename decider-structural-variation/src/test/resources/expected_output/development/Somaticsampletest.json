@@ -56,7 +56,7 @@
         "geo_run_id_and_position" : [ [ "740_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "DYS_IAD78789_185" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Es" ] ],
         "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
         "geo_tissue_type" : [ [ "P" ] ]
@@ -66,7 +66,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "151021_D00343_0104_BC7PEWANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "DYS_Pool-5" ] ]
+      },
       "iusTag" : [ "ACATTGGC" ],
       "iusAttributes" : { },
       "workflowName" : [ "BamFilterMergeCollapse" ],
@@ -93,7 +95,7 @@
         "geo_run_id_and_position" : [ [ "740_1" ] ],
         "geo_str_result" : [ [ "Not Submitted" ] ],
         "geo_targeted_resequencing" : [ [ "DYS_IAD78789_185" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library" ] ],
+        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
         "geo_tissue_origin" : [ [ "Es" ] ],
         "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
         "geo_tissue_type" : [ [ "R" ] ]
@@ -103,7 +105,9 @@
         "instrument_name" : [ [ "D00343" ] ]
       },
       "laneName" : [ "151021_D00343_0104_BC7PEWANXX_lane_1" ],
-      "laneAttributes" : { },
+      "laneAttributes" : {
+        "pool_name" : [ [ "DYS_Pool-5" ] ]
+      },
       "iusTag" : [ "ACCACTGT" ],
       "iusAttributes" : { },
       "workflowName" : [ "BamFilterMergeCollapse" ],
