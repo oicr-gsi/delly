@@ -3,11 +3,12 @@ package ca.on.oicr.pde.workflows;
 import ca.on.oicr.pde.utilities.workflows.OicrWorkflow;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sourceforge.seqware.common.util.Log;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Job;
 import net.sourceforge.seqware.pipeline.workflowV2.model.SqwFile;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Workflow;
@@ -18,8 +19,10 @@ import net.sourceforge.seqware.pipeline.workflowV2.model.Workflow;
    somatic  mode (input_tumors used for tumor bams and input_bams will pass a normal sample bam 
      - only one normal allowed!
 
+   [GP-1982] : we want only one output per tumor file, only one normal accepted   
+
    Four types of structural variants called - inversions (INV) duplications (DUP) deletions (DEL) and
-   translocations (TRA). Nt all calls may be present at the end, so the files will be provisioned if exist
+   translocations (TRA). Not all calls may be present at the end, so the files will be provisioned if exist
    A merged vcf file with all the calls is also provisioned.
 
 */
@@ -153,7 +156,7 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                         : getWorkflowBaseDir() + "/bin/" + getProperty("tabix");
             }
 
-            // INPUTS (bam files and their ids, multiple files allowed)
+            // INPUTS (bam files and their ids, multiple files allowed, but Decider should only give one matched pair or one file in unmatched mode)
             if (getProperty("input_bams") == null) {
                 Logger.getLogger(StructuralVariationWorkflow.class.getName()).log(Level.SEVERE, "The input_bams param was null! We need some bam files to work on!");
                 return (null);
@@ -184,14 +187,14 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             int fileIndex = 0;
             for (String filePath : inputBamFiles) {
                 fileIndex++;
-                Log.stdout("CREATING FILE: bam_inputs_" + fileIndex);
+                Logger.getLogger(StructuralVariationWorkflow.class.getName()).info("CREATING FILE: bam_inputs_" + fileIndex);
                 SqwFile file = this.createInputFile("bam_inputs_" + fileIndex, filePath);
                 file.setType("application/bam");
                 file.setIsInput(true);
             }
             
             if (this.callMode.equals(SOMATIC)) {
-                Log.stdout("CREATING FILE: normal_bam_input");
+                Logger.getLogger(StructuralVariationWorkflow.class.getName()).info("CREATING FILE: normal_bam_input");
                 SqwFile file = this.createInputFile("normal_bam_input", normalBamFile);
                 file.setType("application/bam");
                 file.setIsInput(true);
@@ -226,14 +229,18 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             Job bamJob = workflow.createBashJob("aggregate_bam_input");
             bamJob.setCommand("sleep 1");
             
+            Set <String> inputBams = new HashSet<String>();
+
             for (int i = 1; i <= inputBamFiles.length; i++) {
                 bamJob.addFile(getInputFile("bam_inputs_" + i));
-                if (this.callMode.equals(SOMATIC)) {
-                    bamJob.addFile(getInputFile("normal_bam_input"));
-                }
+                inputBams.add(inputBamFiles[i-1]);
             }
+            if (this.callMode.equals(SOMATIC)) {
+                bamJob.addFile(getInputFile("normal_bam_input"));
+                inputBams.add(normalBamFile);
+            } 
             // Picard job
-            String [] inputBams = getProperty("input_files").split(",");
+            
             List <Job> upstreamJobs = new ArrayList<Job>();
             
             for (String inputBam : inputBams) {
@@ -291,9 +298,9 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
                     }
                     
                     dellyJob.setMaxMemory(getProperty("delly_memory"));
-                    for (Job uj : upstreamJobs) {
+                    upstreamJobs.forEach((uj) -> {
                         dellyJob.addParent(uj);
-                    }
+                    });
                     
                     if (!this.queue.isEmpty()) {
                         dellyJob.setQueue(this.queue);
@@ -340,9 +347,9 @@ public class StructuralVariationWorkflow extends OicrWorkflow {
             SqwFile dellyVcf = this.createOutputFile(this.dataDir + sampleName + "." + this.callMode + VCF_MERGED_SUFFIX, "text/vcf", this.manualOutput);
             mergeJob.setMaxMemory("3000");
             mergeJob.addFile(dellyVcf);
-            for (Job tj : tabixJobs) {
+            tabixJobs.forEach((tj) -> {
                 mergeJob.addParent(tj);
-            }
+                });
             if (!this.queue.isEmpty()) {
                     mergeJob.setQueue(this.queue);
             }

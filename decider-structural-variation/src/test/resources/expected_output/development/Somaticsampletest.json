@@ -21,7 +21,7 @@
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
       "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/28285460/DYS_1096_Es_R_TS.sorted.filter.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/94665400/DYS_1096_Es_P_TS_1-2.sorted.filter.bam,/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/28285460/DYS_1096_Es_R_TS.sorted.filter.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/94665400/DYS_1096_Es_P_TS_1-2.sorted.filter.bam",
       "input_tumors" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/94665400/DYS_1096_Es_P_TS_1-2.sorted.filter.bam",
       "manual_output" : "false",
       "mapping_quality" : "",

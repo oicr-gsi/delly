@@ -1,3 +1,5 @@
+## 1.2.3 - 2019-06-20
+- [GP-1982](https://jira.oicr.on.ca/browse/GP-1982) - fixed workflow, only one pair of inputs in somatic mode
 ## 1.2.2 - 2019-05-07
 - [GBS-1200](https://jira.oicr.on.ca/browse/GBS-1200) - update pipedev to 2.5.1 and enabling tempate-type
 ## 1.2.1 - 2019-02-05

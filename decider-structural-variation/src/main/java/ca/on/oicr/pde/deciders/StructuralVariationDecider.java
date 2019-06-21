@@ -4,6 +4,7 @@
  */
 package ca.on.oicr.pde.deciders;
 
+import com.google.common.collect.Sets;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ public class StructuralVariationDecider extends OicrDecider {
     private final Logger logger = LogManager.getLogger(StructuralVariationDecider.class);
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
     private Map<String, BeSmall> fileSwaToSmall;
+    private Map<String, Set<String>> normalSamples;
     private String templateTypeFilter = "";
     private String picard_memory = "6000";
     private String delly_memory  = "8000";
@@ -33,6 +35,7 @@ public class StructuralVariationDecider extends OicrDecider {
     private String mappingQuality = " ";
     private String callMode = "";
     private List<String> duplicates;
+    private Set<String> normalTissueTypes = Sets.newHashSet("R");
     private final static String BAM_METATYPE = "application/bam";
     private static final String ALIGNER_TOKEN = "file.aligner";
     private final static String UNMATCHED = "unmatched";
@@ -41,7 +44,7 @@ public class StructuralVariationDecider extends OicrDecider {
     public StructuralVariationDecider() {
         super();
         fileSwaToSmall  = new HashMap<String, BeSmall>();
-        
+        normalSamples   = new HashMap<String, Set<String>>();
         parser.acceptsAll(Arrays.asList("ini-file"), "Optional: the location of the INI file.").withRequiredArg();
         
         parser.accepts("picard-memory","Optional. Set the memory allocated to java heap "
@@ -74,7 +77,7 @@ public class StructuralVariationDecider extends OicrDecider {
 		this.delly_memory = iniFileMap.get("delly_memory");
 		this.picard_memory = iniFileMap.get("picard_memory");
             } else {
-                 logger.error("The given INI file does not exist: " + file.getAbsolutePath());
+                logger.error("The given INI file does not exist: " + file.getAbsolutePath());
                 System.exit(1);
             }
 	}
@@ -160,10 +163,23 @@ public class StructuralVariationDecider extends OicrDecider {
         }
         
         for (String p : filePaths) {
-             if (null != this.duplicates && this.duplicates.contains(p)) {
+            if (null != this.duplicates && this.duplicates.contains(p)) {
                 logger.error("File [" + p + "] has a name that cannot be disambiguated in current set, will skip it");
                 continue;
             }
+            
+            //We are in SOMATIC mode, skip normals TODO
+            if (normalFiles > 1) {
+                logger.error("We have multiple normal files, WON'T RUN");
+                return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+            }
+             
+            if (tumorFiles > 1 && (tumorFiles != groupIds)) {
+                logger.error("We have multiple tumor files but not all of them have group id value, WON'T RUN");
+                return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+            }
+            
+            
              
             for (BeSmall bs : fileSwaToSmall.values()) {
                 if (!bs.getPath().equals(p)) {
@@ -175,12 +191,20 @@ public class StructuralVariationDecider extends OicrDecider {
                     haveNorm = true;
                     normalFiles++;
                 } else if (!tt.isEmpty()) {
+                    if (null == normalSamples.get(bs.getDonor())) {
+                        logger.error("No matched normal for this tumor sample from donor " + bs.getDonor() + ", WON'T RUN");
+                        return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
+                    }
+                    haveNorm = true;
                     haveTumr = true;
                     tumorFiles++;
+                    normalFiles+=normalSamples.get(bs.getDonor()).size();
                     String gi = bs.getGroupID();
                     if (null != gi && !gi.equals("NA")) {
                         groupIds++;
                     }
+                    
+                    
                 }
             }
         }
@@ -289,7 +313,20 @@ public class StructuralVariationDecider extends OicrDecider {
 
         // group files according to the designated header (e.g. sample SWID)
         for (ReturnValue r : newValues) {
-            String currVal = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle())).getGroupByAttribute();
+            BeSmall currBs = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle()));
+            String currVal = currBs.getGroupByAttribute();
+                       
+            if (callMode.equals(SOMATIC) && normalTissueTypes.contains(currBs.getTissueType())) {
+               
+                String FileSwa = r.getAttribute(Header.FILE_SWA.getTitle());
+                if (fileSwaToSmall.containsKey(FileSwa)) {
+                 if (null == normalSamples || !normalSamples.containsKey(currBs.getDonor())) {
+                    normalSamples.put(currBs.getDonor(), Sets.newHashSet(FileSwa));
+                 } else {
+                    normalSamples.get(currBs.getDonor()).add(FileSwa);
+                 }
+                }
+            }           
             
             List<ReturnValue> vs = map.get(currVal);
             if (vs == null) {
@@ -331,6 +368,8 @@ public class StructuralVariationDecider extends OicrDecider {
                         inputTumors.append(",");
                     }
                     inputTumors.append(p);
+                    String normalId = this.normalSamples.get(bs.getDonor()).toArray()[0].toString();
+                    inputFile =this.fileSwaToSmall.get(normalId).getPath();
                 }
             }
         }
@@ -414,6 +453,7 @@ public class StructuralVariationDecider extends OicrDecider {
         private String groupByAttribute = null;
         private String tissueType = null;
         private String path = null;
+        private String donor = null;
         
         public BeSmall(ReturnValue rv) {
             try {
@@ -426,6 +466,7 @@ public class StructuralVariationDecider extends OicrDecider {
             //TODO check if metatype is doing what it is supposed to do (adding MIME type here)
             iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + fa.getMetatype();
             tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
+            donor      = fa.getDonor();
             //groupByAttribute = fa.getDonor() + ":" + fa.getLimsValue(Lims.TISSUE_ORIGIN) + ":" + fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE);
             groupID    = fa.getLimsValue(Lims.GROUP_ID);
             if (null == groupID || groupID.isEmpty()) {
@@ -433,32 +474,26 @@ public class StructuralVariationDecider extends OicrDecider {
             }
             
             
-            StringBuilder gba = new StringBuilder();
-
-            if (callMode.equals(UNMATCHED)) {
-                gba.append(fa.getLibrarySample());
+            StringBuilder gba = new StringBuilder();           
+            gba.append(fa.getLibrarySample());
                 
-                if (null != fa.getLimsValue(Lims.TISSUE_TYPE))
-                 gba.append(":").append(fa.getLimsValue(Lims.TISSUE_TYPE));
+            if (null != fa.getLimsValue(Lims.TISSUE_TYPE))
+                gba.append(":").append(fa.getLimsValue(Lims.TISSUE_TYPE));
             
-                if (null != fa.getLimsValue(Lims.TISSUE_PREP))
-                 gba.append(":").append(fa.getLimsValue(Lims.TISSUE_PREP));
+            if (null != fa.getLimsValue(Lims.TISSUE_PREP))
+                gba.append(":").append(fa.getLimsValue(Lims.TISSUE_PREP));
             
-                if (null != fa.getLimsValue(Lims.TISSUE_REGION))
-                 gba.append(":").append(fa.getLimsValue(Lims.TISSUE_REGION));
-            } else {
-                gba.append(fa.getDonor());
-            }
-            
+            if (null != fa.getLimsValue(Lims.TISSUE_REGION))
+                gba.append(":").append(fa.getLimsValue(Lims.TISSUE_REGION));
+                        
             if (null != fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE))
-             gba.append(":").append(fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE));
+                gba.append(":").append(fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE));
             
             String aligner = rv.getAttribute(ALIGNER_TOKEN);
-            if (null != aligner && !aligner.isEmpty()) {
+            if (null != aligner && !aligner.isEmpty()) 
                 gba.append(":").append(aligner);
-            }
             
-                                           
+                                         
             groupByAttribute = gba.toString();
             path = rv.getFiles().get(0).getFilePath() + "";
         }
@@ -507,10 +542,10 @@ public class StructuralVariationDecider extends OicrDecider {
         }
 
         /**
-         * @param groupID the groupID to set
+         * @return the donor
          */
-        public void setGroupID(String groupID) {
-            this.groupID = groupID;
+        public String getDonor() {
+            return donor;
         }
     }
     
