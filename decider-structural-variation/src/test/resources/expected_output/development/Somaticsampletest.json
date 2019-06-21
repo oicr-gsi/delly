@@ -7,12 +7,12 @@
   "workflows" : [ "BamFilterMergeCollapse" ],
   "processingAlgorithms" : [ "ProvisionFiles" ],
   "fileMetaTypes" : [ "application/bam" ],
-  "maxInputFiles" : 2,
-  "minInputFiles" : 2,
-  "totalInputFiles" : 2,
-  "maxOutputFileProvenanceRecords" : 2,
-  "minOutputFileProvenanceRecords" : 2,
-  "totalOutputFileProvenanceRecords" : 2,
+  "maxInputFiles" : 1,
+  "minInputFiles" : 1,
+  "totalInputFiles" : 1,
+  "maxOutputFileProvenanceRecords" : 1,
+  "minOutputFileProvenanceRecords" : 1,
+  "totalOutputFileProvenanceRecords" : 1,
   "workflowRuns" : [ {
     "workflowIni" : {
       "bundled_jre" : "jre1.8.0_45",
