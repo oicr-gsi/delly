@@ -3,7 +3,7 @@
   "studies" : [ "DYS" ],
   "sequencerRuns" : [ "151021_D00343_0104_BC7PEWANXX" ],
   "lanes" : [ "151021_D00343_0104_BC7PEWANXX_lane_1" ],
-  "samples" : [ "DYS_1096_Es_P_PE_360_TS", "DYS_1096_Es_R_PE_360_TS" ],
+  "samples" : [ "DYS_1096_Es_P_PE_360_TS" ],
   "workflows" : [ "BamFilterMergeCollapse" ],
   "processingAlgorithms" : [ "ProvisionFiles" ],
   "fileMetaTypes" : [ "application/bam" ],
@@ -33,7 +33,7 @@
       "picard_memory" : "6000",
       "queue" : "",
       "ref_fasta" : "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa",
-      "sample_name" : "DYS_1096_Es_R",
+      "sample_name" : "DYS_1096_Es_P",
       "samtools" : "samtools-0.1.19",
       "tabix" : "tabix-0.2.6",
       "vcftools" : "vcftools_0.1.10"
@@ -79,45 +79,6 @@
         "aligner" : [ [ "BWA" ] ]
       },
       "fileId" : 1534686420
-    }, {
-      "studyTitle" : [ "DYS" ],
-      "studyAttributes" : { },
-      "experimentName" : [ ],
-      "experimentAttributes" : { },
-      "sampleName" : [ "DYS_1096_Es_R_PE_360_TS" ],
-      "sampleAttributes" : {
-        "geo_external_name" : [ [ "DYS_1096" ] ],
-        "geo_library_source_template_type" : [ [ "TS" ] ],
-        "geo_organism" : [ [ "Homo sapiens" ] ],
-        "geo_prep_kit" : [ [ "AmpliSeq-KAPA Hyper Prep V1" ] ],
-        "geo_purpose" : [ [ "Library" ] ],
-        "geo_receive_date" : [ [ "2015-01-14" ] ],
-        "geo_run_id_and_position" : [ [ "740_1" ] ],
-        "geo_str_result" : [ [ "Not Submitted" ] ],
-        "geo_targeted_resequencing" : [ [ "DYS_IAD78789_185" ] ],
-        "geo_template_type" : [ [ "Illumina PE Library Seq" ] ],
-        "geo_tissue_origin" : [ [ "Es" ] ],
-        "geo_tissue_preparation" : [ [ "Fresh Frozen" ] ],
-        "geo_tissue_type" : [ [ "R" ] ]
-      },
-      "sequencerRunName" : [ "151021_D00343_0104_BC7PEWANXX" ],
-      "sequencerRunAttributes" : {
-        "instrument_name" : [ [ "D00343" ] ]
-      },
-      "laneName" : [ "151021_D00343_0104_BC7PEWANXX_lane_1" ],
-      "laneAttributes" : {
-        "pool_name" : [ [ "DYS_Pool-5" ] ]
-      },
-      "iusTag" : [ "ACCACTGT" ],
-      "iusAttributes" : { },
-      "workflowName" : [ "BamFilterMergeCollapse" ],
-      "processingAlgorithm" : [ "ProvisionFiles" ],
-      "processingAttributes" : { },
-      "fileMetaType" : [ "application/bam" ],
-      "fileAttributes" : {
-        "aligner" : [ [ "BWA" ] ]
-      },
-      "fileId" : 1607339504
     } ],
     "outputFileProvenanceRecords" : 1
   } ]
