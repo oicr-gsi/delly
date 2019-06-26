@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class StructuralVariationDecider extends OicrDecider {
     private final Logger logger = LogManager.getLogger(StructuralVariationDecider.class);
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+    private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
     private Map<String, BeSmall> fileSwaToSmall;
     private Map<String, Set<String>> normalSamples;
     private String templateTypeFilter = "";
@@ -35,7 +35,7 @@ public class StructuralVariationDecider extends OicrDecider {
     private String mappingQuality = " ";
     private String callMode = "";
     private List<String> duplicates;
-    private Set<String> normalTissueTypes = Sets.newHashSet("R");
+    private final static Set<String> NORMAL_TISSUE_TYPES = Sets.newHashSet("R");
     private final static String BAM_METATYPE = "application/bam";
     private static final String ALIGNER_TOKEN = "file.aligner";
     private final static String UNMATCHED = "unmatched";
@@ -320,7 +320,7 @@ public class StructuralVariationDecider extends OicrDecider {
             BeSmall currBs = fileSwaToSmall.get(r.getAttribute(Header.FILE_SWA.getTitle()));
             String currVal = currBs.getGroupByAttribute();
                        
-            if (callMode.equals(SOMATIC) && normalTissueTypes.contains(currBs.getTissueType())) {
+            if (callMode.equals(SOMATIC) && NORMAL_TISSUE_TYPES.contains(currBs.getTissueType())) {
                 // GP-1982 put normals into a special container
                 String FileSwa = r.getAttribute(Header.FILE_SWA.getTitle());
                 if (fileSwaToSmall.containsKey(FileSwa)) {
@@ -365,7 +365,7 @@ public class StructuralVariationDecider extends OicrDecider {
                 }
                     
                 String tt = bs.getTissueType();
-                if (!tt.isEmpty() && tt.equals("R")) {
+                if (!tt.isEmpty() && NORMAL_TISSUE_TYPES.contains(tt)) {
                     inputFile = p;
                 } else if (!tt.isEmpty()) {
                     if (inputTumors.length() != 0) {
@@ -470,7 +470,7 @@ public class StructuralVariationDecider extends OicrDecider {
             //TODO check if metatype is doing what it is supposed to do (adding MIME type here)
             iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + fa.getMetatype();
             tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
-            if (tissueType.equals("R")) {
+            if (NORMAL_TISSUE_TYPES.contains(tissueType)) {
                 this.Fa = fa;
             }
             donor      = fa.getDonor();
