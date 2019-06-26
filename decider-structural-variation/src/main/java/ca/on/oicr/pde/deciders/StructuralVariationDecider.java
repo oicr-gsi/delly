@@ -12,9 +12,9 @@ import java.util.*;
 import net.sourceforge.seqware.common.hibernate.FindAllTheFiles.Header;
 import net.sourceforge.seqware.common.module.FileMetadata;
 import net.sourceforge.seqware.common.module.ReturnValue;
+import net.sourceforge.seqware.common.util.maptools.MapTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import net.sourceforge.seqware.common.util.maptools.MapTools;
 
 /**
  *
@@ -149,6 +149,7 @@ public class StructuralVariationDecider extends OicrDecider {
     @Override
     protected ReturnValue doFinalCheck(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
         String[] filePaths = commaSeparatedFilePaths.split(",");
+        String matchedNormalPath = null;
         boolean haveNorm = false;
         boolean haveTumr = false;
         int tumorFiles  = 0;
@@ -168,7 +169,7 @@ public class StructuralVariationDecider extends OicrDecider {
                 continue;
             }
             
-            //We are in SOMATIC mode, skip normals TODO
+            //We are in SOMATIC mode, skip normals
             if (normalFiles > 1) {
                 logger.error("We have multiple normal files, WON'T RUN");
                 return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
@@ -203,8 +204,10 @@ public class StructuralVariationDecider extends OicrDecider {
                     if (null != gi && !gi.equals("NA")) {
                         groupIds++;
                     }
-                    
-                    
+                    // GP-1982 Add matched normal file to the workflow run
+                    String normalId = this.normalSamples.get(bs.getDonor()).toArray()[0].toString();
+                    matchedNormalPath = this.fileSwaToSmall.get(normalId).getPath();
+                    files.put(matchedNormalPath, this.fileSwaToSmall.get(normalId).getFileAttributes());
                 }
             }
         }
@@ -219,8 +222,9 @@ public class StructuralVariationDecider extends OicrDecider {
             return new ReturnValue(ReturnValue.INVALIDPARAMETERS);
         }
 
-        if (haveNorm && haveTumr) {
-            return super.doFinalCheck(commaSeparatedFilePaths, commaSeparatedParentAccessions);
+        if (haveNorm && haveTumr && null != matchedNormalPath) {
+            String UpdatedPaths = commaSeparatedFilePaths + "," + matchedNormalPath;
+            return super.doFinalCheck(UpdatedPaths, commaSeparatedParentAccessions);
         }
 
         String absent = haveNorm ? "Tumor" : "Normal";
@@ -317,7 +321,7 @@ public class StructuralVariationDecider extends OicrDecider {
             String currVal = currBs.getGroupByAttribute();
                        
             if (callMode.equals(SOMATIC) && normalTissueTypes.contains(currBs.getTissueType())) {
-               
+                // GP-1982 put normals into a special container
                 String FileSwa = r.getAttribute(Header.FILE_SWA.getTitle());
                 if (fileSwaToSmall.containsKey(FileSwa)) {
                  if (null == normalSamples || !normalSamples.containsKey(currBs.getDonor())) {
@@ -368,8 +372,6 @@ public class StructuralVariationDecider extends OicrDecider {
                         inputTumors.append(",");
                     }
                     inputTumors.append(p);
-                    String normalId = this.normalSamples.get(bs.getDonor()).toArray()[0].toString();
-                    inputFile =this.fileSwaToSmall.get(normalId).getPath();
                 }
             }
         }
@@ -379,6 +381,7 @@ public class StructuralVariationDecider extends OicrDecider {
         } else {
             run.addProperty("input_bams", inputFile);
             run.addProperty("input_tumors", inputTumors.toString());
+            run.addProperty("input_files", inputFile + "," + inputTumors.toString());
         }
                
         run.addProperty("picard_memory", this.picard_memory);
@@ -454,6 +457,7 @@ public class StructuralVariationDecider extends OicrDecider {
         private String tissueType = null;
         private String path = null;
         private String donor = null;
+        private FileAttributes Fa = null;
         
         public BeSmall(ReturnValue rv) {
             try {
@@ -466,6 +470,9 @@ public class StructuralVariationDecider extends OicrDecider {
             //TODO check if metatype is doing what it is supposed to do (adding MIME type here)
             iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + fa.getMetatype();
             tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
+            if (tissueType.equals("R")) {
+                this.Fa = fa;
+            }
             donor      = fa.getDonor();
             //groupByAttribute = fa.getDonor() + ":" + fa.getLimsValue(Lims.TISSUE_ORIGIN) + ":" + fa.getLimsValue(Lims.LIBRARY_TEMPLATE_TYPE);
             groupID    = fa.getLimsValue(Lims.GROUP_ID);
@@ -546,6 +553,13 @@ public class StructuralVariationDecider extends OicrDecider {
          */
         public String getDonor() {
             return donor;
+        }
+
+        /**
+         * @return the FileAttributes
+         */
+        public FileAttributes getFileAttributes() {
+            return Fa;
         }
     }
     

@@ -3,16 +3,16 @@
   "studies" : [ "DYS" ],
   "sequencerRuns" : [ "151021_D00343_0104_BC7PEWANXX" ],
   "lanes" : [ "151021_D00343_0104_BC7PEWANXX_lane_1" ],
-  "samples" : [ "DYS_1096_Es_P_PE_360_TS" ],
+  "samples" : [ "DYS_1096_Es_P_PE_360_TS","DYS_1096_Es_R_PE_360_TS" ],
   "workflows" : [ "BamFilterMergeCollapse" ],
   "processingAlgorithms" : [ "ProvisionFiles" ],
   "fileMetaTypes" : [ "application/bam" ],
-  "maxInputFiles" : 1,
-  "minInputFiles" : 1,
-  "totalInputFiles" : 1,
-  "maxOutputFileProvenanceRecords" : 1,
-  "minOutputFileProvenanceRecords" : 1,
-  "totalOutputFileProvenanceRecords" : 1,
+  "maxInputFiles" : 2,
+  "minInputFiles" : 2,
+  "totalInputFiles" : 2,
+  "maxOutputFileProvenanceRecords" : 2,
+  "minOutputFileProvenanceRecords" : 2,
+  "totalOutputFileProvenanceRecords" : 2,
   "workflowRuns" : [ {
     "workflowIni" : {
       "bundled_jre" : "jre1.8.0_45",
@@ -21,7 +21,7 @@
       "delly_memory" : "8000",
       "exclude_list" : "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv",
       "input_bams" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/28285460/DYS_1096_Es_R_TS.sorted.filter.bam",
-      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/94665400/DYS_1096_Es_P_TS_1-2.sorted.filter.bam",
+      "input_files" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/28285460/DYS_1096_Es_R_TS.sorted.filter.bam,/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/94665400/DYS_1096_Es_P_TS_1-2.sorted.filter.bam",
       "input_tumors" : "/oicr/data/archive/seqware/seqware_analysis_9/hsqwprod/seqware-results/BamFilterMergeCollapse_1.3/94665400/DYS_1096_Es_P_TS_1-2.sorted.filter.bam",
       "manual_output" : "false",
       "mapping_quality" : "",
@@ -80,6 +80,6 @@
       },
       "fileId" : 1534686420
     } ],
-    "outputFileProvenanceRecords" : 1
+    "outputFileProvenanceRecords" : 2
   } ]
 }
