@@ -28,7 +28,7 @@ public class StructuralVariationDecider extends OicrDecider {
     private String templateTypeFilter = "";
     private String picard_memory = "6000";
     private String delly_memory  = "8000";
-    private String sampleName     = "";
+    private StringBuilder sampleName;
     private String refFasta = "";
     private String queue = " ";
     private String excludeList = "";
@@ -88,7 +88,7 @@ public class StructuralVariationDecider extends OicrDecider {
         }
         
        	if (this.options.has("root-sample-name")) {
-            this.sampleName   = options.valueOf("root-sample-name").toString();
+            this.sampleName   = new StringBuilder();
 	}
         
         if (this.options.has("queue")) {
@@ -188,7 +188,7 @@ public class StructuralVariationDecider extends OicrDecider {
                 }
                 String tt = bs.getTissueType();
                 //GP-598: make sure we have group_ids for tumor files if there is more than one
-                if (!tt.isEmpty() && tt.equals("R")) {
+                if (!tt.isEmpty() && NORMAL_TISSUE_TYPES.contains(tt)) {
                     haveNorm = true;
                     normalFiles++;
                 } else if (!tt.isEmpty()) {
@@ -235,13 +235,6 @@ public class StructuralVariationDecider extends OicrDecider {
     @Override
     protected boolean checkFileDetails(ReturnValue returnValue, FileMetadata fm) {
         logger.info("CHECK FILE DETAILS:" + fm.getFilePath());
-	this.sampleName      = returnValue.getAttribute(Header.SAMPLE_NAME.getTitle());
-        String tissueType    = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
-        String tissueOrigin  = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_origin");
-        if (null != tissueType && null != tissueOrigin) {
-            String tissueOriTyp = tissueOrigin + "_" + tissueType;
-            this.sampleName = this.sampleName.substring(0, this.sampleName.lastIndexOf(tissueOriTyp) + tissueOriTyp.length());
-        }
         
         String currentTtype    = returnValue.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_library_source_template_type");
         // Filter the data of a different template type if filter is specified
@@ -348,7 +341,7 @@ public class StructuralVariationDecider extends OicrDecider {
     public ReturnValue customizeRun(WorkflowRun run) {
         String inputFile          = "";
         StringBuilder inputTumors = new StringBuilder();
-                 
+              
         for (FileAttributes atts : run.getFiles()) {
             String p = atts.getPath();
             for (BeSmall bs : fileSwaToSmall.values()) {
@@ -361,18 +354,29 @@ public class StructuralVariationDecider extends OicrDecider {
                         inputTumors.append(",");
                     }
                     inputTumors.append(p);
+                
+                    if (this.sampleName.length() != 0) {
+                        this.sampleName.append(",");
+                    }
+                    this.sampleName.append(bs.getSampleName());
                     continue;
                 }
                     
                 String tt = bs.getTissueType();
                 if (!tt.isEmpty() && NORMAL_TISSUE_TYPES.contains(tt)) {
                     inputFile = p;
+                    
                 } else if (!tt.isEmpty()) {
                     if (inputTumors.length() != 0) {
                         inputTumors.append(",");
                     }
                     inputTumors.append(p);
                 }
+                
+                if (this.sampleName.length() != 0) {
+                        this.sampleName.append(",");
+                }
+                this.sampleName.append(bs.getSampleName());
             }
         }
         
@@ -388,7 +392,7 @@ public class StructuralVariationDecider extends OicrDecider {
         run.addProperty("delly_memory", this.delly_memory);
         run.addProperty("data_dir", "data");
         run.addProperty("queue", this.queue);
-        run.addProperty("sample_name", this.sampleName);
+        run.addProperty("sample_name", this.sampleName.toString());
         run.addProperty("mapping_quality", this.mappingQuality);
         run.addProperty("mode", this.callMode);
         
@@ -457,6 +461,7 @@ public class StructuralVariationDecider extends OicrDecider {
         private String tissueType = null;
         private String path = null;
         private String donor = null;
+        private String sampleName = null;
         private FileAttributes Fa = null;
         
         public BeSmall(ReturnValue rv) {
@@ -470,6 +475,14 @@ public class StructuralVariationDecider extends OicrDecider {
             //TODO check if metatype is doing what it is supposed to do (adding MIME type here)
             iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + fa.getMetatype();
             tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
+            this.sampleName      = rv.getAttribute(Header.SAMPLE_NAME.getTitle());
+            String tissueType    = rv.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
+            String tissueOrigin  = rv.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_origin");
+            if (null != tissueType && null != tissueOrigin) {
+                String tissueOriTyp = tissueOrigin + "_" + tissueType;
+                this.sampleName = this.sampleName.substring(0, this.sampleName.lastIndexOf(tissueOriTyp) + tissueOriTyp.length());
+            }
+            
             if (NORMAL_TISSUE_TYPES.contains(tissueType)) {
                 this.Fa = fa;
             }
@@ -560,6 +573,13 @@ public class StructuralVariationDecider extends OicrDecider {
          */
         public FileAttributes getFileAttributes() {
             return Fa;
+        }
+
+        /**
+         * @return the sampleName
+         */
+        public String getSampleName() {
+            return sampleName;
         }
     }
     
