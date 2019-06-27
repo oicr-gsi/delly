@@ -28,7 +28,6 @@ public class StructuralVariationDecider extends OicrDecider {
     private String templateTypeFilter = "";
     private String picard_memory = "6000";
     private String delly_memory  = "8000";
-    private StringBuilder sampleName;
     private String refFasta = "";
     private String queue = " ";
     private String excludeList = "";
@@ -86,11 +85,7 @@ public class StructuralVariationDecider extends OicrDecider {
         if (this.options.has("group-by")) {
             logger.info("group-by parameter passed, but this decider does not allow overriding the default grouping, which is group-by FILE_SWA");
         }
-        
-       	if (this.options.has("root-sample-name")) {
-            this.sampleName   = new StringBuilder();
-	}
-        
+               
         if (this.options.has("queue")) {
             this.queue   = options.valueOf("queue").toString();
 	}
@@ -148,6 +143,7 @@ public class StructuralVariationDecider extends OicrDecider {
      * @return    */
     @Override
     protected ReturnValue doFinalCheck(String commaSeparatedFilePaths, String commaSeparatedParentAccessions) {
+
         String[] filePaths = commaSeparatedFilePaths.split(",");
         String matchedNormalPath = null;
         boolean haveNorm = false;
@@ -340,7 +336,9 @@ public class StructuralVariationDecider extends OicrDecider {
    @Override
     public ReturnValue customizeRun(WorkflowRun run) {
         String inputFile          = "";
-        StringBuilder inputTumors = new StringBuilder();
+        StringBuilder inputTumors  = new StringBuilder();
+        StringBuilder sampleName   = new StringBuilder();
+        Set <String> sampleNames = new HashSet <String> ();
               
         for (FileAttributes atts : run.getFiles()) {
             String p = atts.getPath();
@@ -354,29 +352,20 @@ public class StructuralVariationDecider extends OicrDecider {
                         inputTumors.append(",");
                     }
                     inputTumors.append(p);
-                
-                    if (this.sampleName.length() != 0) {
-                        this.sampleName.append(",");
+                } else {        
+                    String tt = bs.getTissueType();
+                    if (!tt.isEmpty() && NORMAL_TISSUE_TYPES.contains(tt)) {
+                        inputFile = p;
+
+                    } else if (!tt.isEmpty()) {
+                        if (inputTumors.length() != 0) {
+                            inputTumors.append(",");
+                        }
+                        inputTumors.append(p);
                     }
-                    this.sampleName.append(bs.getSampleName());
-                    continue;
                 }
-                    
-                String tt = bs.getTissueType();
-                if (!tt.isEmpty() && NORMAL_TISSUE_TYPES.contains(tt)) {
-                    inputFile = p;
-                    
-                } else if (!tt.isEmpty()) {
-                    if (inputTumors.length() != 0) {
-                        inputTumors.append(",");
-                    }
-                    inputTumors.append(p);
-                }
-                
-                if (this.sampleName.length() != 0) {
-                        this.sampleName.append(",");
-                }
-                this.sampleName.append(bs.getSampleName());
+
+                sampleNames.add(bs.getSampleName());
             }
         }
         
@@ -387,12 +376,20 @@ public class StructuralVariationDecider extends OicrDecider {
             run.addProperty("input_tumors", inputTumors.toString());
             run.addProperty("input_files", inputFile + "," + inputTumors.toString());
         }
+        
+        // Construct sample_name value
+        for (String s:sampleNames) {
+         if (sampleName.length() != 0) {
+                    sampleName.append(",");
+         }
+         sampleName.append(s);
+        }
                
         run.addProperty("picard_memory", this.picard_memory);
         run.addProperty("delly_memory", this.delly_memory);
         run.addProperty("data_dir", "data");
         run.addProperty("queue", this.queue);
-        run.addProperty("sample_name", this.sampleName.toString());
+        run.addProperty("sample_name", sampleName.toString());
         run.addProperty("mapping_quality", this.mappingQuality);
         run.addProperty("mode", this.callMode);
         
