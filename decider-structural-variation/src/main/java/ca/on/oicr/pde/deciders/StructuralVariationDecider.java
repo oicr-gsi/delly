@@ -177,7 +177,7 @@ public class StructuralVariationDecider extends OicrDecider {
             }
             
             
-             
+            
             for (BeSmall bs : fileSwaToSmall.values()) {
                 if (!bs.getPath().equals(p)) {
                     continue;
@@ -203,7 +203,7 @@ public class StructuralVariationDecider extends OicrDecider {
                     // GP-1982 Add matched normal file to the workflow run
                     String normalId = this.normalSamples.get(bs.getDonor()).toArray()[0].toString();
                     matchedNormalPath = this.fileSwaToSmall.get(normalId).getPath();
-                    files.put(matchedNormalPath, this.fileSwaToSmall.get(normalId).getFileAttributes());
+                    files.put(matchedNormalPath, this.fileSwaToSmall.get(normalId).getFileAttributes());                  
                 }
             }
         }
@@ -336,12 +336,12 @@ public class StructuralVariationDecider extends OicrDecider {
    @Override
     public ReturnValue customizeRun(WorkflowRun run) {
         String inputFile          = "";
-        StringBuilder inputTumors  = new StringBuilder();
-        StringBuilder sampleName   = new StringBuilder();
-        Set <String> sampleNames = new HashSet <String> ();
-              
+        StringBuilder inputTumors = new StringBuilder();
+        Set <String> sampleNames  = new HashSet <String> ();
+        Set <String> limsKeyIUSs  = new HashSet <String> ();
+        
         for (FileAttributes atts : run.getFiles()) {
-            String p = atts.getPath();
+            String p = atts.getPath();  
             for (BeSmall bs : fileSwaToSmall.values()) {
                 if (!bs.getPath().equals(p)) {
                     continue;
@@ -364,11 +364,17 @@ public class StructuralVariationDecider extends OicrDecider {
                         inputTumors.append(p);
                     }
                 }
-
+                limsKeyIUSs.add(atts.getOtherAttribute(Header.IUS_SWA));
                 sampleNames.add(bs.getSampleName());
             }
         }
         
+        try {
+             this.getSwidsToLinkWorkflowRunTo(limsKeyIUSs);
+        } catch (Exception e) {
+             logger.error("Error updating SwidsToLinkWorkflowRunTo" + e.getMessage());
+        }
+
         if (this.callMode.equals(UNMATCHED)) {
             run.addProperty("input_bams", inputTumors.toString());
         } else {
@@ -378,12 +384,13 @@ public class StructuralVariationDecider extends OicrDecider {
         }
         
         // Construct sample_name value
-        for (String s:sampleNames) {
-         if (sampleName.length() != 0) {
-                    sampleName.append(",");
-         }
-         sampleName.append(s);
-        }
+        StringBuilder sampleName   = new StringBuilder();
+        sampleNames.forEach((s) -> {
+            if (sampleName.length() != 0) {
+                sampleName.append(",");
+            }
+            sampleName.append(s);
+        });
                
         run.addProperty("picard_memory", this.picard_memory);
         run.addProperty("delly_memory", this.delly_memory);
@@ -470,17 +477,16 @@ public class StructuralVariationDecider extends OicrDecider {
             }
             FileAttributes fa = new FileAttributes(rv, rv.getFiles().get(0));
             //TODO check if metatype is doing what it is supposed to do (adding MIME type here)
-            iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + fa.getMetatype();
-            tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
+            this.iusDetails = fa.getLibrarySample() + fa.getSequencerRun() + fa.getLane() + fa.getBarcode() + fa.getMetatype();
+            this.tissueType = fa.getLimsValue(Lims.TISSUE_TYPE);
             this.sampleName      = rv.getAttribute(Header.SAMPLE_NAME.getTitle());
-            String tissueType    = rv.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_type");
             String tissueOrigin  = rv.getAttribute(Header.SAMPLE_TAG_PREFIX.getTitle() + "geo_tissue_origin");
-            if (null != tissueType && null != tissueOrigin) {
-                String tissueOriTyp = tissueOrigin + "_" + tissueType;
+            if (null != this.tissueType && null != tissueOrigin) {
+                String tissueOriTyp = tissueOrigin + "_" + this.tissueType;
                 this.sampleName = this.sampleName.substring(0, this.sampleName.lastIndexOf(tissueOriTyp) + tissueOriTyp.length());
             }
             
-            if (NORMAL_TISSUE_TYPES.contains(tissueType)) {
+            if (NORMAL_TISSUE_TYPES.contains(this.tissueType)) {
                 this.Fa = fa;
             }
             donor      = fa.getDonor();
