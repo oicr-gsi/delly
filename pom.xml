@@ -6,9 +6,6 @@
     <version>1.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>decider-copy-number-variation</module>
-        <module>decider-structural-variation</module>
-        <module>workflow-copy-number-variation</module>
         <module>workflow-structural-variation</module>
     </modules>
     <properties>

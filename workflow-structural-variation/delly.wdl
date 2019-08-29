@@ -76,7 +76,7 @@ input {
         String dellyMode
         String sampleName
         String? excludeList = "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv"
-        String? refFasta = "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa"
+        String? refFasta = "/scratch2/groups/gsi/development/modulator_hg19/resit/modulator/sw/data/hg19-p13/hg19_random.fa"
         String? callType = "unpaired"
         String? modules = "delly/0.8.1 bcftools-1.7/1.7 tabix/0.2.6"
         Int? mappingQuality = 30
