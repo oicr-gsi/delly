@@ -40,10 +40,10 @@ input {
 	File   inputBam
         Int?   jobMemory  = 20
         Int?   javaMemory = 12
+        String? modules = "picard/1.72" 
 }
 
 command <<<
- module load "picard/1.72" 2>/dev/null
  java -Xmx~{javaMemory}G -jar $PICARDROOT/MarkDuplicates.jar \
                               TMP_DIR=picardTmp \
                               ASSUME_SORTED=true \
@@ -56,6 +56,7 @@ command <<<
 
 runtime {
   memory:  "~{jobMemory} GB"
+  modules: "~{modules}"
 }
 
 output {
@@ -77,16 +78,14 @@ input {
         String? excludeList = "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv"
         String? refFasta = "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa"
         String? callType = "unpaired"
+        String? modules = "delly/0.8.1 bcftools-1.7/1.7 tabix/0.2.6"
         Int? mappingQuality = 30
         Int? jobMemory = 10
 }
 
 command <<<
-module load "delly/0.8.1" 2>/dev/null
-module load "bcftools-1.7/1.7" 2>/dev/null
-module load "tabix/0.2.6" 2>/dev/null
 VALID_TAG="false"
-/.mounts/labs/PDE/Modules/sw/delly/delly_v0.8.1_linux_x86_64bit call -t ~{dellyMode} \
+delly call -t ~{dellyMode} \
       -x ~{excludeList} \
       -o "~{sampleName}.~{dellyMode}.~{callType}.bcf" \
       -q ~{mappingQuality} \
@@ -107,6 +106,7 @@ echo $VALID_TAG 1>&2
 
 runtime {
   memory:  "~{jobMemory} GB"
+  modules: "~{modules}"
 }
 
 output {
@@ -126,18 +126,18 @@ input {
         Array[File] inputTbis
         String sampleName
         String? callType = "unpaired"
+        String? modules = "vcftools/0.1.10 tabix/0.2.6"
 	Int? jobMemory = 10
 }
 
 command <<<
-       module load "vcftools/0.1.10" 2>/dev/null
-       module load "tabix/0.2.6" 2>/dev/null
        vcf-merge ~{sep=' ' inputVcfs} | bgzip -c > "~{sampleName}.~{callType}.delly.merged.vcf.gz"
        tabix -p vcf "~{sampleName}.~{callType}.delly.merged.vcf.gz"
 >>>
 
 runtime {
   memory:  "~{jobMemory} GB"
+  modules: "~{modules}"
 }
 
 output {
