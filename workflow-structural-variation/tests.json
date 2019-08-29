@@ -16,7 +16,8 @@
           "dellyWorkflow.runDelly.modules": "delly/0.8.1 bcftools-1.7/1.7 tabix/0.2.6",
           "dellyWorkflow.mergeAndZip.modules": "vcftools/0.1.10 tabix/0.2.6"
         }
-      },
+      }
+      },{
       "id": "SomaticTest",
       "parameters": {
         "wdl_inputs": {
@@ -25,6 +26,8 @@
           "dellyWorkflow.dupmarkBam.modules": "picard/1.72",
           "dellyWorkflow.runDelly.modules": "delly/0.8.1 bcftools-1.7/1.7 tabix/0.2.6",
           "dellyWorkflow.mergeAndZip.modules": "vcftools/0.1.10 tabix/0.2.6"
+        }
+      }
     }
   ]
 }
