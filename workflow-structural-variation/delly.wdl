@@ -16,19 +16,10 @@ String callType = if length(inputBams) == 1 then "unpaired" else "somatic"
 
 scatter (m in ["DEL", "DUP", "INV", "TRA"]) {
  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
- if (runDelly.validOutput) {
-     File delly_out = runDelly.outVcf
-     File delly_idx = runDelly.outTbi
- }
 }
 
-Array[File?] delly_out_maybes = delly_out
-Array[File?] delly_tbi_maybes = delly_idx
-Array[File] delly_out_valids  = select_all(delly_out_maybes)
-Array[File] delly_tbi_valids  = select_all(delly_tbi_maybes)
-
 # Go on with merging and zipping/indexing
-call mergeAndZip { input: inputVcfs = delly_out_valids, inputTbis = delly_tbi_valids, sampleName = sampleID, callType = callType}
+call mergeAndZip { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType}
 
 }
 
@@ -84,7 +75,6 @@ input {
 }
 
 command <<<
-VALID_TAG="false"
 delly call -t ~{dellyMode} \
       -x ~{excludeList} \
       -o "~{sampleName}.~{dellyMode}.~{callType}.bcf" \
@@ -96,12 +86,7 @@ bcftools view "~{sampleName}.~{dellyMode}.~{callType}.bcf" | bgzip -c > "~{sampl
 if [ -e "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz" ]; then
    bcftools view "~{sampleName}.~{dellyMode}.~{callType}.bcf" | bgzip -c > "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
    tabix -p vcf "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
-   VALID_TAG="true"
-else
-   touch "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
-   touch "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz.tbi"
 fi
-echo $VALID_TAG 1>&2
 >>>
 
 runtime {
@@ -110,9 +95,8 @@ runtime {
 }
 
 output {
-  Boolean validOutput = read_boolean(stderr())
-  File outVcf = "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
-  File outTbi = "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz.tbi"
+  File? outVcf = "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
+  File? outTbi = "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz.tbi"
 }
 }
 
