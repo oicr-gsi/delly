@@ -40,11 +40,11 @@ input {
 	File   inputBam
         Int?   jobMemory  = 20
         Int?   javaMemory = 12
-        String? modules = "picard/1.72" 
+        String? modules = "java/1.8.0_91 picard/2.19.2" 
 }
 
 command <<<
- java -Xmx~{javaMemory}G -jar $PICARDROOT/MarkDuplicates.jar \
+ java -Xmx~{javaMemory}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
                               TMP_DIR=picardTmp \
                               ASSUME_SORTED=true \
                               VALIDATION_STRINGENCY=LENIENT \
@@ -78,7 +78,7 @@ input {
         String? excludeList = "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv"
         String? refFasta = "/scratch2/groups/gsi/development/modulator_hg19/resit/modulator/sw/data/hg19-p13/hg19_random.fa"
         String? callType = "unpaired"
-        String? modules = "delly/0.8.1 bcftools-1.7/1.7 tabix/0.2.6"
+        String? modules = "delly/0.8.1 bcftools/1.9 tabix/0.2.6"
         Int? mappingQuality = 30
         Int? jobMemory = 10
 }
@@ -126,7 +126,7 @@ input {
         Array[File] inputTbis
         String sampleName
         String? callType = "unpaired"
-        String? modules = "vcftools/0.1.10 tabix/0.2.6"
+        String? modules = "vcftools/0.1.16 tabix/0.2.6"
 	Int? jobMemory = 10
 }
 
