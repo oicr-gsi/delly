@@ -21,6 +21,11 @@ scatter (m in ["DEL", "DUP", "INV", "TRA"]) {
 # Go on with merging and zipping/indexing
 call mergeAndZip { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType}
 
+output {
+  File mergedIndex = mergeAndZip.dellyMergedTabixIndex
+  File merdedVcf   = mergeAndZip.dellyMergedVcf
+}
+
 }
 
 # ==========================================
@@ -126,7 +131,7 @@ runtime {
 
 output {
   File dellyMergedVcf       = "~{sampleName}.~{callType}.delly.merged.vcf.gz"
-  File delyMergedTabixIndex = "~{sampleName}.~{callType}.delly.merged.vcf.gz.tbi"
+  File dellyMergedTabixIndex = "~{sampleName}.~{callType}.delly.merged.vcf.gz.tbi"
 }
 }
 
