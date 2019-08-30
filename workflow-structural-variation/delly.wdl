@@ -36,7 +36,7 @@ input {
 	File   inputBam
         Int?   jobMemory  = 20
         Int?   javaMemory = 12
-        String? modules = "java/1.8.0_91 picard/2.19.2" 
+        String? modules = "java/8 picard/2.19.2" 
 }
 
 command <<<
