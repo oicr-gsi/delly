@@ -14,22 +14,27 @@ scatter (f in inputBams) {
 
 String callType = if length(inputBams) == 1 then "unpaired" else "somatic"
 
-scatter (m in ["DEL", "DUP", "INV", "TRA"]) {
+scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
 }
 
 # Go on with merging and zipping/indexing
-call mergeAndZip { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType}
+call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType}
+
+# Go on with processing somatic - filtered files
+call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered"}
 
 output {
-  File mergedIndex = mergeAndZip.dellyMergedTabixIndex
-  File merdedVcf   = mergeAndZip.dellyMergedVcf
+  File? mergedIndex = mergeAndZipALL.dellyMergedTabixIndex
+  File? mergedVcf   = mergeAndZipALL.dellyMergedVcf
+  File? mergedFilteredIndex = mergeAndZipFiltered.dellyMergedTabixIndex
+  File? mergedFilteredVcf   = mergeAndZipFiltered.dellyMergedVcf
 }
 
 }
 
 # ==========================================
-#  TASK 1 of 3: imark duplicates with picard
+#  TASK 1 of 3: mark duplicates with picard
 # ==========================================
 task dupmarkBam {
 input {
@@ -62,7 +67,7 @@ output {
 }
 
 # ================================
-#  TASK 2 of 3: index bam file
+#  TASK 2 of 3: run delly
 # ================================
 task runDelly {
 input { 
@@ -86,11 +91,24 @@ delly call -t ~{dellyMode} \
       -q ~{mappingQuality} \
       -g ~{refFasta} \
          ~{sep=' ' inBams}
+if [ "~{callType}" == "somatic" ]; then
+   echo "Somatic mode requested, will run delly filtering for somatic SVs"
+   bcftools view "~{sampleName}.~{dellyMode}.~{callType}.bcf" | grep ^# | tail -n 1 | \
+   sed 's/.*FORMAT\t//' | awk -F "\t" '{print $1"\ttumor";print $2"\tcontrol"}' > samples.tsv
+   delly filter -f somatic -o "~{sampleName}.~{dellyMode}.~{callType}_filtered.bcf" -s samples.tsv \
+                              "~{sampleName}.~{dellyMode}.~{callType}.bcf"
+   bcftools view "~{sampleName}.~{dellyMode}.~{callType}_filtered.bcf" | \
+                 bgzip -c > "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz"
+fi
+
 bcftools view "~{sampleName}.~{dellyMode}.~{callType}.bcf" | bgzip -c > "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
 
 if [ -e "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz" ]; then
-   bcftools view "~{sampleName}.~{dellyMode}.~{callType}.bcf" | bgzip -c > "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
    tabix -p vcf "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
+fi
+
+if [ -e "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz" ]; then
+   tabix -p vcf "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz"
 fi
 >>>
 
@@ -102,6 +120,8 @@ runtime {
 output {
   File? outVcf = "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
   File? outTbi = "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz.tbi"
+  File? outVcf_filtered = "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz"
+  File? outTbi_filtered = "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz.tbi"
 }
 }
 
@@ -116,12 +136,13 @@ input {
         String sampleName
         String? callType = "unpaired"
         String? modules = "vcftools/0.1.16 tabix/0.2.6"
+        String? prefix = ""
 	Int? jobMemory = 10
 }
 
 command <<<
-       vcf-merge ~{sep=' ' inputVcfs} | bgzip -c > "~{sampleName}.~{callType}.delly.merged.vcf.gz"
-       tabix -p vcf "~{sampleName}.~{callType}.delly.merged.vcf.gz"
+       vcf-concat ~{sep=' ' inputVcfs} | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+       tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
 >>>
 
 runtime {
@@ -130,8 +151,8 @@ runtime {
 }
 
 output {
-  File dellyMergedVcf       = "~{sampleName}.~{callType}.delly.merged.vcf.gz"
-  File dellyMergedTabixIndex = "~{sampleName}.~{callType}.delly.merged.vcf.gz.tbi"
+  File? dellyMergedVcf        = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+  File? dellyMergedTabixIndex = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz.tbi"
 }
 }
 
