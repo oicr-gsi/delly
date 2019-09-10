@@ -141,7 +141,7 @@ input {
 }
 
 command <<<
-       vcf-concat ~{sep=' ' inputVcfs} | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+       vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
        tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
 >>>
 
