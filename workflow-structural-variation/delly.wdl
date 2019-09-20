@@ -5,6 +5,7 @@ input {
     # If we are in somatic mode, normal file follows tumor file in the input array
     Array[File] inputBams
     String      sampleID
+    String?     zipModules = "vcftools/0.1.16 tabix/0.2.6"
 }
 
 # If we see more than one (two) bams switch to somatic mode
@@ -19,10 +20,10 @@ scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
 }
 
 # Go on with merging and zipping/indexing
-call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType}
+call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType, modules = zipModules}
 
 # Go on with processing somatic - filtered files
-call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered"}
+call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered", modules = zipModules}
 
 output {
   File? mergedIndex = mergeAndZipALL.dellyMergedTabixIndex
