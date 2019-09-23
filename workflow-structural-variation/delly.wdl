@@ -5,7 +5,6 @@ input {
     # If we are in somatic mode, normal file follows tumor file in the input array
     Array[File] inputBams
     String      sampleID
-    String?     zipModules = "vcftools/0.1.16 tabix/0.2.6"
 }
 
 # If we see more than one (two) bams switch to somatic mode
@@ -20,10 +19,12 @@ scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
 }
 
 # Go on with merging and zipping/indexing
-call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType, modules = zipModules}
+call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType}
 
 # Go on with processing somatic - filtered files
-call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered", modules = zipModules}
+if (callType == "somatic") {
+ call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered"}
+}
 
 output {
   File? mergedIndex = mergeAndZipALL.dellyMergedTabixIndex
@@ -99,7 +100,7 @@ if [ "~{callType}" == "somatic" ]; then
    delly filter -f somatic -o "~{sampleName}.~{dellyMode}.~{callType}_filtered.bcf" -s samples.tsv \
                               "~{sampleName}.~{dellyMode}.~{callType}.bcf"
    bcftools view "~{sampleName}.~{dellyMode}.~{callType}_filtered.bcf" | \
-                 bgzip -c > "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz"
+   bgzip -c > "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz"
 fi
 
 bcftools view "~{sampleName}.~{dellyMode}.~{callType}.bcf" | bgzip -c > "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
@@ -107,7 +108,6 @@ bcftools view "~{sampleName}.~{dellyMode}.~{callType}.bcf" | bgzip -c > "~{sampl
 if [ -e "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz" ]; then
    tabix -p vcf "~{sampleName}.~{dellyMode}.~{callType}.vcf.gz"
 fi
-
 if [ -e "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz" ]; then
    tabix -p vcf "~{sampleName}.~{dellyMode}.~{callType}_filtered.vcf.gz"
 fi
