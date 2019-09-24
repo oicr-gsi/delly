@@ -16,20 +16,20 @@
       "id": "UnpairedTest",
       "parameters": {
         "wdl_inputs": {
-          "dellyWorkflow.inputBams": ["/.mounts/labs/PDE/data/testdata/genomic/bam/PCSI_0098WG_downsampled/SWID_278681_PCSI_0098_Pa_P_PE_700_WG_120905_h803_0093_AC12P2ACXX_NoIndex_L002_R1_001.chr22.bam"],
-          "dellyWorkflow.sampleID": "DELLY_UNPR",
-          "dellyWorkflow.dupmarkBam.modules": "java/8 picard/2.19.2",
-          "dellyWorkflow.runDelly.modules": "delly/0.8.1 bcftools/1.9 tabix/0.2.6"
+          "delly.inputBams": ["/.mounts/labs/PDE/data/testdata/genomic/bam/PCSI_0098WG_downsampled/SWID_278681_PCSI_0098_Pa_P_PE_700_WG_120905_h803_0093_AC12P2ACXX_NoIndex_L002_R1_001.chr22.bam"],
+          "delly.sampleID": "DELLY_UNPR",
+          "delly.dupmarkBam.modules": "java/8 picard/2.19.2",
+          "delly.runDelly.modules": "delly/0.8.1 bcftools/1.9 tabix/0.2.6"
         }
       }
       },{
       "id": "SomaticTest",
       "parameters": {
         "wdl_inputs": {
-          "dellyWorkflow.inputBams": ["/.mounts/labs/PDE/data/testdata/genomic/bam/PCSI_0090WG_downsampled/PCSI_0090_Pa_P_PE_501_WG_526_170203_D00343_0160_ACACFLANXX_CCGTCC_L008_001.annotated.chr22.bam", "/.mounts/labs/PDE/data/testdata/genomic/bam/PCSI_0090WG_downsampled/PCSI_0090_Ly_R_PE_598_WG_170201_D00355_0145_ACADTLANXX_GTAGAG_L008_001.annotated.chr22.bam"],
-          "dellyWorkflow.sampleID": "DELLY_SOMA",
-          "dellyWorkflow.dupmarkBam.modules": "java/8 picard/2.19.2",
-          "dellyWorkflow.runDelly.modules": "delly/0.8.1 bcftools/1.9 tabix/0.2.6"
+          "delly.inputBams": ["/.mounts/labs/PDE/data/testdata/genomic/bam/PCSI_0090WG_downsampled/PCSI_0090_Pa_P_PE_501_WG_526_170203_D00343_0160_ACACFLANXX_CCGTCC_L008_001.annotated.chr22.bam", "/.mounts/labs/PDE/data/testdata/genomic/bam/PCSI_0090WG_downsampled/PCSI_0090_Ly_R_PE_598_WG_170201_D00355_0145_ACADTLANXX_GTAGAG_L008_001.annotated.chr22.bam"],
+          "delly.sampleID": "DELLY_SOMA",
+          "delly.dupmarkBam.modules": "java/8 picard/2.19.2",
+          "delly.runDelly.modules": "delly/0.8.1 bcftools/1.9 tabix/0.2.6"
         }
       }
     }
