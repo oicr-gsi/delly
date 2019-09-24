@@ -1,6 +1,6 @@
 version 1.0
 
-workflow dellyWorkflow {
+workflow delly {
 input {
     # If we are in somatic mode, normal file follows tumor file in the input array
     Array[File] inputBams
