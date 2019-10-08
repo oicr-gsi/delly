@@ -1,3 +1,5 @@
+## 1.1.2 - 2019-10-08
+- [GP-2144](https://jira.oicr.on.ca/browse/GP-2144) - Parameterize readCounter window size
 ## 1.1.1 - 2019-01-25
 - [GP-1913](https://jira.oicr.on.ca/browse/GP-1913) - Update to pipedev 2.4.7 (SeqWare 2.0.2) to fix provisioning of empty files
 ## 1.1 - 2017-08-16
