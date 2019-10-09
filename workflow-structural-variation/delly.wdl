@@ -3,10 +3,11 @@ version 1.0
 workflow delly {
 input {
     # If we are in somatic mode, normal file follows tumor file in the input array
-    Array[File] inputBams
-    String      sampleID
+    Array[File]+ inputBams
+    String? outputFileNamePrefix = ""
 }
 
+String? sampleID = if outputFileNamePrefix=="" then basename(inputBams[0], ".bam") else outputFileNamePrefix
 # If we see more than one (two) bams switch to somatic mode
 scatter (f in inputBams) {
     call dupmarkBam { input: inputBam = f}
@@ -26,6 +27,12 @@ if (callType == "somatic") {
  call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered"}
 }
 
+meta {
+  author: "Peter Ruzanov"
+  email: "peter.ruzanov@oicr.on.ca"
+  description: "StructuralVariation 2.0"
+}
+
 output {
   File? mergedIndex = mergeAndZipALL.dellyMergedTabixIndex
   File? mergedVcf   = mergeAndZipALL.dellyMergedVcf
@@ -42,12 +49,17 @@ task dupmarkBam {
 input {
 	File   inputBam
         Int?   jobMemory  = 20
-        Int?   javaMemory = 12
         String? modules = "java/8 picard/2.19.2" 
 }
 
+parameter_meta {
+ inputBam: "Input .bam file"
+ jobMemory: "memory allocated for Job"
+ modules: "Names and versions of modules for picard-tools and java"
+}
+
 command <<<
- java -Xmx~{javaMemory}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
+ java -Xmx~{jobMemory-6}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
                               TMP_DIR=picardTmp \
                               ASSUME_SORTED=true \
                               VALIDATION_STRINGENCY=LENIENT \
@@ -74,16 +86,29 @@ output {
 task runDelly {
 input { 
         # We may have 1 or 2 files here, tumor always first
-        Array[File] inBams
-        Array[File] inBai
+        Array[File]+ inBams
+        Array[File]+ inBai
         String dellyMode
-        String sampleName
-        String? excludeList = "/.mounts/labs/PDE/data/reference/hg19/delly/human.hg19.excl.tsv"
-        String? refFasta = "/scratch2/groups/gsi/development/modulator_hg19/resit/modulator/sw/data/hg19-p13/hg19_random.fa"
+        String? sampleName = "SAMPLE"
+        String excludeList
+        String? refFasta = "$HG19_ROOT/hg19_random.fa"
         String? callType = "unpaired"
-        String? modules = "delly/0.8.1 bcftools/1.9 tabix/0.2.6"
+        String? modules = "delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13"
         Int? mappingQuality = 30
         Int? jobMemory = 10
+}
+
+parameter_meta {
+ inBams: "Input .bam files"
+ inBai: "Input .bai files"
+ dellyMode: "Mode specifying type of call"
+ sampleName: "Normally passed from workflow block, prefix for making output files"
+ excludeList: "List of regions to exclude (telomeres and centromeres)"
+ refFasta: "reference assembly file"
+ callType: "unpaired or somatic"
+ mappingQuality: "defines quality threshold for reads to use in calling SVs"
+ jobMemory: "memory allocated for Job"
+ modules: "Names and versions of modules for picard-tools and java"
 }
 
 command <<<
@@ -134,12 +159,23 @@ task mergeAndZip {
 input {
         Array[File] inputVcfs
         Array[File] inputTbis
-        String sampleName
+        String? sampleName = "SAMPLE"
         String? callType = "unpaired"
         String? modules = "vcftools/0.1.16 tabix/0.2.6"
         String? prefix = ""
 	Int? jobMemory = 10
 }
+
+parameter_meta {
+ inputVcfs: "Input .bam files"
+ inputTbis: "Input .bai files"
+ sampleName: "Normally passed from workflow block, prefix for making output files"
+ callType: "unpaired or somatic"
+ modules: "Names and versions of modules for picard-tools and java"
+ prefix: "parameter to use when we need to append _filtered to the file's name"
+ jobMemory: "memory allocated for Job"
+}
+
 
 command <<<
        vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
