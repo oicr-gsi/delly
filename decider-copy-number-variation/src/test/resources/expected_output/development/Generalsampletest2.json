@@ -33,6 +33,7 @@
       "metadata" : "metadata",
       "output_dir" : "seqware-results",
       "queue" : "",
+      "readcounter_window" : "1000",
       "reference_fasta" : "/.mounts/labs/PDE/data/reference/hg19_random/fasta/UCSC/hg19_random.fa",
       "reference_gc" : "/.mounts/labs/PDE/data/HMMcopy/hg19_random.gc.wig",
       "reference_len_file" : "/.mounts/labs/PDE/data/FREEC/hg19_chr.len",

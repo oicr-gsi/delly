@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sourceforge.seqware.common.util.Log;
+import net.sourceforge.seqware.pipeline.workflowV2.model.Command;
 import net.sourceforge.seqware.pipeline.workflowV2.model.Job;
 import net.sourceforge.seqware.pipeline.workflowV2.model.SqwFile;
 
@@ -35,6 +36,9 @@ public class CNVWorkflow extends OicrWorkflow {
     private String  targetFile = "";
     private String[] supportedChromosomes;
     
+    //HMMcopy readCounter
+    private String readCounterWindow;
+
     //HMMcopy
     private String refGCfile;
     private String refMAPfile;
@@ -110,7 +114,7 @@ public class CNVWorkflow extends OicrWorkflow {
             this.templateType  = getProperty("template_type");
             this.supportedChromosomes = getProperty("supported_chromosomes").split(",");
 
-            
+            this.readCounterWindow = getProperty("readcounter_window");
             String fileSkipFlag = this.getOptionalProperty("skip_missing_files", Boolean.toString(DEFAULT_SKIP_IF_MISSING));
             this.varscanPvalueThreshold = this.getOptionalProperty("varscan_pvalue", PVALUE);
             this.varscanJavaXmx = this.getOptionalProperty("varscan_java_xmx", VARSCAN_JAVA_MEM);
@@ -386,8 +390,13 @@ public class CNVWorkflow extends OicrWorkflow {
         for (String inFile : allInputs) {
         // =============== indexing =========================================
         Job indexJob = this.getWorkflow().createBashJob("hmmcopy_index");
-        indexJob.setCommand("mkdir -p " + outputDir + ";"
-                          + getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter -b " + inFile);
+        Command indexCommand = indexJob.getCommand();
+        indexCommand.addArgument("mkdir -p " + outputDir + ";");
+        indexCommand.addArgument(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter");
+        indexCommand.addArgument("--window");
+        indexCommand.addArgument(readCounterWindow);
+        indexCommand.addArgument("--build");
+        indexCommand.addArgument(inFile);
         indexJob.setMaxMemory("4000");
             
         if (parents != null) {
@@ -398,10 +407,13 @@ public class CNVWorkflow extends OicrWorkflow {
             
         //============ converting to wig format =============================
         Job convertJob = this.getWorkflow().createBashJob("hmmcopy_convert");
-        convertJob.setCommand(getWorkflowBaseDir() + "/dependencies/convertHMMcopy.pl "
-                            + " --read-counter " + getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter "
-                            + " --input "  + inFile
-                            + " --output " + this.makeBasename(inFile, ".bam") + "_reads.wig");
+        Command convertCommand = convertJob.getCommand();
+        convertCommand.addArgument(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter");
+        convertCommand.addArgument("--window");
+        convertCommand.addArgument(readCounterWindow);
+        convertCommand.addArgument(inFile);
+        convertCommand.addArgument(">");
+        convertCommand.addArgument(this.makeBasename(inFile, ".bam") + "_reads.wig");
         convertJob.setMaxMemory("4000");
         convertJob.addParent(indexJob);
             
