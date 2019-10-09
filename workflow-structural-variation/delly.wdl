@@ -59,7 +59,7 @@ parameter_meta {
 }
 
 command <<<
- java -Xmx~{jobMemory-6}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
+ java -Xmx~{jobMemory-4}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
                               TMP_DIR=picardTmp \
                               ASSUME_SORTED=true \
                               VALIDATION_STRINGENCY=LENIENT \
