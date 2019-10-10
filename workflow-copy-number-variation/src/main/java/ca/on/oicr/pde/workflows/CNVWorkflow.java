@@ -399,7 +399,7 @@ public class CNVWorkflow extends OicrWorkflow {
         indexCommand.addArgument("--window");
         indexCommand.addArgument(readCounterWindow);
         indexCommand.addArgument("--chromosome");
-        indexCommand.addArgument(readCounterChromosomes);
+        indexCommand.addArgument("\"" + readCounterChromosomes + "\"");
         indexCommand.addArgument("--build");
         indexCommand.addArgument(inFile);
         indexJob.setMaxMemory("4000");
@@ -417,7 +417,7 @@ public class CNVWorkflow extends OicrWorkflow {
         convertCommand.addArgument("--window");
         convertCommand.addArgument(readCounterWindow);
         convertCommand.addArgument("--chromosome");
-        convertCommand.addArgument(readCounterChromosomes);
+        convertCommand.addArgument("\"" + readCounterChromosomes + "\"");
         convertCommand.addArgument(inFile);
         convertCommand.addArgument(">");
         convertCommand.addArgument(this.makeBasename(inFile, ".bam") + "_reads.wig");
