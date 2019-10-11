@@ -1,3 +1,5 @@
+## 1.1.3 - 2019-10-10
+- Update to workflow version 1.1.3
 ## 1.1.2 - 2019-10-08
 - Update to workflow version 1.1.2
 ## 1.1.1 - 2019-01-25
