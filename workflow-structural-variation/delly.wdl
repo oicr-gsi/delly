@@ -49,7 +49,7 @@ task dupmarkBam {
 input {
 	File   inputBam
         Int?   jobMemory  = 20
-        String? modules = "java/8 picard/2.19.2" 
+        String? modules = "picard/2.19.2" 
 }
 
 parameter_meta {
