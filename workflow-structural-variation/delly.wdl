@@ -3,10 +3,12 @@ version 1.0
 workflow delly {
 input {
     # If we are in somatic mode, normal file follows tumor file in the input array
-    Array[File]+ inputBams
+    File inputTumor
+    File? inputNormal
     String? outputFileNamePrefix = ""
 }
 
+Array[File] inputBams= select_all([inputTumor,inputNormal])
 String? sampleID = if outputFileNamePrefix=="" then basename(inputBams[0], ".bam") else outputFileNamePrefix
 # If we see more than one (two) bams switch to somatic mode
 scatter (f in inputBams) {
