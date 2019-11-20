@@ -13,7 +13,7 @@ scatter (f in inputBams) {
     call dupmarkBam { input: inputBam = f}
 }
 
-String callType = if length(inputBams) == 1 then "unpaired" else "somatic"
+String callType = if length(inputBams) == 1 then "unmatched" else "somatic"
 
 scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
