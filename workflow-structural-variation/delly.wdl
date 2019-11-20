@@ -92,7 +92,7 @@ input {
         String? sampleName = "SAMPLE"
         String excludeList
         String? refFasta = "$HG19_ROOT/hg19_random.fa"
-        String? callType = "unpaired"
+        String? callType = "unmatched"
         String? modules = "delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13"
         Int? mappingQuality = 30
         Int? jobMemory = 10
@@ -105,7 +105,7 @@ parameter_meta {
  sampleName: "Normally passed from workflow block, prefix for making output files"
  excludeList: "List of regions to exclude (telomeres and centromeres)"
  refFasta: "reference assembly file"
- callType: "unpaired or somatic"
+ callType: "unmatched or somatic"
  mappingQuality: "defines quality threshold for reads to use in calling SVs"
  jobMemory: "memory allocated for Job"
  modules: "Names and versions of modules for picard-tools and java"
@@ -160,7 +160,7 @@ input {
         Array[File] inputVcfs
         Array[File] inputTbis
         String? sampleName = "SAMPLE"
-        String? callType = "unpaired"
+        String? callType = "unmatched"
         String? modules = "vcftools/0.1.16 tabix/0.2.6"
         String? prefix = ""
 	Int? jobMemory = 10
@@ -170,7 +170,7 @@ parameter_meta {
  inputVcfs: "Input .bam files"
  inputTbis: "Input .bai files"
  sampleName: "Normally passed from workflow block, prefix for making output files"
- callType: "unpaired or somatic"
+ callType: "unmatched or somatic"
  modules: "Names and versions of modules for picard-tools and java"
  prefix: "parameter to use when we need to append _filtered to the file's name"
  jobMemory: "memory allocated for Job"
