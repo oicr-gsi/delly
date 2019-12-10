@@ -5,20 +5,21 @@ input {
     # If we are in somatic mode, normal file follows tumor file in the input array
     File inputTumor
     File? inputNormal
+    Boolean markdup = true
     String? outputFileNamePrefix = ""
 }
 
 Array[File] inputBams= select_all([inputTumor,inputNormal])
 String? sampleID = if outputFileNamePrefix=="" then basename(inputBams[0], ".bam") else outputFileNamePrefix
-# If we see more than one (two) bams switch to somatic mode
-scatter (f in inputBams) {
-    call dupmarkBam { input: inputBam = f}
-}
-
 String callType = if length(inputBams) == 1 then "unmatched" else "somatic"
 
+# If we see more than one (two) bams switch to somatic mode
+scatter (f in inputBams) { 
+  call dupmarkBam { input: inputBam = f, dedup = if markdup then "dedup" else "nomark"}
+} 
+
 scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
- call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
+  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
 }
 
 # Go on with merging and zipping/indexing
@@ -51,7 +52,8 @@ task dupmarkBam {
 input {
 	File   inputBam
         Int?   jobMemory  = 20
-        String? modules = "picard/2.19.2" 
+        String? dedup = "dedup"
+        String? modules = "java/8 picard/2.19.2" 
 }
 
 parameter_meta {
@@ -61,14 +63,22 @@ parameter_meta {
 }
 
 command <<<
- java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
-                              TMP_DIR=picardTmp \
-                              ASSUME_SORTED=true \
+ if [ "~{dedup}" == "dedup" ]; then
+  java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
+                                TMP_DIR=picardTmp \
+                                ASSUME_SORTED=true \
+                                VALIDATION_STRINGENCY=LENIENT \
+                                OUTPUT="~{basename(inputBam, '.bam')}_dupmarked.bam" \
+                                INPUT=~{inputBam} \
+                                CREATE_INDEX=true \
+                                METRICS_FILE="~{basename(inputBam)}.mmm"
+ else
+  ln -s ~{inputBam} ~{basename(inputBam)}
+  java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar BuildBamIndex \
                               VALIDATION_STRINGENCY=LENIENT \
-                              OUTPUT="~{basename(inputBam, '.bam')}_dupmarked.bam" \
-                              INPUT=~{inputBam} \
-                              CREATE_INDEX=true \
-                              METRICS_FILE="~{basename(inputBam)}.mmm"
+                              INPUT=~{basename(inputBam)} \
+                              OUTPUT="~{basename(inputBam, '.bam')}.bai"
+ fi
 >>>
 
 runtime {
@@ -77,8 +87,8 @@ runtime {
 }
 
 output {
-  File outputBam = "~{basename(inputBam, '.bam')}_dupmarked.bam"
-  File outputBai = "~{basename(inputBam, '.bam')}_dupmarked.bai"
+  File outputBam = if "~{dedup}" == "dedup" then "~{basename(inputBam, '.bam')}_dupmarked.bam" else "~{basename(inputBam)}"
+  File outputBai = if "~{dedup}" == "dedup" then "~{basename(inputBam, '.bam')}_dupmarked.bai" else "~{basename(inputBam, '.bam')}.bai"
 }
 }
 
@@ -97,7 +107,8 @@ input {
         String? callType = "unmatched"
         String? modules = "delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13"
         Int? mappingQuality = 30
-        Int? jobMemory = 10
+        Int? jobMemory = 16
+        Int timeout = 20
 }
 
 parameter_meta {
@@ -143,6 +154,7 @@ fi
 runtime {
   memory:  "~{jobMemory} GB"
   modules: "~{modules}"
+  timeout: "~{timeout}"
 }
 
 output {
@@ -180,8 +192,8 @@ parameter_meta {
 
 
 command <<<
-       vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-       tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+  vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+  tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
 >>>
 
 runtime {

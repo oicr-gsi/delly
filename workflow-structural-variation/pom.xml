@@ -10,7 +10,7 @@
         <relativePath/>
     </parent>
 
-    <artifactId>StructuralVariation</artifactId>
+    <artifactId>delly</artifactId>
     <version>2.0</version>
     <packaging>jar</packaging>
 
