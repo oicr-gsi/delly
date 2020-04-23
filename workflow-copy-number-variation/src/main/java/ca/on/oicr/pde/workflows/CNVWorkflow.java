@@ -37,6 +37,7 @@ public class CNVWorkflow extends OicrWorkflow {
     private String[] supportedChromosomes;
     
     //HMMcopy readCounter
+    private String readCounterChromosomes;
     private String readCounterWindow;
 
     //HMMcopy
@@ -115,6 +116,8 @@ public class CNVWorkflow extends OicrWorkflow {
             this.supportedChromosomes = getProperty("supported_chromosomes").split(",");
 
             this.readCounterWindow = getProperty("readcounter_window");
+            this.readCounterChromosomes = getProperty("supported_chromosomes");
+
             String fileSkipFlag = this.getOptionalProperty("skip_missing_files", Boolean.toString(DEFAULT_SKIP_IF_MISSING));
             this.varscanPvalueThreshold = this.getOptionalProperty("varscan_pvalue", PVALUE);
             this.varscanJavaXmx = this.getOptionalProperty("varscan_java_xmx", VARSCAN_JAVA_MEM);
@@ -395,6 +398,8 @@ public class CNVWorkflow extends OicrWorkflow {
         indexCommand.addArgument(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter");
         indexCommand.addArgument("--window");
         indexCommand.addArgument(readCounterWindow);
+        indexCommand.addArgument("--chromosome");
+        indexCommand.addArgument("\"" + readCounterChromosomes + "\"");
         indexCommand.addArgument("--build");
         indexCommand.addArgument(inFile);
         indexJob.setMaxMemory("4000");
@@ -411,6 +416,8 @@ public class CNVWorkflow extends OicrWorkflow {
         convertCommand.addArgument(getWorkflowBaseDir() + "/bin/HMMcopy-" + this.hmmcopyVersion + "/bin/readCounter");
         convertCommand.addArgument("--window");
         convertCommand.addArgument(readCounterWindow);
+        convertCommand.addArgument("--chromosome");
+        convertCommand.addArgument("\"" + readCounterChromosomes + "\"");
         convertCommand.addArgument(inFile);
         convertCommand.addArgument(">");
         convertCommand.addArgument(this.makeBasename(inFile, ".bam") + "_reads.wig");

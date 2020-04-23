@@ -1,3 +1,5 @@
+## 2.0.1 - 2020-04-23
+- Adding timeout setting to the first step (marking duplicate reads with picard)
 ## 2.0   - 2019-08-22
 - [GP-2058](https://jira.oicr.on.ca/browse/GP-2058) - Converting to Cromwell
 ## 1.2.1 - 2019-02-05

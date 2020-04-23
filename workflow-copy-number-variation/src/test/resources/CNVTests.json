@@ -16,7 +16,8 @@
                 "reference_gc":  "/.mounts/labs/PDE/data/HMMcopy/gc_hg18_chr22.wig",
                 "reference_map": "/.mounts/labs/PDE/data/HMMcopy/map_hg18_chr22.wig",
                 "reference_len_file": "/.mounts/labs/PDE/data/FREEC/hg18_chr.len",
-                "template_type": "WG"
+                "template_type": "WG",
+                "supported_chromosomes": "chr22"
             }
         },
         {
