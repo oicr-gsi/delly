@@ -2,23 +2,24 @@ version 1.0
 
 workflow delly {
 input {
-    # If we are in somatic mode, normal file follows tumor file in the input array
-    File inputTumor
-    File? inputNormal
-    String? outputFileNamePrefix = ""
+  # If we are in somatic mode, normal file follows tumor file in the input array
+  File inputTumor
+  File? inputNormal
+  Boolean markdup = true
+  String outputFileNamePrefix = ""
 }
 
 Array[File] inputBams= select_all([inputTumor,inputNormal])
-String? sampleID = if outputFileNamePrefix=="" then basename(inputBams[0], ".bam") else outputFileNamePrefix
-# If we see more than one (two) bams switch to somatic mode
-scatter (f in inputBams) {
-    call dupmarkBam { input: inputBam = f}
-}
-
+String sampleID = if outputFileNamePrefix=="" then basename(inputBams[0], ".bam") else outputFileNamePrefix
 String callType = if length(inputBams) == 1 then "unmatched" else "somatic"
 
+# If we see more than one (two) bams switch to somatic mode
+scatter (f in inputBams) { 
+  call dupmarkBam { input: inputBam = f, dedup = if markdup then "dedup" else "nomark"}
+} 
+
 scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
- call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
+  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
 }
 
 # Go on with merging and zipping/indexing
@@ -29,10 +30,49 @@ if (callType == "somatic") {
  call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered"}
 }
 
+parameter_meta {
+  inputTumor: "Tumor input .bam file."
+  inputNormal: "Normal input .bam file."
+  markdup: "A switch between marking duplicate reads and indexing with picard."
+  outputFileNamePrefix: "Output prefix to be used with result files."
+}
+
 meta {
   author: "Peter Ruzanov"
   email: "peter.ruzanov@oicr.on.ca"
-  description: "StructuralVariation 2.0"
+  description: "Delly workflow produces a set of vcf files with different types of structural variant calls: Translocation, Deletion, Inversion and Duplications It uses .bam files as input. The below graph describes the process:\n![delly flowchart](docs/delly-wf.png)\n### Preprocessing\nThe expected inputs for the DELLY tool are library-level BAMs with distinct insert size and median. In most cases, this means that the BAM files will not need to be merged prior to processing. However, the DELLY website recommends the removal of non-unique, multi-mapped reads and marking duplicate reads. We may also have to realign around indels and perform base recalibration.\n### Mark duplicates\nPicard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates.\n```\n java -jar MarkDuplicates.jar\n INPUT=sample.bam\n OUTPUT=sample.dedup.bam    \n METRICS_FILE=sample.metrics\n```\n### Detect deletions\n```\ndelly\n-t DEL\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Detect tandem duplications\n```\ndelly\n-t DUP\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Detect inversions\n```\ndelly\n-t INV\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\nDetect translocations\n```\n### Detecting translocations\n```\ndelly\n-t TRA\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Post-processing\nEach DELLY tool produces several files, which will all need to be merged together after the chromosomes are finished processing. The output format is described on the DELLY webpage. The merging script may require a small parser to combine the output from multiple runs in together.\nMerge DELLY results with vcftools"
+  dependencies: [
+      {
+        name: "picard/2.19.2",
+        url: "https://master.dl.sourceforge.net/project/picard/picard-tools/1.89/picard-tools-1.89.zip"
+      },
+      {
+        name: "java/8",
+        url: "https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_linux_8u222b10.tar.gz"
+      },
+      {
+        name: "delly/0.8.1",
+        url: "https://github.com/dellytools/delly/releases/download/v0.8.1/delly_v0.8.1_linux_x86_64bit"
+      },
+      {
+        name: "bcftools/1.9",
+        url: "https://github.com/samtools/bcftools/releases/download/1.9/bcftools-1.9.tar.bz2"
+      },
+      {
+        name: "tabix/0.2.6",
+        url: "https://sourceforge.net/projects/samtools/files/tabix/tabix-0.2.6.tar.bz2"
+      },
+      {
+        name: "vcftools/0.1.16",
+        url: "https://github.com/vcftools/vcftools/archive/v0.1.16.tar.gz"
+      }
+    ]
+    output_meta: {
+      mergedVcf: "vcf file containing all structural variant calls",
+      mergedIndex: "tabix index of the vcf file containing all structural variant calls",
+      mergedFilteredVcf: "filtered vcf file containing all structural variant calls",
+      mergedFilteredIndex: "tabix index of the filtered vcf file containing all structural variant calls"
+    }
 }
 
 output {
@@ -49,36 +89,49 @@ output {
 # ==========================================
 task dupmarkBam {
 input {
-	File   inputBam
-        Int?   jobMemory  = 20
-        String? modules = "picard/2.19.2" 
+  File inputBam
+  Int jobMemory = 20
+  Int timeout   = 20
+  String dedup = "dedup"
+  String modules = "java/8 picard/2.19.2"
 }
 
 parameter_meta {
  inputBam: "Input .bam file"
  jobMemory: "memory allocated for Job"
+ dedup: "A switch between marking duplicate reads and indexing with picard"
  modules: "Names and versions of modules for picard-tools and java"
+ timeout: "Timeout in hours"
 }
 
 command <<<
- java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
-                              TMP_DIR=picardTmp \
-                              ASSUME_SORTED=true \
+ if [ "~{dedup}" == "dedup" ]; then
+  java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
+                                TMP_DIR=picardTmp \
+                                ASSUME_SORTED=true \
+                                VALIDATION_STRINGENCY=LENIENT \
+                                OUTPUT="~{basename(inputBam, '.bam')}_dupmarked.bam" \
+                                INPUT=~{inputBam} \
+                                CREATE_INDEX=true \
+                                METRICS_FILE="~{basename(inputBam)}.mmm"
+ else
+  ln -s ~{inputBam} ~{basename(inputBam)}
+  java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar BuildBamIndex \
                               VALIDATION_STRINGENCY=LENIENT \
-                              OUTPUT="~{basename(inputBam, '.bam')}_dupmarked.bam" \
-                              INPUT=~{inputBam} \
-                              CREATE_INDEX=true \
-                              METRICS_FILE="~{basename(inputBam)}.mmm"
+                              INPUT=~{basename(inputBam)} \
+                              OUTPUT="~{basename(inputBam, '.bam')}.bai"
+ fi
 >>>
 
 runtime {
   memory:  "~{jobMemory} GB"
   modules: "~{modules}"
-}
+  timeout: "~{timeout}"
+} 
 
 output {
-  File outputBam = "~{basename(inputBam, '.bam')}_dupmarked.bam"
-  File outputBai = "~{basename(inputBam, '.bam')}_dupmarked.bai"
+  File outputBam = if "~{dedup}" == "dedup" then "~{basename(inputBam, '.bam')}_dupmarked.bam" else "~{basename(inputBam)}"
+  File outputBai = if "~{dedup}" == "dedup" then "~{basename(inputBam, '.bam')}_dupmarked.bai" else "~{basename(inputBam, '.bam')}.bai"
 }
 }
 
@@ -87,17 +140,17 @@ output {
 # ================================
 task runDelly {
 input { 
-        # We may have 1 or 2 files here, tumor always first
-        Array[File]+ inBams
-        Array[File]+ inBai
-        String dellyMode
-        String? sampleName = "SAMPLE"
-        String excludeList
-        String? refFasta = "$HG19_ROOT/hg19_random.fa"
-        String? callType = "unmatched"
-        String? modules = "delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13"
-        Int? mappingQuality = 30
-        Int? jobMemory = 10
+  Array[File]+ inBams
+  Array[File]+ inBai
+  String dellyMode
+  String sampleName = "SAMPLE"
+  String excludeList
+  String refFasta = "$HG19_ROOT/hg19_random.fa"
+  String callType = "unmatched"
+  String modules = "delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0"
+  Int mappingQuality = 30
+  Int jobMemory = 16
+  Int timeout = 20
 }
 
 parameter_meta {
@@ -110,6 +163,7 @@ parameter_meta {
  callType: "unmatched or somatic"
  mappingQuality: "defines quality threshold for reads to use in calling SVs"
  jobMemory: "memory allocated for Job"
+ timeout: "Timeout in hours"
  modules: "Names and versions of modules for picard-tools and java"
 }
 
@@ -143,6 +197,7 @@ fi
 runtime {
   memory:  "~{jobMemory} GB"
   modules: "~{modules}"
+  timeout: "~{timeout}"
 }
 
 output {
@@ -159,13 +214,13 @@ output {
 # =====================================================
 task mergeAndZip {
 input {
-        Array[File] inputVcfs
-        Array[File] inputTbis
-        String? sampleName = "SAMPLE"
-        String? callType = "unmatched"
-        String? modules = "vcftools/0.1.16 tabix/0.2.6"
-        String? prefix = ""
-	Int? jobMemory = 10
+  Array[File] inputVcfs
+  Array[File] inputTbis
+  String sampleName = "SAMPLE"
+  String callType = "unmatched"
+  String modules = "vcftools/0.1.16 tabix/0.2.6"
+  String prefix = ""
+  Int jobMemory = 10
 }
 
 parameter_meta {
@@ -180,8 +235,8 @@ parameter_meta {
 
 
 command <<<
-       vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-       tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+  vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+  tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
 >>>
 
 runtime {
