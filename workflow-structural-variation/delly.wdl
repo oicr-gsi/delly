@@ -105,6 +105,7 @@ parameter_meta {
 }
 
 command <<<
+ set -eu -o pipefail
  if [ "~{dedup}" == "dedup" ]; then
   java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
                                 TMP_DIR=picardTmp \
@@ -168,6 +169,7 @@ parameter_meta {
 }
 
 command <<<
+set -eu -o pipefail
 delly call -t ~{dellyMode} \
       -x ~{excludeList} \
       -o "~{sampleName}.~{dellyMode}.~{callType}.bcf" \
@@ -235,6 +237,7 @@ parameter_meta {
 
 
 command <<<
+  set -eu -o pipefail
   vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
   tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
 >>>

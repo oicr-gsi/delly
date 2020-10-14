@@ -1,3 +1,5 @@
+## 2.0.2 - 2020-10-14
+- Added "set -euo pipefail" to the runDelly task
 ## 2.0.1 - 2020-04-23
 - Adding timeout setting to the first step (marking duplicate reads with picard)
 ## 2.0   - 2019-08-22
