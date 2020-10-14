@@ -168,6 +168,7 @@ parameter_meta {
 }
 
 command <<<
+set -eu -o pipefail
 delly call -t ~{dellyMode} \
       -x ~{excludeList} \
       -o "~{sampleName}.~{dellyMode}.~{callType}.bcf" \
