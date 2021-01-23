@@ -117,8 +117,10 @@ Output | Type | Description
 ---|---|---
 `mergedIndex`|File?|tabix index of the vcf file containing all structural variant calls
 `mergedVcf`|File?|vcf file containing all structural variant calls
-`mergedFilteredIndex`|File?|tabix index of the filtered vcf file containing all structural variant calls
-`mergedFilteredVcf`|File?|filtered vcf file containing all structural variant calls
+`mergedFilteredIndex`|File?|tabix index of the filtered vcf file containing structural variant calls
+`mergedFilteredVcf`|File?|filtered vcf file containing structural variant calls
+`mergedFilteredPassIndex`|File?|tabix index of the filtered vcf file containing PASS structural variant calls
+`mergedFilteredPassVcf`|File?|filtered vcf file containing PASS structural variant calls
 
 
 ## Niassa + Cromwell

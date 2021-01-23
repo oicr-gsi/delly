@@ -70,8 +70,10 @@ meta {
     output_meta: {
       mergedVcf: "vcf file containing all structural variant calls",
       mergedIndex: "tabix index of the vcf file containing all structural variant calls",
-      mergedFilteredVcf: "filtered vcf file containing all structural variant calls",
-      mergedFilteredIndex: "tabix index of the filtered vcf file containing all structural variant calls"
+      mergedFilteredVcf: "filtered vcf file containing structural variant calls",
+      mergedFilteredIndex: "tabix index of the filtered vcf file containing structural variant calls",
+      mergedFilteredPassVcf: "filtered vcf file containing PASS structural variant calls",
+      mergedFilteredPassIndex: "tabix index of the filtered vcf file containing PASS structural variant calls"
     }
 }
 
@@ -80,6 +82,8 @@ output {
   File? mergedVcf   = mergeAndZipALL.dellyMergedVcf
   File? mergedFilteredIndex = mergeAndZipFiltered.dellyMergedTabixIndex
   File? mergedFilteredVcf   = mergeAndZipFiltered.dellyMergedVcf
+  File? mergedFilteredPassIndex = mergeAndZipFiltered.dellyMergedPassTabixIndex
+  File? mergedFilteredPassVcf = mergeAndZipFiltered.dellyMergedPassVcf
 }
 
 }
@@ -220,7 +224,7 @@ input {
   Array[File] inputTbis
   String sampleName = "SAMPLE"
   String callType = "unmatched"
-  String modules = "vcftools/0.1.16 tabix/0.2.6"
+  String modules = "bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"
   String prefix = ""
   Int jobMemory = 10
 }
@@ -240,6 +244,10 @@ command <<<
   set -eu -o pipefail
   vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
   tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+  if [ -e ~{sampleName}.~{callType}_filtered.delly.merged.vcf.gz ]; then
+    bcftools view -i "%FILTER='PASS' & INFO/PE>10" ~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz -Oz -o ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
+    tabix -p vcf ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
+  fi
 >>>
 
 runtime {
@@ -250,6 +258,8 @@ runtime {
 output {
   File? dellyMergedVcf        = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
   File? dellyMergedTabixIndex = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz.tbi"
+  File? dellyMergedPassVcf    = "~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz"
+  File? dellyMergedPassTabixIndex =  "~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz.tbi"
 }
 }
 
