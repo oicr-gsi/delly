@@ -226,6 +226,7 @@ input {
   String callType = "unmatched"
   String modules = "bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"
   String prefix = ""
+  String variantSupport = 10
   Int jobMemory = 10
 }
 
@@ -236,6 +237,7 @@ parameter_meta {
  callType: "unmatched or somatic"
  modules: "Names and versions of modules for picard-tools and java"
  prefix: "parameter to use when we need to append _filtered to the file's name"
+ variantSupport: "Paired-end support for structural variants, in pairs. Default is 10"
  jobMemory: "memory allocated for Job"
 }
 
@@ -245,7 +247,7 @@ command <<<
   vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
   tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
   if [ -e ~{sampleName}.~{callType}_filtered.delly.merged.vcf.gz ]; then
-    bcftools view -i "%FILTER='PASS' & INFO/PE>10" ~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz -Oz -o ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
+    bcftools view -i "%FILTER='PASS' & INFO/PE>~{variantSupport}" ~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz -Oz -o ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
     tabix -p vcf ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
   fi
 >>>
