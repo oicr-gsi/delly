@@ -104,10 +104,12 @@ Parameter|Value|Default|Description
 `runDelly.mappingQuality`|Int|30|defines quality threshold for reads to use in calling SVs
 `runDelly.jobMemory`|Int|16|memory allocated for Job
 `runDelly.timeout`|Int|20|Timeout in hours
-`mergeAndZipALL.modules`|String|"vcftools/0.1.16 tabix/0.2.6"|Names and versions of modules for picard-tools and java
+`mergeAndZipALL.modules`|String|"bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"|Names and versions of modules for picard-tools and java
 `mergeAndZipALL.prefix`|String|""|parameter to use when we need to append _filtered to the file's name
+`mergeAndZipALL.variantSupport`|Int|10|Paired-end support for structural variants, in pairs. Default is 10
 `mergeAndZipALL.jobMemory`|Int|10|memory allocated for Job
-`mergeAndZipFiltered.modules`|String|"vcftools/0.1.16 tabix/0.2.6"|Names and versions of modules for picard-tools and java
+`mergeAndZipFiltered.modules`|String|"bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"|Names and versions of modules for picard-tools and java
+`mergeAndZipFiltered.variantSupport`|Int|10|Paired-end support for structural variants, in pairs. Default is 10
 `mergeAndZipFiltered.jobMemory`|Int|10|memory allocated for Job
 
 

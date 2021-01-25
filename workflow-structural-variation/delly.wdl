@@ -226,7 +226,7 @@ input {
   String callType = "unmatched"
   String modules = "bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"
   String prefix = ""
-  String variantSupport = 10
+  Int variantSupport = 10
   Int jobMemory = 10
 }
 
