@@ -1,3 +1,5 @@
+## 2.1   - 2021-01-22
+- Added filtering of PASS variants, additional output
 ## 2.0.2 - 2020-10-14
 - Added "set -euo pipefail" to the runDelly task
 ## 2.0.1 - 2020-04-23

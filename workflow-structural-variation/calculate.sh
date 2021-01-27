@@ -1,3 +1,3 @@
 #!/bin/bash
 cd $1
-ls | sed 's/.*\.//' | sort | uniq -c
+for z in *gz;do echo $z;zcat $z | grep -v ^# | wc -l;done | sed 's!.*/!!'
