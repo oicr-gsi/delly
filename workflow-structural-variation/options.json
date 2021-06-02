@@ -1,0 +1,6 @@
+{
+  "default_runtime_attributes": {
+    "docker": "g3chen/delly@sha256:9e9f221f944c6f4b11a8682c070b8ff4d99a329f5e498e50896825461558ec70",
+    "docker_volume": "/home/ubuntu/Downloads/sample_data:/data"
+  }
+}
