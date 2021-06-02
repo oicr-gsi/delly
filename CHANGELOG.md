@@ -1,3 +1,5 @@
+## 2.2   - 2021-06-01
+- Migrating to vidarr
 ## 2.1   - 2021-01-22
 - Added filtering of PASS variants, additional output
 ## 2.0.2 - 2020-10-14

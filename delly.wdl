@@ -78,8 +78,8 @@ meta {
 }
 
 output {
-  File? mergedIndex = mergeAndZipALL.dellyMergedTabixIndex
-  File? mergedVcf   = mergeAndZipALL.dellyMergedVcf
+  File mergedIndex = mergeAndZipALL.dellyMergedTabixIndex
+  File mergedVcf   = mergeAndZipALL.dellyMergedVcf
   File? mergedFilteredIndex = mergeAndZipFiltered.dellyMergedTabixIndex
   File? mergedFilteredVcf   = mergeAndZipFiltered.dellyMergedVcf
   File? mergedFilteredPassIndex = mergeAndZipFiltered.dellyMergedPassTabixIndex
@@ -258,8 +258,8 @@ runtime {
 }
 
 output {
-  File? dellyMergedVcf        = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-  File? dellyMergedTabixIndex = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz.tbi"
+  File dellyMergedVcf        = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
+  File dellyMergedTabixIndex = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz.tbi"
   File? dellyMergedPassVcf    = "~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz"
   File? dellyMergedPassTabixIndex =  "~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz.tbi"
 }
