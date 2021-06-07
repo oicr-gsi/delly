@@ -1,6 +1,7 @@
 {
     "names": [
-        "delly"
+        "delly",
+        "delly_by_tumor_group"
     ],
     "wdl": "delly.wdl"
 }
