@@ -1,0 +1,59 @@
+## Commands
+This section lists command(s) run by delly workflow
+
+* Running delly
+
+SV calling workflow
+
+Mark duplicates
+
+```
+  This is a job which can be optional:  
+
+  java -Xmx[JOB_MEMORY-8]G -jar picard.jar MarkDuplicates 
+                                TMP_DIR=picardTmp
+                                ASSUME_SORTED=true 
+                                VALIDATION_STRINGENCY=LENIENT 
+                                OUTPUT=INPUT_BAM_BASENAME_dupmarked.bam
+                                INPUT=INPUT_BAM
+                                CREATE_INDEX=true 
+                                METRICS_FILE=INPUT_BAM_BASENAME.mmm
+```
+
+Call variants
+
+```
+delly call -t DELLY_MODE
+      -x EXCLUDE_LIST
+      -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf
+      -q MAPPING_QUALITY
+      -g REF_FASTA
+         INPUT_BAM
+
+   Optional post-filtering if we need somatic variants:
+
+   echo "Somatic mode requested, will run delly filtering for somatic SVs"
+   bcftools view SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf | grep ^# | tail -n 1 | 
+            sed 's/.*FORMAT\t//' | awk -F "\t" '{print $1"\ttumor";print $2"\tcontrol"}' > samples.tsv
+   delly filter -f somatic -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf -s samples.tsv 
+   bcftools view SAMPLE_NAME.DELLY_MODE.CALL_TYPE_filtered.bcf | 
+   bgzip -c > SAMPLE_NAME.DELLY_MODE.CALL_TYPE_filtered.vcf.gz
+
+
+bcftools view SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf | bgzip -c > SAMPLE_NAME.DELLY_MODE.CALL_TYPE.vcf.gz
+
+tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE.vcf.gz
+tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_filtered.vcf.gz
+
+```
+
+Post-process
+
+```
+  vcf-concat INPUT_VCFS | vcf-sort | bgzip -c > SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz
+  tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz
+
+  bcftools view -i "%FILTER='PASS' & INFO/PE>~{variantSupport}" SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz -Oz -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.pass.vcf.gz
+  tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.pass.vcf.gz
+
+```

@@ -117,39 +117,74 @@ Parameter|Value|Default|Description
 
 Output | Type | Description
 ---|---|---
-`mergedIndex`|File?|tabix index of the vcf file containing all structural variant calls
-`mergedVcf`|File?|vcf file containing all structural variant calls
+`mergedIndex`|File|tabix index of the vcf file containing all structural variant calls
+`mergedVcf`|File|vcf file containing all structural variant calls
 `mergedFilteredIndex`|File?|tabix index of the filtered vcf file containing structural variant calls
 `mergedFilteredVcf`|File?|filtered vcf file containing structural variant calls
 `mergedFilteredPassIndex`|File?|tabix index of the filtered vcf file containing PASS structural variant calls
 `mergedFilteredPassVcf`|File?|filtered vcf file containing PASS structural variant calls
 
 
-## Niassa + Cromwell
-
-This WDL workflow is wrapped in a Niassa workflow (https://github.com/oicr-gsi/pipedev/tree/master/pipedev-niassa-cromwell-workflow) so that it can used with the Niassa metadata tracking system (https://github.com/oicr-gsi/niassa).
-
-* Building
-```
-mvn clean install
-```
-
-* Testing
-```
-mvn clean verify \
--Djava_opts="-Xmx1g -XX:+UseG1GC -XX:+UseStringDeduplication" \
--DrunTestThreads=2 \
--DskipITs=false \
--DskipRunITs=false \
--DworkingDirectory=/path/to/tmp/ \
--DschedulingHost=niassa_oozie_host \
--DwebserviceUrl=http://niassa-url:8080 \
--DwebserviceUser=niassa_user \
--DwebservicePassword=niassa_user_password \
--Dcromwell-host=http://cromwell-url:8000
-```
-
-## Support
+## Commands
+ This section lists command(s) run by delly workflow
+ 
+ * Running delly
+ 
+ SV calling workflow
+ 
+ Mark duplicates
+ 
+ ```
+   This is a job which can be optional:  
+ 
+   java -Xmx[JOB_MEMORY-8]G -jar picard.jar MarkDuplicates 
+                                 TMP_DIR=picardTmp
+                                 ASSUME_SORTED=true 
+                                 VALIDATION_STRINGENCY=LENIENT 
+                                 OUTPUT=INPUT_BAM_BASENAME_dupmarked.bam
+                                 INPUT=INPUT_BAM
+                                 CREATE_INDEX=true 
+                                 METRICS_FILE=INPUT_BAM_BASENAME.mmm
+ ```
+ 
+ Call variants
+ 
+ ```
+ delly call -t DELLY_MODE
+       -x EXCLUDE_LIST
+       -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf
+       -q MAPPING_QUALITY
+       -g REF_FASTA
+          INPUT_BAM
+ 
+    Optional post-filtering if we need somatic variants:
+ 
+    echo "Somatic mode requested, will run delly filtering for somatic SVs"
+    bcftools view SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf | grep ^# | tail -n 1 | 
+             sed 's/.*FORMAT\t//' | awk -F "\t" '{print $1"\ttumor";print $2"\tcontrol"}' > samples.tsv
+    delly filter -f somatic -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf -s samples.tsv 
+    bcftools view SAMPLE_NAME.DELLY_MODE.CALL_TYPE_filtered.bcf | 
+    bgzip -c > SAMPLE_NAME.DELLY_MODE.CALL_TYPE_filtered.vcf.gz
+ 
+ 
+ bcftools view SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf | bgzip -c > SAMPLE_NAME.DELLY_MODE.CALL_TYPE.vcf.gz
+ 
+ tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE.vcf.gz
+ tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_filtered.vcf.gz
+ 
+ ```
+ 
+ Post-process
+ 
+ ```
+   vcf-concat INPUT_VCFS | vcf-sort | bgzip -c > SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz
+   tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz
+ 
+   bcftools view -i "%FILTER='PASS' & INFO/PE>~{variantSupport}" SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz -Oz -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.pass.vcf.gz
+   tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.pass.vcf.gz
+ 
+ ```
+ ## Support
 
 For support, please file an issue on the [Github project](https://github.com/oicr-gsi) or send an email to gsi@oicr.on.ca .
 
