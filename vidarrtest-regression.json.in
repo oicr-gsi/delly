@@ -34,7 +34,10 @@
             "delly.runDelly.timeout": null
         },
         "description": "Delly workflow test",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "UnmatchedTest",
         "metadata": {
             "delly.mergedFilteredIndex": {
@@ -141,7 +144,10 @@
             "delly.runDelly.timeout": null
         },
         "description": "Delly workflow test",
-        "engineArguments": {},
+        "engineArguments": {
+           "write_to_cache": false,
+           "read_from_cache": false
+        },
         "id": "SomaticTest",
         "metadata": {
             "delly.mergedFilteredIndex": {
