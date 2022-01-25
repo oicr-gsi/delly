@@ -63,7 +63,7 @@ Merge DELLY results with vcftools
 
 * [picard 2.19.2](https://master.dl.sourceforge.net/project/picard/picard-tools/1.89/picard-tools-1.89.zip)
 * [java 8](https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_linux_8u222b10.tar.gz)
-* [delly 0.8.1](https://github.com/dellytools/delly/releases/download/v0.8.1/delly_v0.8.1_linux_x86_64bit)
+* [delly 0.9.1](https://github.com/dellytools/delly/releases/download/v0.9.1/delly_v0.9.1_linux_x86_64bit)
 * [bcftools 1.9](https://github.com/samtools/bcftools/releases/download/1.9/bcftools-1.9.tar.bz2)
 * [tabix 0.2.6](https://sourceforge.net/projects/samtools/files/tabix/tabix-0.2.6.tar.bz2)
 * [vcftools 0.1.16](https://github.com/vcftools/vcftools/archive/v0.1.16.tar.gz)
@@ -100,7 +100,7 @@ Parameter|Value|Default|Description
 `dupmarkBam.timeout`|Int|20|Timeout in hours
 `dupmarkBam.modules`|String|"java/8 picard/2.19.2"|Names and versions of modules for picard-tools and java
 `runDelly.refFasta`|String|"$HG19_ROOT/hg19_random.fa"|reference assembly file
-`runDelly.modules`|String|"delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0"|Names and versions of modules for picard-tools and java
+`runDelly.modules`|String|"delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0"|Names and versions of modules for picard-tools and java
 `runDelly.mappingQuality`|Int|30|defines quality threshold for reads to use in calling SVs
 `runDelly.jobMemory`|Int|16|memory allocated for Job
 `runDelly.timeout`|Int|20|Timeout in hours
