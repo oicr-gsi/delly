@@ -51,8 +51,8 @@ meta {
         url: "https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x64_linux_8u222b10.tar.gz"
       },
       {
-        name: "delly/0.8.1",
-        url: "https://github.com/dellytools/delly/releases/download/v0.8.1/delly_v0.8.1_linux_x86_64bit"
+        name: "delly/0.9.1",
+        url: "https://github.com/dellytools/delly/releases/download/v0.9.1/delly_v0.9.1_linux_x86_64bit"
       },
       {
         name: "bcftools/1.9",
@@ -152,7 +152,7 @@ input {
   String excludeList
   String refFasta = "$HG19_ROOT/hg19_random.fa"
   String callType = "unmatched"
-  String modules = "delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0"
+  String modules = "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0"
   Int mappingQuality = 30
   Int jobMemory = 16
   Int timeout = 20
