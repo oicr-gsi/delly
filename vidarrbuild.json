@@ -1,7 +1,7 @@
 {
     "names": [
         "delly",
-        "delly_by_tumor_group",
+        "delly_matched_by_tumor_group",
         "delly_matched",
         "delly_tumor_only"
     ],
