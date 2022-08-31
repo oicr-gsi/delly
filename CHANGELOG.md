@@ -1,6 +1,9 @@
+## Unreleased
+
+## 2.3.1 - 2022-08-31
+- Changed workflow name to `delly_matched_by_tumor_group` for consistency
 ## 2.3.0 - 2022-01-25
 - Delly upgrade to 0.9.1
-## Unreleased - 2021-11-10
 - [GP-2874](https://jira.oicr.on.ca/browse/GP-2874) - Making regression test script more robust
 ## 2.2.0  - 2021-06-01
 - Migrating to vidarr
