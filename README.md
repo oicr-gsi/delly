@@ -82,7 +82,8 @@ java -jar cromwell.jar run delly.wdl --inputs inputs.json
 Parameter|Value|Description
 ---|---|---
 `inputTumor`|File|Tumor input .bam file.
-`runDelly.excludeList`|String|List of regions to exclude (telomeres and centromeres)
+`outputFileNamePrefix`|String|Output prefix to be used with result files.
+`reference`|String|the reference genome for input sample
 
 
 #### Optional workflow parameters:
@@ -90,7 +91,6 @@ Parameter|Value|Default|Description
 ---|---|---|---
 `inputNormal`|File?|None|Normal input .bam file.
 `markdup`|Boolean|true|A switch between marking duplicate reads and indexing with picard.
-`outputFileNamePrefix`|String|""|Output prefix to be used with result files.
 
 
 #### Optional task parameters:
@@ -99,17 +99,14 @@ Parameter|Value|Default|Description
 `dupmarkBam.jobMemory`|Int|20|memory allocated for Job
 `dupmarkBam.timeout`|Int|20|Timeout in hours
 `dupmarkBam.modules`|String|"java/8 picard/2.19.2"|Names and versions of modules for picard-tools and java
-`runDelly.refFasta`|String|"$HG19_ROOT/hg19_random.fa"|reference assembly file
-`runDelly.modules`|String|"delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0"|Names and versions of modules for picard-tools and java
 `runDelly.mappingQuality`|Int|30|defines quality threshold for reads to use in calling SVs
 `runDelly.jobMemory`|Int|16|memory allocated for Job
 `runDelly.timeout`|Int|20|Timeout in hours
 `mergeAndZipALL.modules`|String|"bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"|Names and versions of modules for picard-tools and java
-`mergeAndZipALL.prefix`|String|""|parameter to use when we need to append _filtered to the file's name
-`mergeAndZipALL.variantSupport`|Int|10|Paired-end support for structural variants, in pairs. Default is 10
+`mergeAndZipALL.variantSupport`|Int|0|Paired-end support for structural variants, in pairs. Default is 10
 `mergeAndZipALL.jobMemory`|Int|10|memory allocated for Job
 `mergeAndZipFiltered.modules`|String|"bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"|Names and versions of modules for picard-tools and java
-`mergeAndZipFiltered.variantSupport`|Int|10|Paired-end support for structural variants, in pairs. Default is 10
+`mergeAndZipFiltered.variantSupport`|Int|0|Paired-end support for structural variants, in pairs. Default is 10
 `mergeAndZipFiltered.jobMemory`|Int|10|memory allocated for Job
 
 
@@ -123,7 +120,6 @@ Output | Type | Description
 `mergedFilteredVcf`|File?|filtered vcf file containing structural variant calls
 `mergedFilteredPassIndex`|File?|tabix index of the filtered vcf file containing PASS structural variant calls
 `mergedFilteredPassVcf`|File?|filtered vcf file containing PASS structural variant calls
-
 
 ## Commands
  This section lists command(s) run by delly workflow

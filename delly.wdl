@@ -56,6 +56,7 @@ parameter_meta {
   inputNormal: "Normal input .bam file."
   markdup: "A switch between marking duplicate reads and indexing with picard."
   outputFileNamePrefix: "Output prefix to be used with result files."
+  reference: "the reference genome for input sample"
 }
 
 meta {
@@ -247,7 +248,7 @@ input {
   String callType = "unmatched"
   String modules = "bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"
   String prefix = ""
-  Int variantSupport = 10
+  Int variantSupport = 0
   Int jobMemory = 10
 }
 
