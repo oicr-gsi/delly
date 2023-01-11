@@ -26,12 +26,13 @@
             "delly.mergeAndZipFiltered.modules": null,
             "delly.mergeAndZipFiltered.variantSupport": null,
             "delly.outputFileNamePrefix": "DELLY_UNMTCHD",
-            "delly.runDelly.excludeList": "$HG19_DELLY_ROOT/human.hg19.excl.tsv",
+            "delly.runDelly.excludeList": null,
             "delly.runDelly.jobMemory": null,
             "delly.runDelly.mappingQuality": null,
-            "delly.runDelly.modules": "delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0",
+            "delly.runDelly.modules": null,
             "delly.runDelly.refFasta": null,
-            "delly.runDelly.timeout": null
+            "delly.runDelly.timeout": null,
+            "delly.reference": "hg19"
         },
         "description": "Delly workflow test",
         "engineArguments": {
@@ -103,6 +104,7 @@
             "delly.dupmarkBam.jobMemory": null,
             "delly.dupmarkBam.modules": "picard/2.19.2",
             "delly.dupmarkBam.timeout": null,
+            "delly.reference": "hg19",
             "delly.inputNormal": {
                 "contents": {
                     "configuration": "/.mounts/labs/gsi/testdata/delly/input_data/PCSI_1019_Ly_R_PE_635_WG.chr19.annotated.bam",
@@ -136,10 +138,10 @@
             "delly.mergeAndZipFiltered.modules": null,
             "delly.mergeAndZipFiltered.variantSupport": null,
             "delly.outputFileNamePrefix": "DELLY_SOMATIC",
-            "delly.runDelly.excludeList": "$HG19_DELLY_ROOT/human.hg19.excl.tsv",
+            "delly.runDelly.excludeList": null,
             "delly.runDelly.jobMemory": null,
             "delly.runDelly.mappingQuality": null,
-            "delly.runDelly.modules": "delly/0.8.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0",
+            "delly.runDelly.modules": null,
             "delly.runDelly.refFasta": null,
             "delly.runDelly.timeout": null
         },
@@ -209,3 +211,4 @@
         ]
     }
 ]
+

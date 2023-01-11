@@ -1,16 +1,37 @@
 version 1.0
 
+struct GenomeResources {
+    String rundelly_module
+    String rundelly_fasta
+    String rundelly_exclude_list
+}
+
 workflow delly {
+
 input {
   # If we are in somatic mode, normal file follows tumor file in the input array
   File inputTumor
   File? inputNormal
   Boolean markdup = true
-  String outputFileNamePrefix = ""
+  String outputFileNamePrefix
+  String reference
+}
+
+Map[String,GenomeResources] resources = {
+  "hg19": {
+    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0",
+    "rundelly_fasta": "$HG19_ROOT/hg19_random.fa",
+    "rundelly_exclude_list": "$HG19_DELLY_ROOT/human.hg19.excl.tsv"
+  },
+   "hg38": {
+    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg38/p12 hg38-delly/1.0",
+    "rundelly_fasta": "$HG38_ROOT/hg38_random.fa",
+    "rundelly_exclude_list": "$HG38_DELLY_ROOT/human.hg38.excl.tsv"
+   }
 }
 
 Array[File] inputBams= select_all([inputTumor,inputNormal])
-String sampleID = if outputFileNamePrefix=="" then basename(inputBams[0], ".bam") else outputFileNamePrefix
+String sampleID = outputFileNamePrefix
 String callType = if length(inputBams) == 1 then "unmatched" else "somatic"
 
 # If we see more than one (two) bams switch to somatic mode
@@ -19,11 +40,11 @@ scatter (f in inputBams) {
 } 
 
 scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
-  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
+  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list}
 }
 
 # Go on with merging and zipping/indexing
-call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType}
+call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType, prefix = "_all"}
 
 # Go on with processing somatic - filtered files
 if (callType == "somatic") {
@@ -148,11 +169,11 @@ input {
   Array[File]+ inBams
   Array[File]+ inBai
   String dellyMode
-  String sampleName = "SAMPLE"
+  String sampleName
   String excludeList
-  String refFasta = "$HG19_ROOT/hg19_random.fa"
+  String refFasta
   String callType = "unmatched"
-  String modules = "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0"
+  String modules
   Int mappingQuality = 30
   Int jobMemory = 16
   Int timeout = 20
@@ -244,11 +265,11 @@ parameter_meta {
 
 command <<<
   set -eu -o pipefail
-  vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-  tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-  if [ -e ~{sampleName}.~{callType}_filtered.delly.merged.vcf.gz ]; then
-    bcftools view -i "%FILTER='PASS' & INFO/PE>~{variantSupport}" ~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz -Oz -o ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
-    tabix -p vcf ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
+  vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.vcf.gz"
+  tabix -p vcf "~{sampleName}.~{callType}~{prefix}.vcf.gz"
+  if [ -e ~{sampleName}.~{callType}_filtered.vcf.gz ]; then
+    bcftools view -i "%FILTER='PASS' & INFO/PE>~{variantSupport}" ~{sampleName}.~{callType}~{prefix}.vcf.gz -Oz -o ~{sampleName}.~{callType}~{prefix}.pass.vcf.gz
+    tabix -p vcf ~{sampleName}.~{callType}~{prefix}.pass.vcf.gz
   fi
 >>>
 
@@ -258,10 +279,9 @@ runtime {
 }
 
 output {
-  File dellyMergedVcf        = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-  File dellyMergedTabixIndex = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz.tbi"
-  File? dellyMergedPassVcf    = "~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz"
-  File? dellyMergedPassTabixIndex =  "~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz.tbi"
+  File dellyMergedVcf        = "~{sampleName}.~{callType}~{prefix}.vcf.gz"
+  File dellyMergedTabixIndex = "~{sampleName}.~{callType}~{prefix}.vcf.gz.tbi"
+  File? dellyMergedPassVcf    = "~{sampleName}.~{callType}~{prefix}.pass.vcf.gz"
+  File? dellyMergedPassTabixIndex =  "~{sampleName}.~{callType}~{prefix}.pass.vcf.gz.tbi"
 }
 }
-
