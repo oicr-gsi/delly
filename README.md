@@ -1,11 +1,11 @@
 # delly
 
-Delly workflow produces a set of vcf files with different types of structural variant calls: Translocation, Deletion, Inversion and Duplications It uses .bam files as input. The below graph describes the process:
+The Delly workflow produces a set of vcf files with different types of structural variant calls: Translocations, Deletions, Inversions and Duplications It uses .bam files as input. The below graph describes the process:
 ![delly flowchart](docs/delly-wf.png)
 ### Preprocessing
-The expected inputs for the DELLY tool are library-level BAMs with distinct insert size and median. In most cases, this means that the BAM files will not need to be merged prior to processing. However, the DELLY website recommends the removal of non-unique, multi-mapped reads and marking duplicate reads. We may also have to realign around indels and perform base recalibration.
+The expected inputs for the DELLY tool are aligned sequence (bam format), properly sorted and indexed, with marked duplicates. 
 ### Mark duplicates
-Picard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates.
+Picard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates and is activated be default.  If providing bam files with duplicates marked, this can be disabled.
 ```
  java -jar MarkDuplicates.jar
  INPUT=sample.bam
@@ -120,6 +120,7 @@ Output | Type | Description
 `mergedFilteredVcf`|File?|filtered vcf file containing structural variant calls
 `mergedFilteredPassIndex`|File?|tabix index of the filtered vcf file containing PASS structural variant calls
 `mergedFilteredPassVcf`|File?|filtered vcf file containing PASS structural variant calls
+
 
 ## Commands
  This section lists command(s) run by delly workflow
