@@ -1,16 +1,37 @@
 version 1.0
 
+struct GenomeResources {
+    String rundelly_module
+    String rundelly_fasta
+    String rundelly_exclude_list
+}
+
 workflow delly {
+
 input {
   # If we are in somatic mode, normal file follows tumor file in the input array
   File inputTumor
   File? inputNormal
   Boolean markdup = true
-  String outputFileNamePrefix = ""
+  String outputFileNamePrefix
+  String reference
+}
+
+Map[String,GenomeResources] resources = {
+  "hg19": {
+    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0",
+    "rundelly_fasta": "$HG19_ROOT/hg19_random.fa",
+    "rundelly_exclude_list": "$HG19_DELLY_ROOT/human.hg19.excl.tsv"
+  },
+   "hg38": {
+    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg38/p12 hg38-delly/1.0",
+    "rundelly_fasta": "$HG38_ROOT/hg38_random.fa",
+    "rundelly_exclude_list": "$HG38_DELLY_ROOT/human.hg38.excl.tsv"
+   }
 }
 
 Array[File] inputBams= select_all([inputTumor,inputNormal])
-String sampleID = if outputFileNamePrefix=="" then basename(inputBams[0], ".bam") else outputFileNamePrefix
+String sampleID = outputFileNamePrefix
 String callType = if length(inputBams) == 1 then "unmatched" else "somatic"
 
 # If we see more than one (two) bams switch to somatic mode
@@ -19,11 +40,11 @@ scatter (f in inputBams) {
 } 
 
 scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
-  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID }
+  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list}
 }
 
 # Go on with merging and zipping/indexing
-call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType}
+call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType, prefix = "_all"}
 
 # Go on with processing somatic - filtered files
 if (callType == "somatic") {
@@ -35,12 +56,13 @@ parameter_meta {
   inputNormal: "Normal input .bam file."
   markdup: "A switch between marking duplicate reads and indexing with picard."
   outputFileNamePrefix: "Output prefix to be used with result files."
+  reference: "the reference genome for input sample"
 }
 
 meta {
   author: "Peter Ruzanov"
   email: "peter.ruzanov@oicr.on.ca"
-  description: "Delly workflow produces a set of vcf files with different types of structural variant calls: Translocation, Deletion, Inversion and Duplications It uses .bam files as input. The below graph describes the process:\n![delly flowchart](docs/delly-wf.png)\n### Preprocessing\nThe expected inputs for the DELLY tool are library-level BAMs with distinct insert size and median. In most cases, this means that the BAM files will not need to be merged prior to processing. However, the DELLY website recommends the removal of non-unique, multi-mapped reads and marking duplicate reads. We may also have to realign around indels and perform base recalibration.\n### Mark duplicates\nPicard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates.\n```\n java -jar MarkDuplicates.jar\n INPUT=sample.bam\n OUTPUT=sample.dedup.bam    \n METRICS_FILE=sample.metrics\n```\n### Detect deletions\n```\ndelly\n-t DEL\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Detect tandem duplications\n```\ndelly\n-t DUP\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Detect inversions\n```\ndelly\n-t INV\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\nDetect translocations\n```\n### Detecting translocations\n```\ndelly\n-t TRA\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Post-processing\nEach DELLY tool produces several files, which will all need to be merged together after the chromosomes are finished processing. The output format is described on the DELLY webpage. The merging script may require a small parser to combine the output from multiple runs in together.\nMerge DELLY results with vcftools"
+  description: "The Delly workflow produces a set of vcf files with different types of structural variant calls: Translocations, Deletions, Inversions and Duplications It uses .bam files as input. The below graph describes the process:\n![delly flowchart](docs/delly-wf.png)\n### Preprocessing\nThe expected inputs for the DELLY tool are aligned sequence (bam format), properly sorted and indexed, with marked duplicates. \n### Mark duplicates\nPicard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates and is activated by default.  If providing bam files with duplicates marked, this can be disabled.\n```\n java -jar MarkDuplicates.jar\n INPUT=sample.bam\n OUTPUT=sample.dedup.bam    \n METRICS_FILE=sample.metrics\n```\n### Detect deletions\n```\ndelly\n-t DEL\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Detect tandem duplications\n```\ndelly\n-t DUP\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Detect inversions\n```\ndelly\n-t INV\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\nDetect translocations\n```\n### Detecting translocations\n```\ndelly\n-t TRA\n-x excludeList.tsv\n-o sample.jumpy.bam\n-q 0\n-g hn19.fa\nsample.bam\n```\n### Post-processing\nEach DELLY tool produces several files, which will all need to be merged together after the chromosomes are finished processing. The output format is described on the DELLY webpage. The merging script may require a small parser to combine the output from multiple runs in together.\nMerge DELLY results with vcftools"
   dependencies: [
       {
         name: "picard/2.19.2",
@@ -148,11 +170,11 @@ input {
   Array[File]+ inBams
   Array[File]+ inBai
   String dellyMode
-  String sampleName = "SAMPLE"
+  String sampleName
   String excludeList
-  String refFasta = "$HG19_ROOT/hg19_random.fa"
+  String refFasta
   String callType = "unmatched"
-  String modules = "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0"
+  String modules
   Int mappingQuality = 30
   Int jobMemory = 16
   Int timeout = 20
@@ -226,7 +248,7 @@ input {
   String callType = "unmatched"
   String modules = "bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"
   String prefix = ""
-  Int variantSupport = 10
+  Int variantSupport = 0
   Int jobMemory = 10
 }
 
@@ -244,11 +266,11 @@ parameter_meta {
 
 command <<<
   set -eu -o pipefail
-  vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-  tabix -p vcf "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-  if [ -e ~{sampleName}.~{callType}_filtered.delly.merged.vcf.gz ]; then
-    bcftools view -i "%FILTER='PASS' & INFO/PE>~{variantSupport}" ~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz -Oz -o ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
-    tabix -p vcf ~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz
+  vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.vcf.gz"
+  tabix -p vcf "~{sampleName}.~{callType}~{prefix}.vcf.gz"
+  if [ -e ~{sampleName}.~{callType}_filtered.vcf.gz ]; then
+    bcftools view -i "%FILTER='PASS' & INFO/PE>~{variantSupport}" ~{sampleName}.~{callType}~{prefix}.vcf.gz -Oz -o ~{sampleName}.~{callType}~{prefix}.pass.vcf.gz
+    tabix -p vcf ~{sampleName}.~{callType}~{prefix}.pass.vcf.gz
   fi
 >>>
 
@@ -258,10 +280,9 @@ runtime {
 }
 
 output {
-  File dellyMergedVcf        = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz"
-  File dellyMergedTabixIndex = "~{sampleName}.~{callType}~{prefix}.delly.merged.vcf.gz.tbi"
-  File? dellyMergedPassVcf    = "~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz"
-  File? dellyMergedPassTabixIndex =  "~{sampleName}.~{callType}~{prefix}.delly.merged.pass.vcf.gz.tbi"
+  File dellyMergedVcf        = "~{sampleName}.~{callType}~{prefix}.vcf.gz"
+  File dellyMergedTabixIndex = "~{sampleName}.~{callType}~{prefix}.vcf.gz.tbi"
+  File? dellyMergedPassVcf    = "~{sampleName}.~{callType}~{prefix}.pass.vcf.gz"
+  File? dellyMergedPassTabixIndex =  "~{sampleName}.~{callType}~{prefix}.pass.vcf.gz.tbi"
 }
 }
-
