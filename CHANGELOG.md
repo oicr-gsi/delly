@@ -1,5 +1,6 @@
 ## Unreleased
-
+## 2.3.2 - 2023-05-30
+- Assembly-specific code in olive moved inside the wdl, changes to output file name
 ## 2.3.1 - 2022-08-31
 - Changed workflow name to `delly_matched_by_tumor_group` for consistency
 ## 2.3.0 - 2022-01-25
