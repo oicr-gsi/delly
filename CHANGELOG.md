@@ -1,4 +1,6 @@
 ## Unreleased
+## 2.4.0
+- Same code as 2.4.0, use major version to mark upgrades.
 ## 2.3.2 - 2023-05-30
 - Assembly-specific code in olive moved inside the wdl, changes to output file name
 ## 2.3.1 - 2022-08-31
