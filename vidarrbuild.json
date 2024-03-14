@@ -3,7 +3,8 @@
         "delly",
         "delly_matched_by_tumor_group",
         "delly_matched",
-        "delly_tumor_only"
+        "delly_tumor_only",
+        "delly_normal_only"
     ],
     "wdl": "delly.wdl"
 }
