@@ -1,4 +1,5 @@
-## Unreleased
+## 2.4.1 - 2024-03-14
+- Adding normal_only alias to use delly files downstream for dellyGermline
 ## 2.4.0
 - Same code as 2.4.0, use major version to mark upgrades.
 ## 2.3.2 - 2023-05-30
