@@ -1,3 +1,5 @@
+## 2.4.2 - 2024-03-15
+- Workflow definitions for delly_normal_only were made after the last tag and thus are not available to shesmu. Retagging to be able to use delly_normal_only
 ## 2.4.1 - 2024-03-14
 - Adding normal_only alias to use delly files downstream for dellyGermline
 ## 2.4.0
