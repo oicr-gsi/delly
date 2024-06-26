@@ -90,13 +90,31 @@ meta {
       }
     ]
     output_meta: {
-      mergedVcf: "vcf file containing all structural variant calls",
-      mergedIndex: "tabix index of the vcf file containing all structural variant calls",
-      mergedFilteredVcf: "filtered vcf file containing structural variant calls",
-      mergedFilteredIndex: "tabix index of the filtered vcf file containing structural variant calls",
-      mergedFilteredPassVcf: "filtered vcf file containing PASS structural variant calls",
-      mergedFilteredPassIndex: "tabix index of the filtered vcf file containing PASS structural variant calls"
+    mergedVcf: {
+        description: "vcf file containing all structural variant calls",
+        vidarr_label: "mergedVcf"
+    },
+    mergedIndex: {
+        description: "tabix index of the vcf file containing all structural variant calls",
+        vidarr_label: "mergedIndex"
+    },
+    mergedFilteredVcf: {
+        description: "filtered vcf file containing structural variant calls",
+        vidarr_label: "mergedFilteredVcf"
+    },
+    mergedFilteredIndex: {
+        description: "tabix index of the filtered vcf file containing structural variant calls",
+        vidarr_label: "mergedFilteredIndex"
+    },
+    mergedFilteredPassVcf: {
+        description: "filtered vcf file containing PASS structural variant calls",
+        vidarr_label: "mergedFilteredPassVcf"
+    },
+    mergedFilteredPassIndex: {
+        description: "tabix index of the filtered vcf file containing PASS structural variant calls",
+        vidarr_label: "mergedFilteredPassIndex"
     }
+}
 }
 
 output {
