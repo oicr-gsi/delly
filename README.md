@@ -5,7 +5,7 @@ The Delly workflow produces a set of vcf files with different types of structura
 ### Preprocessing
 The expected inputs for the DELLY tool are aligned sequence (bam format), properly sorted and indexed, with marked duplicates. 
 ### Mark duplicates
-Picard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates and is activated be default.  If providing bam files with duplicates marked, this can be disabled.
+Picard Tools MarkDuplicates is used to flag reads as PCR or optical duplicates and is activated by default.  If providing bam files with duplicates marked, this can be disabled.
 ```
  java -jar MarkDuplicates.jar
  INPUT=sample.bam
@@ -112,26 +112,26 @@ Parameter|Value|Default|Description
 
 ### Outputs
 
-Output | Type | Description
----|---|---
-`mergedIndex`|File|tabix index of the vcf file containing all structural variant calls
-`mergedVcf`|File|vcf file containing all structural variant calls
-`mergedFilteredIndex`|File?|tabix index of the filtered vcf file containing structural variant calls
-`mergedFilteredVcf`|File?|filtered vcf file containing structural variant calls
-`mergedFilteredPassIndex`|File?|tabix index of the filtered vcf file containing PASS structural variant calls
-`mergedFilteredPassVcf`|File?|filtered vcf file containing PASS structural variant calls
+Output | Type | Description | Labels
+---|---|---|---
+`mergedIndex`|File|tabix index of the vcf file containing all structural variant calls|vidarr_label: mergedIndex
+`mergedVcf`|File|vcf file containing all structural variant calls|vidarr_label: mergedVcf
+`mergedFilteredIndex`|File?|tabix index of the filtered vcf file containing structural variant calls|vidarr_label: mergedFilteredIndex
+`mergedFilteredVcf`|File?|filtered vcf file containing structural variant calls|vidarr_label: mergedFilteredVcf
+`mergedFilteredPassIndex`|File?|tabix index of the filtered vcf file containing PASS structural variant calls|vidarr_label: mergedFilteredPassIndex
+`mergedFilteredPassVcf`|File?|filtered vcf file containing PASS structural variant calls|vidarr_label: mergedFilteredPassVcf
 
 
 ## Commands
- This section lists command(s) run by delly workflow
+This section lists command(s) run by delly workflow
  
- * Running delly
+* Running delly
  
- SV calling workflow
+SV calling workflow
  
- Mark duplicates
+### Mark duplicates
  
- ```
+```
    This is a job which can be optional:  
  
    java -Xmx[JOB_MEMORY-8]G -jar picard.jar MarkDuplicates 
@@ -142,11 +142,11 @@ Output | Type | Description
                                  INPUT=INPUT_BAM
                                  CREATE_INDEX=true 
                                  METRICS_FILE=INPUT_BAM_BASENAME.mmm
- ```
+```
  
- Call variants
+### Call variants
  
- ```
+```
  delly call -t DELLY_MODE
        -x EXCLUDE_LIST
        -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf
@@ -169,19 +169,19 @@ Output | Type | Description
  tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE.vcf.gz
  tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_filtered.vcf.gz
  
- ```
+```
  
- Post-process
+### Post-process
  
- ```
+```
    vcf-concat INPUT_VCFS | vcf-sort | bgzip -c > SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz
    tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz
  
    bcftools view -i "%FILTER='PASS' & INFO/PE>~{variantSupport}" SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.vcf.gz -Oz -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.pass.vcf.gz
    tabix -p vcf SAMPLE_NAME.DELLY_MODE.CALL_TYPE_PREFIX.delly.merged.pass.vcf.gz
  
- ```
- ## Support
+```
+## Support
 
 For support, please file an issue on the [Github project](https://github.com/oicr-gsi) or send an email to gsi@oicr.on.ca .
 
