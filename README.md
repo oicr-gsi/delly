@@ -99,7 +99,14 @@ Parameter|Value|Default|Description
 `dupmarkBam.jobMemory`|Int|20|memory allocated for Job
 `dupmarkBam.timeout`|Int|20|Timeout in hours
 `dupmarkBam.modules`|String|"java/8 picard/2.19.2"|Names and versions of modules for picard-tools and java
-`runDelly.mappingQuality`|Int|30|defines quality threshold for reads to use in calling SVs
+`runDelly.mappingQuality`|Int|30|defines quality threshold for reads to use in calling SVs. Set higher for big data
+`runDelly.translocationQuality`|Int|20|min. PE quality for translocation
+`runDelly.insertSizeCutoff`|Int|9|insert size cutoff, median+s*MAD (deletions only). Set higher for big data
+`runDelly.minClip`|Int|25|min. clipping length
+`runDelly.minCliqueSize`|Int|2|min. PE/SR clique size. Set to 5 for big data
+`runDelly.minRefSeparation`|Int|25|min. reference separation
+`runDelly.maxReadSeparation`|Int|40|Maximum read separation
+`runDelly.additionalParameters`|String?|None|Any additional parameters to delly we want to pass
 `runDelly.jobMemory`|Int|16|memory allocated for Job
 `runDelly.timeout`|Int|20|Timeout in hours
 `mergeAndZipALL.modules`|String|"bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"|Names and versions of modules for picard-tools and java
@@ -151,7 +158,14 @@ SV calling workflow
        -x EXCLUDE_LIST
        -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf
        -q MAPPING_QUALITY
+       -s INSERT_SIZE_CUTOFF
+       -r ~{translocationQuality} \
+       -c ~{minClip} \
+       -z ~{minCliqueSize} \
+       -m ~{minRefSeparation} \
+       -n ~{maxReadSeparation} \
        -g REF_FASTA
+          ADDITIONAL_PARAMETERS
           INPUT_BAM
  
     Optional post-filtering if we need somatic variants:

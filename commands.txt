@@ -27,7 +27,14 @@ delly call -t DELLY_MODE
       -x EXCLUDE_LIST
       -o SAMPLE_NAME.DELLY_MODE.CALL_TYPE.bcf
       -q MAPPING_QUALITY
+      -s INSERT_SIZE_CUTOFF
+      -r ~{translocationQuality} \
+      -c ~{minClip} \
+      -z ~{minCliqueSize} \
+      -m ~{minRefSeparation} \
+      -n ~{maxReadSeparation} \
       -g REF_FASTA
+         ADDITIONAL_PARAMETERS
          INPUT_BAM
 
    Optional post-filtering if we need somatic variants:

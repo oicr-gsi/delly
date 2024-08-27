@@ -150,6 +150,7 @@ parameter_meta {
 
 command <<<
  set -eu -o pipefail
+ echo ~{dedup}
  if [ "~{dedup}" == "dedup" ]; then
   java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
                                 TMP_DIR=picardTmp \
@@ -194,6 +195,13 @@ input {
   String callType = "unmatched"
   String modules
   Int mappingQuality = 30
+  Int translocationQuality = 20
+  Int insertSizeCutoff = 9
+  Int minClip = 25
+  Int minCliqueSize = 2
+  Int minRefSeparation = 25
+  Int maxReadSeparation = 40
+  String? additionalParameters
   Int jobMemory = 16
   Int timeout = 20
 }
@@ -206,7 +214,14 @@ parameter_meta {
  excludeList: "List of regions to exclude (telomeres and centromeres)"
  refFasta: "reference assembly file"
  callType: "unmatched or somatic"
- mappingQuality: "defines quality threshold for reads to use in calling SVs"
+ mappingQuality: "defines quality threshold for reads to use in calling SVs. Set higher for big data"
+ translocationQuality: "min. PE quality for translocation"
+ insertSizeCutoff: "insert size cutoff, median+s*MAD (deletions only). Set higher for big data"
+ minClip: "min. clipping length"
+ minCliqueSize: "min. PE/SR clique size. Set to 5 for big data"
+ minRefSeparation: "min. reference separation"
+ maxReadSeparation: "Maximum read separation"
+ additionalParameters: "Any additional parameters to delly we want to pass"
  jobMemory: "memory allocated for Job"
  timeout: "Timeout in hours"
  modules: "Names and versions of modules for picard-tools and java"
@@ -218,7 +233,13 @@ delly call -t ~{dellyMode} \
       -x ~{excludeList} \
       -o "~{sampleName}.~{dellyMode}.~{callType}.bcf" \
       -q ~{mappingQuality} \
-      -g ~{refFasta} \
+      -s ~{insertSizeCutoff} \
+      -r ~{translocationQuality} \
+      -c ~{minClip} \
+      -z ~{minCliqueSize} \
+      -m ~{minRefSeparation} \
+      -n ~{maxReadSeparation} \
+      -g ~{refFasta} ~{additionalParameters} \
          ~{sep=' ' inBams}
 if [ "~{callType}" == "somatic" ]; then
    echo "Somatic mode requested, will run delly filtering for somatic SVs"
