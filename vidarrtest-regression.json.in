@@ -4,6 +4,7 @@
             "delly.dupmarkBam.jobMemory": null,
             "delly.dupmarkBam.modules": "picard/2.19.2",
             "delly.dupmarkBam.timeout": null,
+            "delly.dupmarkBam.ioSlots": null,
             "delly.inputNormal": null,
             "delly.inputTumor": {
                 "contents": {
@@ -39,6 +40,7 @@
             "delly.runDelly.additionalParameters": null,
             "delly.runDelly.refFasta": null,
             "delly.runDelly.timeout": null,
+            "delly.runDelly.ioSlots": null,
             "delly.reference": "hg19"
         },
         "description": "Delly workflow test",
@@ -111,6 +113,7 @@
             "delly.dupmarkBam.jobMemory": null,
             "delly.dupmarkBam.modules": "picard/2.19.2",
             "delly.dupmarkBam.timeout": null,
+            "delly.dupmarkBam.ioSlots": null,
             "delly.reference": "hg19",
             "delly.inputNormal": {
                 "contents": {
@@ -157,7 +160,8 @@
             "delly.runDelly.maxReadSeparation": null,
             "delly.runDelly.additionalParameters": null,
             "delly.runDelly.refFasta": null,
-            "delly.runDelly.timeout": null
+            "delly.runDelly.timeout": null,
+            "delly.runDelly.ioSlots": null
         },
         "description": "Delly workflow test",
         "engineArguments": {
