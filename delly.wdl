@@ -138,6 +138,7 @@ input {
   Int timeout   = 20
   String dedup = "dedup"
   String modules = "java/8 picard/2.19.2"
+  Int ioSlots = 1
 }
 
 parameter_meta {
@@ -146,6 +147,7 @@ parameter_meta {
  dedup: "A switch between marking duplicate reads and indexing with picard"
  modules: "Names and versions of modules for picard-tools and java"
  timeout: "Timeout in hours"
+ ioSlots: "Number of io slots"
 }
 
 command <<<
@@ -173,6 +175,7 @@ runtime {
   memory:  "~{jobMemory} GB"
   modules: "~{modules}"
   timeout: "~{timeout}"
+  io_slots: "~{ioSlots}"
 } 
 
 output {
@@ -204,6 +207,7 @@ input {
   String? additionalParameters
   Int jobMemory = 16
   Int timeout = 20
+  Int ioSlots = 1
 }
 
 parameter_meta {
@@ -225,6 +229,7 @@ parameter_meta {
  jobMemory: "memory allocated for Job"
  timeout: "Timeout in hours"
  modules: "Names and versions of modules for picard-tools and java"
+ ioSlots: "Number of io slots"
 }
 
 command <<<
@@ -265,6 +270,7 @@ runtime {
   memory:  "~{jobMemory} GB"
   modules: "~{modules}"
   timeout: "~{timeout}"
+  io_slots: "~{ioSlots}"
 }
 
 output {
