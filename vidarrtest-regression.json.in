@@ -8,7 +8,7 @@
             "delly.inputNormal": null,
             "delly.inputTumor": {
                 "contents": {
-                    "configuration": "/.mounts/labs/gsi/testdata/delly/input_data/PCSI_1019_Pa_P_PE_598_WG_526.chr19.annotated.bam",
+                    "configuration": "/.mounts/labs/gsi/testdata/delly/test_inputs/PCSI_Test01.chr19.annotated.bam",
                     "externalIds": [
                         {
                             "id": "TEST",
@@ -103,7 +103,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/delly/output_metrics/UnmatchedTest.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/delly/output_metrics/workflow_test_01.metrics",
                 "type": "script"
             }
         ]
@@ -117,7 +117,7 @@
             "delly.reference": "hg19",
             "delly.inputNormal": {
                 "contents": {
-                    "configuration": "/.mounts/labs/gsi/testdata/delly/input_data/PCSI_1019_Ly_R_PE_635_WG.chr19.annotated.bam",
+                    "configuration": "/.mounts/labs/gsi/testdata/delly/test_inputs/PCSI_Test02.chr19.annotated.bam",
                     "externalIds": [
                         {
                             "id": "TEST",
@@ -129,7 +129,7 @@
             },
             "delly.inputTumor": {
                 "contents": {
-                    "configuration": "/.mounts/labs/gsi/testdata/delly/input_data/PCSI_1019_Pa_P_PE_598_WG_526.chr19.annotated.bam",
+                    "configuration": "/.mounts/labs/gsi/testdata/delly/test_inputs/PCSI_Test01.chr19.annotated.bam",
                     "externalIds": [
                         {
                             "id": "TEST",
@@ -223,7 +223,7 @@
             {
                 "metrics_calculate": "@CHECKOUT@/tests/calculate.sh",
                 "metrics_compare": "@CHECKOUT@/tests/compare.sh",
-                "output_metrics": "/.mounts/labs/gsi/testdata/delly/output_metrics/SomaticTest.metrics",
+                "output_metrics": "/.mounts/labs/gsi/testdata/delly/output_metrics/workflow_test_02.metrics",
                 "type": "script"
             }
         ]
