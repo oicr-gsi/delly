@@ -15,6 +15,8 @@ input {
   Boolean markdup = true
   String outputFileNamePrefix
   String reference
+  String local_code_modulefile_path  = "/home/ubuntu/local_modules/gsi/modulator/modulefiles/Ubuntu24.04"
+  String local_data_modulefile_path  = "/home/ubuntu/local_modules/gsi/modulator/modulefiles/data"
 }
 
 Map[String,GenomeResources] resources = {
@@ -152,6 +154,9 @@ parameter_meta {
 
 command <<<
  set -eu -o pipefail
+ . /usr/share/modules/init/bash
+ module use ~{local_code_modulefile_path }
+ module load ~{modules}
  echo ~{dedup}
  if [ "~{dedup}" == "dedup" ]; then
   java -Xmx~{jobMemory-8}G -jar $PICARD_ROOT/picard.jar MarkDuplicates \
@@ -234,6 +239,11 @@ parameter_meta {
 
 command <<<
 set -eu -o pipefail
+  . /usr/share/modules/init/bash
+  module use ~{local_code_modulefile_path }
+  module load delly/0.9.1 bcftools/1.22 tabix/0.2.6
+  module use ~{local_data_modulefile_path }
+  module load hg19/p13 hg19-delly/1.0
 delly call -t ~{dellyMode} \
       -x ~{excludeList} \
       -o "~{sampleName}.~{dellyMode}.~{callType}.bcf" \
@@ -291,7 +301,7 @@ input {
   Array[File] inputTbis
   String sampleName = "SAMPLE"
   String callType = "unmatched"
-  String modules = "bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"
+  String modules = "bcftools/1.22 vcftools/0.1.16 tabix/0.2.6"
   String prefix = ""
   Int variantSupport = 0
   Int jobMemory = 10
@@ -311,6 +321,9 @@ parameter_meta {
 
 command <<<
   set -eu -o pipefail
+  . /usr/share/modules/init/bash
+  module use ~{local_code_modulefile_path }
+  module load ~{modules}
   vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.vcf.gz"
   tabix -p vcf "~{sampleName}.~{callType}~{prefix}.vcf.gz"
   if [ -e ~{sampleName}.~{callType}_filtered.vcf.gz ]; then
