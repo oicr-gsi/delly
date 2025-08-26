@@ -254,9 +254,9 @@ command <<<
 set -eu -o pipefail
   . /usr/share/modules/init/bash
   module use ~{local_code_modulefile_path }
-  module load delly/0.9.1 bcftools/1.22 tabix/0.2.6
+  module load ~{modules}
   module use ~{local_data_modulefile_path }
-  module load hg19/p13 hg19-delly/1.0
+  module load ~{data_modules}
 delly call -t ~{dellyMode} \
       -x ~{excludeList} \
       -o "~{sampleName}.~{dellyMode}.~{callType}.bcf" \
