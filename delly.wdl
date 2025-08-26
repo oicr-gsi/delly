@@ -2,6 +2,7 @@ version 1.0
 
 struct GenomeResources {
     String rundelly_module
+    String rundelly_data_modules
     String rundelly_fasta
     String rundelly_exclude_list
 }
@@ -15,18 +16,20 @@ input {
   Boolean markdup = true
   String outputFileNamePrefix
   String reference
-  String local_code_modulefile_path  = "/home/ubuntu/local_modules/gsi/modulator/modulefiles/Ubuntu24.04"
-  String local_data_modulefile_path  = "/home/ubuntu/local_modules/gsi/modulator/modulefiles/data"
+  String local_code_modulefile_path = "/home/ubuntu/local_modules/gsi/modulator/modulefiles/Ubuntu24.04"
+  String local_data_modulefile_path = "/home/ubuntu/local_modules/gsi/modulator/modulefiles/data"
 }
 
 Map[String,GenomeResources] resources = {
   "hg19": {
-    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg19/p13 hg19-delly/1.0",
+    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6",
+    "rundelly_data_modules": "hg19/p13 hg19-delly/1.0",
     "rundelly_fasta": "$HG19_ROOT/hg19_random.fa",
     "rundelly_exclude_list": "$HG19_DELLY_ROOT/human.hg19.excl.tsv"
   },
    "hg38": {
-    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg38/p12 hg38-delly/1.0",
+    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6",
+    "rundelly_data_modules": "hg38/p12 hg38-delly/1.0",
     "rundelly_fasta": "$HG38_ROOT/hg38_random.fa",
     "rundelly_exclude_list": "$HG38_DELLY_ROOT/human.hg38.excl.tsv"
    }
@@ -38,19 +41,19 @@ String callType = if length(inputBams) == 1 then "unmatched" else "somatic"
 
 # If we see more than one (two) bams switch to somatic mode
 scatter (f in inputBams) { 
-  call dupmarkBam { input: inputBam = f, dedup = if markdup then "dedup" else "nomark"}
+  call dupmarkBam { input: inputBam = f, dedup = if markdup then "dedup" else "nomark", local_code_modulefile_path = local_code_modulefile_path}
 } 
 
 scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
-  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list}
+  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, data_modules = resources [ reference ].rundelly_data_modules, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list, local_code_modulefile_path = local_code_modulefile_path, local_data_modulefile_path = local_data_modulefile_path}
 }
 
 # Go on with merging and zipping/indexing
-call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType, prefix = "_all"}
+call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType, prefix = "_all", local_code_modulefile_path = local_code_modulefile_path}
 
 # Go on with processing somatic - filtered files
 if (callType == "somatic") {
- call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered"}
+ call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered", local_code_modulefile_path = local_code_modulefile_path}
 }
 
 parameter_meta {
@@ -59,6 +62,8 @@ parameter_meta {
   markdup: "A switch between marking duplicate reads and indexing with picard."
   outputFileNamePrefix: "Output prefix to be used with result files."
   reference: "the reference genome for input sample"
+  local_code_modulefile_path: "Path to locally build code modulefiles"
+  local_data_modulefile_path: "Path to locally build data modulefiles"
 }
 
 meta {
@@ -140,6 +145,7 @@ input {
   Int timeout   = 20
   String dedup = "dedup"
   String modules = "java/8 picard/2.19.2"
+  String local_code_modulefile_path
   Int ioSlots = 1
 }
 
@@ -148,6 +154,7 @@ parameter_meta {
  jobMemory: "memory allocated for Job"
  dedup: "A switch between marking duplicate reads and indexing with picard"
  modules: "Names and versions of modules for picard-tools and java"
+ local_code_modulefile_path: "Path to locally build code modulefiles"
  timeout: "Timeout in hours"
  ioSlots: "Number of io slots"
 }
@@ -202,6 +209,9 @@ input {
   String refFasta
   String callType = "unmatched"
   String modules
+  String data_modules
+  String local_code_modulefile_path
+  String local_data_modulefile_path
   Int mappingQuality = 30
   Int translocationQuality = 20
   Int insertSizeCutoff = 9
@@ -234,6 +244,9 @@ parameter_meta {
  jobMemory: "memory allocated for Job"
  timeout: "Timeout in hours"
  modules: "Names and versions of modules for picard-tools and java"
+ data_modules: "Names and versions of data modules"
+ local_code_modulefile_path: "Path to locally build code modulefiles"
+ local_data_modulefile_path: "Path to locally build data modulefiles"
  ioSlots: "Number of io slots"
 }
 
@@ -278,7 +291,6 @@ fi
 
 runtime {
   memory:  "~{jobMemory} GB"
-  modules: "~{modules}"
   timeout: "~{timeout}"
   io_slots: "~{ioSlots}"
 }
@@ -302,6 +314,7 @@ input {
   String sampleName = "SAMPLE"
   String callType = "unmatched"
   String modules = "bcftools/1.22 vcftools/0.1.16 tabix/0.2.6"
+  String local_code_modulefile_path
   String prefix = ""
   Int variantSupport = 0
   Int jobMemory = 10
@@ -313,6 +326,7 @@ parameter_meta {
  sampleName: "Normally passed from workflow block, prefix for making output files"
  callType: "unmatched or somatic"
  modules: "Names and versions of modules for picard-tools and java"
+ local_code_modulefile_path: "Path to locally build code modulefiles"
  prefix: "parameter to use when we need to append _filtered to the file's name"
  variantSupport: "Paired-end support for structural variants, in pairs. Default is 10"
  jobMemory: "memory allocated for Job"
@@ -322,7 +336,7 @@ parameter_meta {
 command <<<
   set -eu -o pipefail
   . /usr/share/modules/init/bash
-  module use ~{local_code_modulefile_path }
+  module use ~{local_code_modulefile_path}
   module load ~{modules}
   vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.vcf.gz"
   tabix -p vcf "~{sampleName}.~{callType}~{prefix}.vcf.gz"
