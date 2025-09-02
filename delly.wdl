@@ -313,7 +313,7 @@ input {
   Array[File] inputTbis
   String sampleName = "SAMPLE"
   String callType = "unmatched"
-  String modules = "bcftools/1.22 vcftools/0.1.16 tabix/0.2.6"
+  String modules = "bcftools/1.9 vcftools/0.1.16 tabix/0.2.6"
   String local_code_modulefile_path
   String prefix = ""
   Int variantSupport = 0
@@ -338,6 +338,7 @@ command <<<
   . /usr/share/modules/init/bash
   module use ~{local_code_modulefile_path}
   module load ~{modules}
+  export PERL5LIB=~/local_modules/gsi/modulator/sw/Ubuntu24.04/vcftools-0.1.16/share/perl/5.38.2:$PERL5LIB
   vcf-concat ~{sep=' ' inputVcfs} | vcf-sort | bgzip -c > "~{sampleName}.~{callType}~{prefix}.vcf.gz"
   tabix -p vcf "~{sampleName}.~{callType}~{prefix}.vcf.gz"
   if [ -e ~{sampleName}.~{callType}_filtered.vcf.gz ]; then
