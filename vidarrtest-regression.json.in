@@ -8,7 +8,7 @@
             "delly.inputNormal": null,
             "delly.inputTumor": {
                 "contents": {
-                    "configuration": "/.mounts/labs/gsi/testdata/delly/input_data/PCSI_1019_Pa_P_PE_598_WG_526.chr19.annotated.bam",
+                    "configuration": "/.mounts/labs/gsi/testdata/delly/test_inputs/PCSI_Test01.chr19.annotated.bam",
                     "externalIds": [
                         {
                             "id": "TEST",
@@ -117,7 +117,7 @@
             "delly.reference": "hg19",
             "delly.inputNormal": {
                 "contents": {
-                    "configuration": "/.mounts/labs/gsi/testdata/delly/input_data/PCSI_1019_Ly_R_PE_635_WG.chr19.annotated.bam",
+                    "configuration": "/.mounts/labs/gsi/testdata/delly/test_inputs/PCSI_Test02.chr19.annotated.bam",
                     "externalIds": [
                         {
                             "id": "TEST",
@@ -129,7 +129,7 @@
             },
             "delly.inputTumor": {
                 "contents": {
-                    "configuration": "/.mounts/labs/gsi/testdata/delly/input_data/PCSI_1019_Pa_P_PE_598_WG_526.chr19.annotated.bam",
+                    "configuration": "/.mounts/labs/gsi/testdata/delly/test_inputs/PCSI_Test01.chr19.annotated.bam",
                     "externalIds": [
                         {
                             "id": "TEST",
