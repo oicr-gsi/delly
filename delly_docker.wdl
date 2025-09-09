@@ -22,7 +22,7 @@ Map[String,GenomeResources] resources = {
     "rundelly_exclude_list": "/home/ubuntu/module_data/hg19_data/human.hg19.excl.tsv"
   },
    "hg38": {
-    "rundelly_fasta": "/home/ubuntu/module_data/hg38_data/hg38/hg38_random.fa",
+    "rundelly_fasta": "/home/ubuntu/module_data/hg38_data/hg38_random.fa",
     "rundelly_exclude_list": "/home/ubuntu/module_data/hg38_data/human.hg38.excl.tsv"
    }
 }
@@ -132,10 +132,8 @@ task dupmarkBam {
 input {
   File inputBam
   Int jobMemory = 20
-  Int timeout   = 20
   String dedup = "dedup"
   String docker = "picard:2.19.2"
-  Int ioSlots = 1
 }
 
 parameter_meta {
@@ -143,8 +141,6 @@ parameter_meta {
  jobMemory: "memory allocated for Job"
  dedup: "A switch between marking duplicate reads and indexing with picard"
  docker: "Names and versions of docker image for picard-tools and java"
- timeout: "Timeout in hours"
- ioSlots: "Number of io slots"
 }
 
 command <<<
@@ -160,7 +156,7 @@ command <<<
                                 CREATE_INDEX=true \
                                 METRICS_FILE="~{basename(inputBam)}.mmm"
  else
-  ln -s ~{inputBam} ~{basename(inputBam)}
+  cp ~{inputBam} ~{basename(inputBam)}
   java -Xmx~{jobMemory-8}G -jar /opt/picard/picard.jar BuildBamIndex \
                               VALIDATION_STRINGENCY=LENIENT \
                               INPUT=~{basename(inputBam)} \
@@ -171,8 +167,6 @@ command <<<
 runtime {
   memory:  "~{jobMemory} GB"
   docker: "~{docker}"
-  timeout: "~{timeout}"
-  io_slots: "~{ioSlots}"
 } 
 
 output {
@@ -203,8 +197,6 @@ input {
   Int maxReadSeparation = 40
   String? additionalParameters
   Int jobMemory = 16
-  Int timeout = 20
-  Int ioSlots = 1
 }
 
 parameter_meta {
@@ -224,9 +216,7 @@ parameter_meta {
  maxReadSeparation: "Maximum read separation"
  additionalParameters: "Any additional parameters to delly we want to pass"
  jobMemory: "memory allocated for Job"
- timeout: "Timeout in hours"
  docker: "Names and versions of docker for picard-tools and java"
- ioSlots: "Number of io slots"
 }
 
 command <<<
@@ -266,9 +256,7 @@ fi
 
 runtime {
   memory:  "~{jobMemory} GB"
-  timeout: "~{timeout}"
   docker: "~{docker}"
-  io_slots: "~{ioSlots}"
 }
 
 output {
