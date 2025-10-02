@@ -18,12 +18,12 @@ input {
 
 Map[String,GenomeResources] resources = {
   "hg19": {
-    "rundelly_fasta": "/home/ubuntu/module_data/hg19_data/hg19_random.fa",
-    "rundelly_exclude_list": "/home/ubuntu/module_data/hg19_data/human.hg19.excl.tsv"
+    "rundelly_fasta": "gs://cromwell-wdl/module_data/hg19_data/hg19_random.fa",
+    "rundelly_exclude_list": "gs://cromwell-wdl/module_data/hg19_data/human.hg19.excl.tsv"
   },
    "hg38": {
-    "rundelly_fasta": "/home/ubuntu/module_data/hg38_data/hg38_random.fa",
-    "rundelly_exclude_list": "/home/ubuntu/module_data/hg38_data/human.hg38.excl.tsv"
+    "rundelly_fasta": "gs://cromwell-wdl/module_data/hg38_data/hg38_random.fa",
+    "rundelly_exclude_list": "gs://cromwell-wdl/module_data/hg38_data/human.hg38.excl.tsv"
    }
 }
 
@@ -129,45 +129,41 @@ output {
 #  TASK 1 of 3: mark duplicates with picard
 # ==========================================
 task dupmarkBam {
-input {
-  File inputBam
-  Int jobMemory = 20
-  String dedup = "dedup"
-  String docker = "picard:2.19.2"
-}
-
-parameter_meta {
- inputBam: "Input .bam file"
- jobMemory: "memory allocated for Job"
- dedup: "A switch between marking duplicate reads and indexing with picard"
- docker: "Names and versions of docker image for picard-tools and java"
-}
-
-command <<<
- set -eu -o pipefail
- echo ~{dedup}
- if [ "~{dedup}" == "dedup" ]; then
-  java -Xmx~{jobMemory-8}G -jar /opt/picard/picard.jar MarkDuplicates \
-                                TMP_DIR=picardTmp \
-                                ASSUME_SORTED=true \
-                                VALIDATION_STRINGENCY=LENIENT \
-                                OUTPUT="~{basename(inputBam, '.bam')}_dupmarked.bam" \
-                                INPUT=~{inputBam} \
-                                CREATE_INDEX=true \
-                                METRICS_FILE="~{basename(inputBam)}.mmm"
- else
-  cp ~{inputBam} ~{basename(inputBam)}
-  java -Xmx~{jobMemory-8}G -jar /opt/picard/picard.jar BuildBamIndex \
-                              VALIDATION_STRINGENCY=LENIENT \
-                              INPUT=~{basename(inputBam)} \
-                              OUTPUT="~{basename(inputBam, '.bam')}.bai"
- fi
->>>
-
-runtime {
-  memory:  "~{jobMemory} GB"
-  docker: "~{docker}"
-} 
+  input {
+    File inputBam
+    Int jobMemory = 20
+    String dedup = "dedup"
+    String docker = "kevin2peng/picard:2.19.2"
+  }
+  
+  command <<<
+    set -eu -o pipefail
+    echo ~{dedup}
+    if [ "~{dedup}" == "dedup" ]; then
+      java -Xmx~{jobMemory-8}G -jar /opt/picard/picard.jar MarkDuplicates \
+                                    TMP_DIR=picardTmp \
+                                    ASSUME_SORTED=true \
+                                    VALIDATION_STRINGENCY=LENIENT \
+                                    OUTPUT="~{basename(inputBam, '.bam')}_dupmarked.bam" \
+                                    INPUT=~{inputBam} \
+                                    CREATE_INDEX=true \
+                                    METRICS_FILE="~{basename(inputBam)}.mmm"
+    else
+      cp ~{inputBam} ~{basename(inputBam)}
+      java -Xmx~{jobMemory-8}G -jar /opt/picard/picard.jar BuildBamIndex \
+                                  VALIDATION_STRINGENCY=LENIENT \
+                                  INPUT=~{basename(inputBam)} \
+                                  OUTPUT="~{basename(inputBam, '.bam')}.bai"
+    fi
+  >>>
+  
+  runtime {
+    memory: "~{jobMemory} GB"
+    docker: "~{docker}"
+    disks: "local-disk 1000 SSD"
+    bootDiskSizeGb: 200
+    preemptible: 0
+  }
 
 output {
   File outputBam = if "~{dedup}" == "dedup" then "~{basename(inputBam, '.bam')}_dupmarked.bam" else "~{basename(inputBam)}"
@@ -187,7 +183,7 @@ input {
   File excludeList
   File refFasta
   String callType = "unmatched"
-  String docker = "delly-tools:0.9.1"
+  String docker = "kevin2peng/delly-tools:0.9.1"
   Int mappingQuality = 30
   Int translocationQuality = 20
   Int insertSizeCutoff = 9
@@ -257,6 +253,9 @@ fi
 runtime {
   memory:  "~{jobMemory} GB"
   docker: "~{docker}"
+  disks: "local-disk 1000 SSD"
+  bootDiskSizeGb: 200
+  preemptible: 0
 }
 
 output {
@@ -277,7 +276,7 @@ input {
   Array[File] inputTbis
   String sampleName = "SAMPLE"
   String callType = "unmatched"
-  String docker = "delly-tools:0.9.1"
+  String docker = "kevin2peng/delly-tools:0.9.1"
   String prefix = ""
   Int variantSupport = 0
   Int jobMemory = 10
