@@ -16,8 +16,8 @@ input {
   Boolean markdup = true
   String outputFileNamePrefix
   String reference
-  String local_code_modulefile_path = "/home/ubuntu/local_modules/gsi/modulator/modulefiles/Ubuntu24.04"
-  String local_data_modulefile_path = "/home/ubuntu/local_modules/gsi/modulator/modulefiles/data"
+  String local_code_modulefile_path = "/home/gpeng_oicr_on_ca/local_modules/gsi/modulator/modulefiles/Ubuntu24.04"
+  String local_data_modulefile_path = "/home/gpeng_oicr_on_ca/local_modules/gsi/modulator/modulefiles/data"
 }
 
 Map[String,GenomeResources] resources = {
@@ -44,16 +44,22 @@ scatter (f in inputBams) {
   call dupmarkBam { input: inputBam = f, dedup = if markdup then "dedup" else "nomark", local_code_modulefile_path = local_code_modulefile_path}
 } 
 
-scatter (m in ["DEL", "DUP", "INV", "INS", "BND"]) {
-  call runDelly { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = m, callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, data_modules = resources [ reference ].rundelly_data_modules, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list, local_code_modulefile_path = local_code_modulefile_path, local_data_modulefile_path = local_data_modulefile_path}
-}
+call runDelly as runDellyDEL { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = "DEL", callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, data_modules = resources [ reference ].rundelly_data_modules, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list, local_code_modulefile_path = local_code_modulefile_path, local_data_modulefile_path = local_data_modulefile_path}
+
+call runDelly as runDellyDUP { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = "DUP", callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, data_modules = resources [ reference ].rundelly_data_modules, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list, local_code_modulefile_path = local_code_modulefile_path, local_data_modulefile_path = local_data_modulefile_path, dependsOn = select_all([runDellyDEL.outVcf, runDellyDEL.outTbi])}
+
+call runDelly as runDellyINV { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = "INV", callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, data_modules = resources [ reference ].rundelly_data_modules, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list, local_code_modulefile_path = local_code_modulefile_path, local_data_modulefile_path = local_data_modulefile_path, dependsOn = select_all([runDellyDUP.outVcf, runDellyDUP.outTbi])}
+
+call runDelly as runDellyINS { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = "INS", callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, data_modules = resources [ reference ].rundelly_data_modules, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list, local_code_modulefile_path = local_code_modulefile_path, local_data_modulefile_path = local_data_modulefile_path, dependsOn = select_all([runDellyINV.outVcf, runDellyINV.outTbi])}
+
+call runDelly as runDellyBND { input: inBams = dupmarkBam.outputBam, inBai = dupmarkBam.outputBai, dellyMode = "BND", callType = callType, sampleName = sampleID, modules = resources [ reference ].rundelly_module, data_modules = resources [ reference ].rundelly_data_modules, refFasta = resources [ reference ].rundelly_fasta, excludeList = resources [ reference ].rundelly_exclude_list, local_code_modulefile_path = local_code_modulefile_path, local_data_modulefile_path = local_data_modulefile_path, dependsOn = select_all([runDellyINS.outVcf, runDellyINS.outTbi])}
 
 # Go on with merging and zipping/indexing
-call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all(runDelly.outVcf), inputTbis = select_all(runDelly.outTbi), sampleName = sampleID, callType = callType, prefix = "_all", local_code_modulefile_path = local_code_modulefile_path}
+call mergeAndZip as mergeAndZipALL { input: inputVcfs = select_all([runDellyDEL.outVcf, runDellyDUP.outVcf, runDellyINV.outVcf, runDellyINS.outVcf, runDellyBND.outVcf]), inputTbis = select_all([runDellyDEL.outTbi, runDellyDUP.outTbi, runDellyINV.outTbi, runDellyINS.outTbi, runDellyBND.outTbi]), sampleName = sampleID, callType = callType, prefix = "_all", local_code_modulefile_path = local_code_modulefile_path}
 
 # Go on with processing somatic - filtered files
 if (callType == "somatic") {
- call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all(runDelly.outVcf_filtered), inputTbis = select_all(runDelly.outTbi_filtered), sampleName = sampleID, callType = callType, prefix = "_filtered", local_code_modulefile_path = local_code_modulefile_path}
+ call mergeAndZip as mergeAndZipFiltered { input: inputVcfs = select_all([runDellyDEL.outVcf_filtered, runDellyDUP.outVcf_filtered, runDellyINV.outVcf_filtered, runDellyINS.outVcf_filtered, runDellyBND.outVcf_filtered]), inputTbis = select_all([runDellyDEL.outTbi_filtered, runDellyDUP.outTbi_filtered, runDellyINV.outTbi_filtered, runDellyINS.outTbi_filtered, runDellyBND.outTbi_filtered]), sampleName = sampleID, callType = callType, prefix = "_filtered", local_code_modulefile_path = local_code_modulefile_path}
 }
 
 parameter_meta {
@@ -200,7 +206,7 @@ output {
 #  TASK 2 of 3: run delly
 # ================================
 task runDelly {
-input { 
+input {
   Array[File]+ inBams
   Array[File]+ inBai
   String dellyMode
@@ -220,9 +226,10 @@ input {
   Int minRefSeparation = 25
   Int maxReadSeparation = 40
   String? additionalParameters
-  Int jobMemory = 16
+  Int jobMemory = 128
   Int timeout = 20
   Int ioSlots = 1
+  Array[File]? dependsOn
 }
 
 parameter_meta {
@@ -248,6 +255,7 @@ parameter_meta {
  local_code_modulefile_path: "Path to locally build code modulefiles"
  local_data_modulefile_path: "Path to locally build data modulefiles"
  ioSlots: "Number of io slots"
+ dependsOn: "Optional array of files from previous tasks to enforce serial execution"
 }
 
 command <<<
@@ -359,3 +367,4 @@ output {
   File? dellyMergedPassTabixIndex =  "~{sampleName}.~{callType}~{prefix}.pass.vcf.gz.tbi"
 }
 }
+
