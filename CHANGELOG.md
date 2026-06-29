@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.6.3] - 2025-12-18
 ### Added
 - Added new reference options, noAlt and ncbi references
+- [GRD-969](https://jira.oicr.on.ca/browse/GRD-969)
 
 ## [2.6.2] - 2025-05-26
 - Re-deployment to enable labels for optional outputs
