@@ -27,6 +27,16 @@ Map[String,GenomeResources] resources = {
     "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg38/p12 hg38-delly/1.0",
     "rundelly_fasta": "$HG38_ROOT/hg38_random.fa",
     "rundelly_exclude_list": "$HG38_DELLY_ROOT/human.hg38.excl.tsv"
+   },
+   "hg38_noAlt": {
+    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 hg38-noalt/p12 hg38-delly/1.0",
+    "rundelly_fasta": "$HG38_NOALT_ROOT/hg38_noAlt.fa",
+    "rundelly_exclude_list": "$HG38_DELLY_ROOT/human.hg38.excl.tsv"
+   },
+   "grch38" : {
+    "rundelly_module": "delly/0.9.1 bcftools/1.9 tabix/0.2.6 grch38/p15 hg38-delly/1.0",
+    "rundelly_fasta": "$GRCH38_ROOT/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna",
+    "rundelly_exclude_list": "$HG38_DELLY_ROOT/human.hg38.excl.tsv"
    }
 }
 
